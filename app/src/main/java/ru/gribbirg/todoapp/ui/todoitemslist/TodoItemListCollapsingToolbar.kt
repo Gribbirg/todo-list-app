@@ -43,7 +43,6 @@ fun TodoItemListCollapsingToolbar(
     val topBarState = rememberCollapsingToolbarScaffoldState()
     val systemUiController = rememberSystemUiController()
 
-
     CollapsingToolbarScaffold(modifier = Modifier
         .fillMaxSize()
         .padding(

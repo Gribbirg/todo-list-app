@@ -19,4 +19,5 @@
         <item>ноября</item>
         <item>декобря</item>
     </string-array>
+    <string name="save">Сохранить</string>
 </resources>

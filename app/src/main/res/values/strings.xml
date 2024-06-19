@@ -20,4 +20,5 @@
         <item>Nov</item>
         <item>Dec</item>
     </string-array>
+    <string name="save">Save</string>
 </resources>
