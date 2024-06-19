@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Список дел</string>
+    <string name="todo_items_list">Список дел</string>
+    <string name="hello_blank_fragment">Привет</string>
+    <string name="done_count">Сделано - %1d</string>
+    <string name="new_item">Новое</string>
+    <string name="day_month_date_template">%1$s %2$s</string>
+    <string-array name="months_names">
+        <item>января</item>
+        <item>февраля</item>
+        <item>марта</item>
+        <item>апреля</item>
+        <item>мая</item>
+        <item>июня</item>
+        <item>июля</item>
+        <item>августа</item>
+        <item>сентября</item>
+        <item>октября</item>
+        <item>ноября</item>
+        <item>декобря</item>
+    </string-array>
+</resources>

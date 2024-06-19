@@ -1,0 +1,64 @@
+package ru.gribbirg.todoapp.ui.edititem
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import ru.gribbirg.todoapp.TodoApplication
+import ru.gribbirg.todoapp.data.data.TodoItem
+import ru.gribbirg.todoapp.data.repositories.TodoItemRepository
+
+class EditItemViewModel(
+    val todoItemRepository: TodoItemRepository
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow<EditItemUiState>(EditItemUiState.Loading)
+    val uiState: StateFlow<EditItemUiState> = _uiState
+
+    fun setItem(item: TodoItem?) {
+        _uiState.update { EditItemUiState.Loading }
+        viewModelScope.launch {
+            try {
+                _uiState.emit(
+                    if (item == null)
+                        EditItemUiState.Loaded(
+                            TodoItem(),
+                            EditItemUiState.ItemState.NEW
+                        )
+                    else
+                        EditItemUiState.Loaded(
+                            item,
+                            EditItemUiState.ItemState.EDIT
+                        )
+                )
+            } catch (e: Exception) {
+                _uiState.emit(EditItemUiState.Error(e.message.toString()))
+            }
+        }
+    }
+
+    fun save() {
+        viewModelScope.launch {
+            if (uiState.value is EditItemUiState.Loaded)
+                todoItemRepository.saveItem(item = (uiState.value as EditItemUiState.Loaded).item)
+        }
+    }
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val todoItemRepository =
+                    (this[APPLICATION_KEY] as TodoApplication).todoItemRepository
+                EditItemViewModel(
+                    todoItemRepository = todoItemRepository
+                )
+            }
+        }
+    }
+}
