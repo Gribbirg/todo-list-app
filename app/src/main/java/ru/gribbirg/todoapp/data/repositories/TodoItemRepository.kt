@@ -10,7 +10,7 @@ interface TodoItemRepository {
 
     suspend fun addItem(item: TodoItem)
 
-    suspend fun getItemsFlow():  StateFlow<SnapshotStateList<TodoItem>>
+    fun getItemsFlow():  StateFlow<SnapshotStateList<TodoItem>>
 
     suspend fun saveItem(item: TodoItem)
 

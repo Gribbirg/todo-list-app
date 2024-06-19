@@ -1,5 +1,6 @@
 package ru.gribbirg.todoapp.ui.todoitemslist
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -145,24 +146,38 @@ fun TodoListItemScreen(
                     fontSize = textSize
                 )
 
-                Text(
-                    text = stringResource(id = R.string.done_count, 2),
-                    modifier = Modifier
-                        .road(
-                            whenExpanded = Alignment.BottomStart,
-                            whenCollapsed = Alignment.CenterStart
-                        )
-                        .padding(
-                            start = leftPadding,
-                            top = 16.dp,
-                            end = 16.dp,
-                            bottom = bottomPadding
+                if (uiState is TodoItemsListUiState.Loaded)
+                    Text(
+                        text = stringResource(
+                            id = R.string.done_count,
+                            (uiState as TodoItemsListUiState.Loaded).doneCount
                         ),
-                    color = countColor,
-                )
+                        modifier = Modifier
+                            .road(
+                                whenExpanded = Alignment.BottomStart,
+                                whenCollapsed = Alignment.CenterStart
+                            )
+                            .padding(
+                                start = leftPadding,
+                                top = 16.dp,
+                                end = 16.dp,
+                                bottom = bottomPadding
+                            ),
+                        color = countColor,
+                    )
 
                 IconButton(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        viewModel.onFilterChange(
+                            if ((uiState as TodoItemsListUiState.Loaded)
+                                    .filterState == TodoItemsListUiState.Loaded.FilterState.ALL
+                            ) {
+                                TodoItemsListUiState.Loaded.FilterState.NOT_COMPLETED
+                            } else {
+                                TodoItemsListUiState.Loaded.FilterState.ALL
+                            }
+                        )
+                    },
                     modifier = Modifier
                         .road(
                             whenExpanded = Alignment.BottomEnd,
@@ -177,12 +192,22 @@ fun TodoListItemScreen(
                         .height(56.dp),
                     colors = IconButtonDefaults.iconButtonColors(
                         contentColor = MaterialTheme.colorScheme.primary
-                    )
+                    ),
+                    enabled = uiState is TodoItemsListUiState.Loaded
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.baseline_visibility_24),
-                        contentDescription = null
-                    )
+                    if (uiState is TodoItemsListUiState.Loaded &&
+                        (uiState as TodoItemsListUiState.Loaded).filterState == TodoItemsListUiState.Loaded.FilterState.ALL
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_visibility_off_24),
+                            contentDescription = null
+                        )
+                    } else {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_visibility_24),
+                            contentDescription = null
+                        )
+                    }
                 }
             }
         ) {
@@ -221,28 +246,53 @@ fun TodoListItemScreen(
                                     onInfoClicked = toEditItemScreen
                                 )
                             }
-                        }
-                        item {
-                            Row(
-                                modifier = Modifier
-                                    .clip(
-                                        RoundedCornerShape(
-                                            bottomEnd = 16.dp,
-                                            bottomStart = 16.dp
+                            item {
+                                Row(
+                                    modifier = Modifier
+                                        .clip(
+                                            RoundedCornerShape(
+                                                bottomEnd = 16.dp,
+                                                bottomStart = 16.dp
+                                            )
                                         )
+                                        .background(MaterialTheme.colorScheme.surface)
+                                        .fillMaxWidth()
+                                        .clickable { toEditItemScreen(null) }
+                                ) {
+                                    Spacer(modifier = Modifier.width(45.dp))
+                                    Text(
+                                        text = stringResource(id = R.string.new_item),
+                                        modifier = Modifier.padding(20.dp),
+                                        color = MaterialTheme.colorScheme.onSurface
                                     )
-                                    .background(MaterialTheme.colorScheme.surface)
-                                    .fillMaxWidth()
-                                    .clickable { toEditItemScreen(null) }
-                            ) {
-                                Spacer(modifier = Modifier.width(45.dp))
-                                Text(
-                                    text = stringResource(id = R.string.new_item),
-                                    modifier = Modifier.padding(20.dp),
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
+                                }
+                            }
+                        } else {
+                            item {
+                                Row(
+                                    modifier = Modifier
+                                        .clip(
+                                            RoundedCornerShape(
+                                                bottomEnd = 16.dp,
+                                                bottomStart = 16.dp,
+                                                topEnd = 16.dp,
+                                                topStart = 16.dp
+                                            )
+                                        )
+                                        .background(MaterialTheme.colorScheme.surface)
+                                        .fillMaxWidth()
+                                        .clickable { toEditItemScreen(null) }
+                                ) {
+                                    Spacer(modifier = Modifier.width(45.dp))
+                                    Text(
+                                        text = stringResource(id = R.string.new_item),
+                                        modifier = Modifier.padding(20.dp),
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
                             }
                         }
+
                         item {
                             Spacer(modifier = Modifier.height(40.dp))
                         }
