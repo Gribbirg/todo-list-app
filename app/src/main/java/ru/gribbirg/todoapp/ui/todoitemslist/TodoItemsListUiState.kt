@@ -1,6 +1,5 @@
 package ru.gribbirg.todoapp.ui.todoitemslist
 
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import ru.gribbirg.todoapp.data.data.TodoItem
 
 sealed class TodoItemsListUiState {
@@ -11,10 +10,10 @@ sealed class TodoItemsListUiState {
         val items: List<TodoItem>,
         val filterState: FilterState,
         val doneCount: Int
-    ) : TodoItemsListUiState() {
-        enum class FilterState(val filter: (TodoItem) -> Boolean) {
-            ALL({ true }),
-            NOT_COMPLETED({ !it.completed })
-        }
+    ) : TodoItemsListUiState()
+
+    enum class FilterState(val filter: (TodoItem) -> Boolean) {
+        ALL({ true }),
+        NOT_COMPLETED({ !it.completed })
     }
 }

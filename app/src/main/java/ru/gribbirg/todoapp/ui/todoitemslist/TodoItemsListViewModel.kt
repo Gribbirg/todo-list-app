@@ -20,7 +20,7 @@ class TodoItemsListViewModel(
     private val todoItemRepository: TodoItemRepository
 ) : ViewModel() {
 
-    private val filterFlow = MutableStateFlow(TodoItemsListUiState.Loaded.FilterState.NOT_COMPLETED)
+    private val filterFlow = MutableStateFlow(TodoItemsListUiState.FilterState.NOT_COMPLETED)
     val uiState: StateFlow<TodoItemsListUiState> =
         todoItemRepository.getItemsFlow()
             .combine(filterFlow) { list, filter ->
@@ -42,7 +42,7 @@ class TodoItemsListViewModel(
         }
     }
 
-    fun onFilterChange(filterState: TodoItemsListUiState.Loaded.FilterState) {
+    fun onFilterChange(filterState: TodoItemsListUiState.FilterState) {
         viewModelScope.launch {
             filterFlow.emit(filterState)
         }

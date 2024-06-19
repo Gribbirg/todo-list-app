@@ -115,13 +115,15 @@ fun TodoItemRow(
                         item.deadline.dayOfMonth,
                         stringArrayResource(id = R.array.months_names)[item.deadline.monthValue]
                     ),
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
         IconButton(
             onClick = { onInfoClicked(item) },
-            colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.onSurface)
+            colors = IconButtonDefaults.iconButtonColors(
+                contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         ) {
             Icon(Icons.Outlined.Info, contentDescription = "")
         }

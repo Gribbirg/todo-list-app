@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,8 +36,8 @@ import ru.gribbirg.todoapp.R
 fun TodoItemListCollapsingToolbar(
     topPadding: Dp,
     doneCount: Int?,
-    filterState: TodoItemsListUiState.Loaded.FilterState?,
-    onFilterChange: (TodoItemsListUiState.Loaded.FilterState) -> Unit,
+    filterState: TodoItemsListUiState.FilterState?,
+    onFilterChange: (TodoItemsListUiState.FilterState) -> Unit,
     content: @Composable () -> Unit
 ) {
     val topBarState = rememberCollapsingToolbarScaffoldState()
@@ -54,8 +55,8 @@ fun TodoItemListCollapsingToolbar(
         toolbar = {
             val progress = topBarState.toolbarState.progress
 
-            val textSize = getToolbarValue(30, 18, progress).sp
-            val leftPadding = getToolbarValue(60, 40, progress).dp
+            val textSize = getToolbarValue(35, 20, progress).sp
+            val leftPadding = getToolbarValue(60, 16, progress).dp
             val bottomPadding = getToolbarValue(30, 10, progress).dp
 
             val countColor = MaterialTheme.colorScheme.onSurfaceVariant
@@ -96,7 +97,8 @@ fun TodoItemListCollapsingToolbar(
                         end = 16.dp,
                         bottom = 10.dp
                     ),
-                fontSize = textSize
+                fontSize = textSize,
+                fontWeight = FontWeight.Bold
             )
 
             if (doneCount != null)
@@ -117,15 +119,16 @@ fun TodoItemListCollapsingToolbar(
                             bottom = bottomPadding
                         ),
                     color = countColor,
+                    fontSize = 20.sp
                 )
 
             IconButton(
                 onClick = {
                     onFilterChange(
-                        if (filterState == TodoItemsListUiState.Loaded.FilterState.ALL) {
-                            TodoItemsListUiState.Loaded.FilterState.NOT_COMPLETED
+                        if (filterState == TodoItemsListUiState.FilterState.ALL) {
+                            TodoItemsListUiState.FilterState.NOT_COMPLETED
                         } else {
-                            TodoItemsListUiState.Loaded.FilterState.ALL
+                            TodoItemsListUiState.FilterState.ALL
                         }
                     )
                 },
@@ -146,7 +149,7 @@ fun TodoItemListCollapsingToolbar(
                 ),
                 enabled = filterState != null
             ) {
-                if (filterState != null && filterState == TodoItemsListUiState.Loaded.FilterState.ALL) {
+                if (filterState != null && filterState == TodoItemsListUiState.FilterState.ALL) {
                     Icon(
                         painter = painterResource(id = R.drawable.baseline_visibility_off_24),
                         contentDescription = null

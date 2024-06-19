@@ -91,7 +91,7 @@ fun TodoListItemScreen(
                                     Text(
                                         text = stringResource(id = R.string.new_item),
                                         modifier = Modifier.padding(20.dp),
-                                        color = MaterialTheme.colorScheme.onSurface
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
                             }
