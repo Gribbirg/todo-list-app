@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxColors
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -70,15 +71,28 @@ fun TodoItemRow(
             Checkbox(
                 checked = item.completed,
                 onCheckedChange = { onChecked(item, it) },
-                colors = CheckboxDefaults.colors(
-                    checkedColor = AppTheme.colors.green,
-                    uncheckedColor = if (item.importance == TodoImportance.HIGH) {
-                        AppTheme.colors.red
-                    } else {
-                        AppTheme.colors.tertiary
-                    },
-                    checkmarkColor = AppTheme.colors.secondaryBack
-                )
+                colors =
+                if (item.importance == TodoImportance.HIGH)
+                    CheckboxColors(
+                        checkedCheckmarkColor = AppTheme.colors.secondaryBack,
+                        uncheckedCheckmarkColor = Color.Unspecified,
+                        checkedBoxColor = AppTheme.colors.green,
+                        uncheckedBoxColor = AppTheme.colors.red.copy(alpha = 0.16f),
+                        disabledCheckedBoxColor = Color.Unspecified,
+                        disabledUncheckedBoxColor = Color.Unspecified,
+                        disabledIndeterminateBoxColor = Color.Unspecified,
+                        checkedBorderColor = AppTheme.colors.green,
+                        uncheckedBorderColor = AppTheme.colors.red,
+                        disabledBorderColor = Color.Unspecified,
+                        disabledUncheckedBorderColor = Color.Unspecified,
+                        disabledIndeterminateBorderColor = Color.Unspecified,
+                    )
+                else
+                    CheckboxDefaults.colors(
+                        checkedColor = AppTheme.colors.green,
+                        uncheckedColor = AppTheme.colors.tertiary,
+                        checkmarkColor = AppTheme.colors.secondaryBack
+                    )
             )
             Spacer(modifier = Modifier.width(4.dp))
             if (item.importance == TodoImportance.HIGH) {
@@ -183,21 +197,3 @@ internal enum class Sides {
     BOTTOM,
     TOP
 }
-
-private fun Modifier.setShadow() =
-    drawBehind {
-        val size = size
-
-        val shadowStart = Color.Black.copy(alpha = 0.32f)
-        val shadowEnd = Color.Transparent
-
-        drawRect(
-            brush = Brush.horizontalGradient(
-                listOf(shadowStart, shadowEnd),
-                startX = size.width,
-                endX = size.width + 28f
-            ),
-            topLeft = Offset(size.width, 0f),
-            size = Size(28f, size.height),
-        )
-    }
