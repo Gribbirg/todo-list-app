@@ -171,7 +171,9 @@ fun EditItemScreen(
                             viewModel.edit(state.item.copy(importance = importance))
                         }
                     )
-                    HorizontalDivider(modifier = Modifier.padding(top = 8.dp, bottom = 16.dp))
+                    EdiItemSeparator(
+                        modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
+                    )
                     ItemDeadline(
                         deadline = state.item.deadline,
                         onChanged = { newDeadline ->
@@ -179,7 +181,10 @@ fun EditItemScreen(
                         },
                         modifier = Modifier.fillMaxWidth()
                     )
-                    HorizontalDivider(modifier = Modifier.padding(top = 8.dp, bottom = 16.dp))
+                    Spacer(modifier = Modifier.height(32.dp))
+                    EdiItemSeparator(
+                        modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
+                    )
                     ItemDelete(
                         enabled = state.itemState == EditItemUiState.ItemState.EDIT,
                         onDeleted = {
@@ -195,6 +200,16 @@ fun EditItemScreen(
             }
         }
     }
+}
+
+@Composable
+private fun EdiItemSeparator(
+    modifier: Modifier = Modifier
+) {
+    HorizontalDivider(
+        modifier = modifier,
+        color = AppTheme.colors.separator
+    )
 }
 
 @Composable

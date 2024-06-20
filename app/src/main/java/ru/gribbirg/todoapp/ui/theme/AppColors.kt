@@ -128,7 +128,7 @@ class AppColors(
         private val LightGreen = Color(0xFF34C759)
         private val LightBlue = Color(0xFF007AFF)
         private val LightGray = Color(0xFFD1D1D6)
-        private val LightGrayLight = Color(0xFFFF3B30)
+        private val LightGrayLight = Color(0xFFD1D1D6)
 
         private val LightPrimaryBack = Color(0xFFF7F6F2)
         private val LightSecondaryBack = Color(0xFFFFFFFF)

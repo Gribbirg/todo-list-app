@@ -1,12 +1,15 @@
 package ru.gribbirg.todoapp.ui.todoitemslist
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
@@ -15,12 +18,17 @@ import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -44,89 +52,152 @@ fun TodoItemRow(
         topStart = topBorderRadius,
         topEnd = topBorderRadius,
     )
-
-    Row(
-        modifier = Modifier
-            .clip(shape)
-            .background(AppTheme.colors.secondaryBack)
-            .padding(
-                start = 8.dp,
-                end = 8.dp
-            )
+    BoxWithSidesForShadow(
+        sides = if (topBorderRadius == 0.dp) Sides.LEFT_AND_RIGHT else Sides.TOP,
     ) {
-        Checkbox(
-            checked = item.completed,
-            onCheckedChange = { onChecked(item, it) },
-            colors = CheckboxDefaults.colors(
-                checkedColor = AppTheme.colors.green,
-                uncheckedColor = if (item.importance == TodoImportance.HIGH) {
-                    AppTheme.colors.red
-                } else {
-                    Color.Unspecified
-                },
-                checkmarkColor = AppTheme.colors.secondaryBack
-            )
-        )
-        Spacer(modifier = Modifier.width(4.dp))
-        if (item.importance == TodoImportance.HIGH) {
-            Icon(
-                painter = painterResource(id = R.drawable.baseline_priority_high_24),
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(top = 12.dp),
-                tint = AppTheme.colors.red
-            )
-            Spacer(modifier = Modifier.width(5.dp))
-        } else if (item.importance == TodoImportance.LOW) {
-            Icon(
-                painter = painterResource(id = R.drawable.baseline_south_24),
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(top = 12.dp),
-                tint = AppTheme.colors.secondary
-            )
-            Spacer(modifier = Modifier.width(5.dp))
-        }
-
-        Column(
+        Row(
             modifier = Modifier
-                .weight(1f)
                 .fillMaxWidth()
-                .padding(top = 12.dp)
+                .shadow(2.dp, shape)
+                .clip(shape)
+                .background(AppTheme.colors.secondaryBack)
+                .padding(
+                    start = 8.dp,
+                    end = 8.dp,
+                    top = 4.dp
+                ),
         ) {
-            Text(
-                text = item.text,
-                modifier = Modifier,
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis,
-                textDecoration =
-                if (item.completed)
-                    TextDecoration.LineThrough
-                else
-                    null,
-                color = if (item.completed)
-                    AppTheme.colors.grayLight
-                else
-                    AppTheme.colors.gray
-            )
-            if (item.deadline != null) {
-                Text(
-                    text = stringResource(
-                        id = R.string.day_month_date_template,
-                        item.deadline.dayOfMonth,
-                        stringArrayResource(id = R.array.months_names)[item.deadline.monthValue]
-                    ),
-                    color = AppTheme.colors.grayLight
+            Checkbox(
+                checked = item.completed,
+                onCheckedChange = { onChecked(item, it) },
+                colors = CheckboxDefaults.colors(
+                    checkedColor = AppTheme.colors.green,
+                    uncheckedColor = if (item.importance == TodoImportance.HIGH) {
+                        AppTheme.colors.red
+                    } else {
+                        AppTheme.colors.tertiary
+                    },
+                    checkmarkColor = AppTheme.colors.secondaryBack
                 )
-            }
-        }
-        IconButton(
-            onClick = { onInfoClicked(item) },
-            colors = IconButtonDefaults.iconButtonColors(
-                contentColor = AppTheme.colors.grayLight
             )
-        ) {
-            Icon(Icons.Outlined.Info, contentDescription = "")
+            Spacer(modifier = Modifier.width(4.dp))
+            if (item.importance == TodoImportance.HIGH) {
+                Icon(
+                    painter = painterResource(id = R.drawable.baseline_priority_high_24),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(top = 12.dp),
+                    tint = colorResource(id = TodoImportance.HIGH.colorId!!)
+                )
+                Spacer(modifier = Modifier.width(5.dp))
+            } else if (item.importance == TodoImportance.LOW) {
+                Icon(
+                    painter = painterResource(id = R.drawable.baseline_south_24),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(top = 12.dp),
+                    tint = AppTheme.colors.tertiary
+                )
+                Spacer(modifier = Modifier.width(5.dp))
+            }
+
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .padding(top = 12.dp)
+            ) {
+                Text(
+                    text = item.text,
+                    modifier = Modifier,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis,
+                    textDecoration =
+                    if (item.completed)
+                        TextDecoration.LineThrough
+                    else
+                        null,
+                    color = if (item.completed)
+                        AppTheme.colors.tertiary
+                    else
+                        AppTheme.colors.primary
+                )
+                if (item.deadline != null) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = stringResource(
+                            id = R.string.day_month_date_template,
+                            item.deadline.dayOfMonth,
+                            stringArrayResource(id = R.array.months_names)[item.deadline.monthValue]
+                        ),
+                        color = AppTheme.colors.tertiary
+                    )
+                }
+            }
+            IconButton(
+                onClick = { onInfoClicked(item) },
+                colors = IconButtonDefaults.iconButtonColors(
+                    contentColor = AppTheme.colors.tertiary
+                )
+            ) {
+                Icon(Icons.Outlined.Info, contentDescription = "")
+            }
         }
     }
 }
+
+@Composable
+internal fun BoxWithSidesForShadow(
+    sides: Sides,
+    content: @Composable () -> Unit
+) {
+    val shadowShape =
+        when (sides) {
+            Sides.LEFT_AND_RIGHT, Sides.BOTTOM -> GenericShape { size, _ ->
+                val maxSize = (size.width + size.height) * 10
+                moveTo(-maxSize, 0f)
+                lineTo(maxSize, 0f)
+                lineTo(maxSize, size.height + maxSize)
+                lineTo(0f, size.height + maxSize)
+            }
+
+            Sides.TOP -> GenericShape { size, _ ->
+                val maxSize = (size.width + size.height) * 10
+                moveTo(-maxSize, -maxSize)
+                lineTo(maxSize, -maxSize)
+                lineTo(maxSize, size.height + maxSize)
+                lineTo(0f, size.height + maxSize)
+            }
+        }
+
+    Box(
+        modifier = Modifier
+            .clip(shadowShape)
+    ) {
+        content()
+    }
+}
+
+internal enum class Sides {
+    LEFT_AND_RIGHT,
+    BOTTOM,
+    TOP
+}
+
+private fun Modifier.setShadow() =
+    drawBehind {
+        val size = size
+
+        val shadowStart = Color.Black.copy(alpha = 0.32f)
+        val shadowEnd = Color.Transparent
+
+        drawRect(
+            brush = Brush.horizontalGradient(
+                listOf(shadowStart, shadowEnd),
+                startX = size.width,
+                endX = size.width + 28f
+            ),
+            topLeft = Offset(size.width, 0f),
+            size = Size(28f, size.height),
+        )
+    }

@@ -2,6 +2,7 @@ package ru.gribbirg.todoapp.ui.todoitemslist
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.gribbirg.todoapp.R
@@ -92,24 +94,28 @@ fun TodoListItemScreen(
                                 )
                             }
                             item {
-                                Row(
-                                    modifier = Modifier
-                                        .clip(
-                                            RoundedCornerShape(
-                                                bottomEnd = 16.dp,
-                                                bottomStart = 16.dp
-                                            )
-                                        )
-                                        .background(AppTheme.colors.secondaryBack)
-                                        .fillMaxWidth()
-                                        .clickable { toEditItemScreen(null) }
+                                BoxWithSidesForShadow(
+                                    Sides.BOTTOM
                                 ) {
-                                    Spacer(modifier = Modifier.width(45.dp))
-                                    Text(
-                                        text = stringResource(id = R.string.new_item),
-                                        modifier = Modifier.padding(20.dp),
-                                        color = AppTheme.colors.secondary
+                                    val shape = RoundedCornerShape(
+                                        bottomEnd = 16.dp,
+                                        bottomStart = 16.dp
                                     )
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .shadow(2.dp, shape)
+                                            .clip(shape)
+                                            .background(AppTheme.colors.secondaryBack)
+                                            .clickable { toEditItemScreen(null) }
+                                    ) {
+                                        Spacer(modifier = Modifier.width(45.dp))
+                                        Text(
+                                            text = stringResource(id = R.string.new_item),
+                                            modifier = Modifier.padding(20.dp),
+                                            color = AppTheme.colors.secondary
+                                        )
+                                    }
                                 }
                             }
                         } else {
