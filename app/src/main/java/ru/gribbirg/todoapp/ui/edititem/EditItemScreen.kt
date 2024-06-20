@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -28,10 +29,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -50,7 +51,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
@@ -62,9 +62,11 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 import ru.gribbirg.todoapp.R
 import ru.gribbirg.todoapp.data.data.TodoImportance
+import ru.gribbirg.todoapp.ui.theme.AppTheme
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.ZoneOffset
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,11 +78,11 @@ fun EditItemScreen(
     val scrollState = rememberScrollState()
     val systemUiController = rememberSystemUiController()
 
-    val appBarColor = MaterialTheme.colorScheme.background
+    val appBarColor = AppTheme.colors.primaryBack
     val scrolledAppBarColor = if (isSystemInDarkTheme())
-        MaterialTheme.colorScheme.surface
+        AppTheme.colors.secondaryBack
     else
-        MaterialTheme.colorScheme.background
+        AppTheme.colors.primaryBack
     val topColor = remember {
         Animatable(if (scrollState.canScrollBackward) appBarColor else scrolledAppBarColor)
     }
@@ -88,8 +90,6 @@ fun EditItemScreen(
     val topElevation = remember {
         androidx.compose.animation.core.Animatable(if (scrollState.canScrollBackward) 30f else 0f)
     }
-
-    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(scrollState.canScrollBackward) {
         launch { topElevation.animateTo(if (scrollState.canScrollBackward) 30f else 0f) }
@@ -99,6 +99,8 @@ fun EditItemScreen(
     systemUiController.setStatusBarColor(topColor.value)
 
     Scaffold(
+        containerColor = AppTheme.colors.primaryBack,
+        contentColor = AppTheme.colors.primary,
         topBar = {
             TopAppBar(
                 title = {
@@ -114,7 +116,7 @@ fun EditItemScreen(
                                 text = stringResource(id = R.string.save),
                                 textAlign = TextAlign.Center,
                                 fontSize = 20.sp,
-                                color = MaterialTheme.colorScheme.primary
+                                color = AppTheme.colors.blue
                             )
                         }
                         Spacer(modifier = Modifier.width(16.dp))
@@ -131,7 +133,11 @@ fun EditItemScreen(
                 ),
                 navigationIcon = {
                     IconButton(onClick = onClose) {
-                        Icon(Icons.Filled.Close, contentDescription = null)
+                        Icon(
+                            Icons.Filled.Close,
+                            contentDescription = null,
+                            tint = AppTheme.colors.primary
+                        )
                     }
                 }
             )
@@ -197,6 +203,11 @@ private fun ItemTextField(
     onChanged: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val indicatorColor = Color.Transparent
+    val containerColor = AppTheme.colors.secondaryBack
+    val textColor = AppTheme.colors.primary
+    val placeFolderColor = AppTheme.colors.gray
+    val cursorColor = AppTheme.colors.blue
     TextField(
         value = text,
         onValueChange = { onChanged(it) },
@@ -204,12 +215,19 @@ private fun ItemTextField(
         minLines = 5,
         placeholder = { Text(text = stringResource(id = R.string.type_text)) },
         colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent,
-            focusedContainerColor = MaterialTheme.colorScheme.surface,
-            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-            disabledContainerColor = MaterialTheme.colorScheme.surface,
+            focusedIndicatorColor = indicatorColor,
+            unfocusedIndicatorColor = indicatorColor,
+            disabledIndicatorColor = indicatorColor,
+            focusedContainerColor = containerColor,
+            unfocusedContainerColor = containerColor,
+            disabledContainerColor = containerColor,
+            focusedTextColor = textColor,
+            unfocusedTextColor = textColor,
+            disabledTextColor = textColor,
+            focusedPlaceholderColor = placeFolderColor,
+            disabledPlaceholderColor = placeFolderColor,
+            unfocusedPlaceholderColor = placeFolderColor,
+            cursorColor = cursorColor
         ),
         shape = RoundedCornerShape(10.dp)
     )
@@ -234,7 +252,7 @@ private fun ItemImportanceSelector(
             onClick = { menuOpened = true },
             colors = ButtonDefaults.textButtonColors(
                 contentColor = importance.colorId?.let { colorResource(it) }
-                    ?: MaterialTheme.colorScheme.onSurface
+                    ?: AppTheme.colors.gray
             )
         ) {
             Row(
@@ -255,11 +273,11 @@ private fun ItemImportanceSelector(
         DropdownMenu(
             expanded = menuOpened,
             onDismissRequest = { menuOpened = false },
-            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+            modifier = Modifier.background(AppTheme.colors.secondaryBack)
         ) {
             for (importanceValue in TodoImportance.entries) {
                 val color = importanceValue.colorId?.let { colorResource(it) }
-                    ?: MaterialTheme.colorScheme.onSurface
+                    ?: AppTheme.colors.gray
                 DropdownMenuItem(
                     text = {
                         Text(
@@ -288,7 +306,6 @@ private fun ItemImportanceSelector(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ItemDeadline(
     deadline: LocalDate?,
@@ -307,7 +324,12 @@ private fun ItemDeadline(
                 text = stringResource(id = R.string.deadline),
                 modifier = Modifier.padding(start = 8.dp)
             )
-            TextButton(onClick = { dialogOpened = true }) {
+            TextButton(
+                onClick = { dialogOpened = true },
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = AppTheme.colors.blue
+                )
+            ) {
                 if (deadline != null) {
                     Text(
                         text = stringResource(
@@ -321,37 +343,111 @@ private fun ItemDeadline(
         }
         Switch(
             checked = deadline != null,
-            onCheckedChange = { onChanged(if (it) LocalDate.now() else null) })
+            onCheckedChange = { onChanged(if (it) LocalDate.now() else null) },
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = AppTheme.colors.white,
+                checkedTrackColor = AppTheme.colors.blue,
+                checkedBorderColor = Color.Transparent,
+                uncheckedThumbColor = AppTheme.colors.gray,
+                uncheckedTrackColor = AppTheme.colors.grayLight,
+                uncheckedBorderColor = AppTheme.colors.gray
+            )
+        )
     }
 
     if (dialogOpened) {
-        val datePickerState = rememberDatePickerState()
-        DatePickerDialog(
-            onDismissRequest = { dialogOpened = false },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        onChanged(
-                            Instant
-                                .ofEpochMilli(datePickerState.selectedDateMillis!!)
-                                .atZone(ZoneId.systemDefault())
-                                .toLocalDate()
-                        )
-                        dialogOpened = false
-                    },
-                    enabled = datePickerState.selectedDateMillis != null
-                ) {
-                    Text(text = stringResource(id = R.string.ready))
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { dialogOpened = false }) {
-                    Text(text = stringResource(id = R.string.cancel))
-                }
-            },
-        ) {
-            DatePicker(state = datePickerState)
-        }
+        ItemDeadlineDatePicker(
+            startingValue = deadline!!,
+            onChanged = onChanged,
+            close = { dialogOpened = false })
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ItemDeadlineDatePicker(
+    startingValue: LocalDate,
+    onChanged: (LocalDate?) -> Unit,
+    close: () -> Unit
+) {
+    val datePickerState = rememberDatePickerState()
+    datePickerState.selectedDateMillis =
+        startingValue.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
+    DatePickerDialog(
+        onDismissRequest = close,
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onChanged(
+                        Instant
+                            .ofEpochMilli(datePickerState.selectedDateMillis!!)
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate()
+                    )
+                    close()
+                },
+                enabled = datePickerState.selectedDateMillis != null,
+                colors = ButtonDefaults.textButtonColors(contentColor = AppTheme.colors.blue)
+            ) {
+                Text(text = stringResource(id = R.string.ready))
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = close,
+                colors = ButtonDefaults.textButtonColors(contentColor = AppTheme.colors.blue)
+            ) {
+                Text(text = stringResource(id = R.string.cancel))
+            }
+        },
+        colors = DatePickerDefaults.colors(
+            containerColor = AppTheme.colors.secondaryBack
+        )
+    ) {
+        DatePicker(
+            state = datePickerState,
+            colors = DatePickerDefaults.colors(
+                containerColor = AppTheme.colors.secondaryBack,
+                titleContentColor = AppTheme.colors.gray,
+                headlineContentColor = AppTheme.colors.primary,
+                weekdayContentColor = AppTheme.colors.gray,
+                subheadContentColor = Color.Unspecified,
+                navigationContentColor = AppTheme.colors.gray,
+                yearContentColor = AppTheme.colors.primary,
+                disabledYearContentColor = Color.Unspecified,
+                currentYearContentColor = AppTheme.colors.blue,
+                selectedYearContentColor = AppTheme.colors.primary,
+                disabledSelectedYearContentColor = Color.Unspecified,
+                selectedYearContainerColor = AppTheme.colors.blue,
+                disabledSelectedYearContainerColor = Color.Unspecified,
+                dayContentColor = AppTheme.colors.primary,
+                disabledDayContentColor = Color.Unspecified,
+                selectedDayContentColor = AppTheme.colors.primary,
+                disabledSelectedDayContentColor = Color.Unspecified,
+                selectedDayContainerColor = AppTheme.colors.blue,
+                disabledSelectedDayContainerColor = Color.Unspecified,
+                todayContentColor = AppTheme.colors.blue,
+                todayDateBorderColor = Color.Transparent,
+                dividerColor = AppTheme.colors.separator,
+                dateTextFieldColors = TextFieldDefaults.colors(
+                    focusedTextColor = AppTheme.colors.primary,
+                    unfocusedTextColor = AppTheme.colors.primary,
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    cursorColor = AppTheme.colors.blue,
+                    selectionColors = null,
+                    focusedIndicatorColor = AppTheme.colors.blue,
+                    unfocusedIndicatorColor = AppTheme.colors.gray,
+                    focusedLabelColor = AppTheme.colors.blue,
+                    unfocusedLabelColor = AppTheme.colors.gray,
+                    errorCursorColor = AppTheme.colors.red,
+                    errorLabelColor = AppTheme.colors.red,
+                    errorContainerColor = AppTheme.colors.secondaryBack,
+                    errorIndicatorColor = AppTheme.colors.red,
+                    errorTextColor = AppTheme.colors.primary
+                )
+            )
+        )
     }
 }
 
@@ -360,7 +456,7 @@ private fun ItemDelete(enabled: Boolean, onDeleted: () -> Unit, modifier: Modifi
     TextButton(
         onClick = onDeleted,
         modifier = modifier,
-        colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
+        colors = ButtonDefaults.textButtonColors(contentColor = AppTheme.colors.red),
         enabled = enabled
     ) {
         Icon(Icons.Filled.Delete, contentDescription = null)

@@ -17,8 +17,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,7 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.gribbirg.todoapp.R
 import ru.gribbirg.todoapp.data.data.TodoItem
-import ru.gribbirg.todoapp.ui.theme.White
+import ru.gribbirg.todoapp.ui.theme.AppTheme
 
 @Composable
 fun TodoListItemScreen(
@@ -42,12 +40,13 @@ fun TodoListItemScreen(
 
 
     Scaffold(
+        containerColor = AppTheme.colors.primaryBack,
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { toEditItemScreen(null) },
                 shape = CircleShape,
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = White
+                containerColor = AppTheme.colors.blue,
+                contentColor = AppTheme.colors.white
             ) {
                 Icon(Icons.Filled.Add, contentDescription = null)
             }
@@ -101,7 +100,7 @@ fun TodoListItemScreen(
                                                 bottomStart = 16.dp
                                             )
                                         )
-                                        .background(MaterialTheme.colorScheme.surface)
+                                        .background(AppTheme.colors.secondaryBack)
                                         .fillMaxWidth()
                                         .clickable { toEditItemScreen(null) }
                                 ) {
@@ -109,7 +108,7 @@ fun TodoListItemScreen(
                                     Text(
                                         text = stringResource(id = R.string.new_item),
                                         modifier = Modifier.padding(20.dp),
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        color = AppTheme.colors.secondary
                                     )
                                 }
                             }
@@ -125,7 +124,7 @@ fun TodoListItemScreen(
                                                 topStart = 16.dp
                                             )
                                         )
-                                        .background(MaterialTheme.colorScheme.surface)
+                                        .background(AppTheme.colors.secondaryBack)
                                         .fillMaxWidth()
                                         .clickable { toEditItemScreen(null) }
                                 ) {
@@ -133,7 +132,7 @@ fun TodoListItemScreen(
                                     Text(
                                         text = stringResource(id = R.string.new_item),
                                         modifier = Modifier.padding(20.dp),
-                                        color = MaterialTheme.colorScheme.onSurface
+                                        color = AppTheme.colors.primary
                                     )
                                 }
                             }

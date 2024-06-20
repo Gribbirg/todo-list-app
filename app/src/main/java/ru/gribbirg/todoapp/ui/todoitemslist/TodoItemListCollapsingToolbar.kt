@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,6 +30,7 @@ import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 import ru.gribbirg.todoapp.R
+import ru.gribbirg.todoapp.ui.theme.AppTheme
 
 @Composable
 fun TodoItemListCollapsingToolbar(
@@ -58,16 +58,16 @@ fun TodoItemListCollapsingToolbar(
             val leftPadding = getToolbarValue(60, 16, progress).dp
             val bottomPadding = getToolbarValue(30, 10, progress).dp
 
-            val countColor = MaterialTheme.colorScheme.onSurfaceVariant
+            val countColor = AppTheme.colors.grayLight
                 .let { it.copy(alpha = getToolbarValue(it.alpha, 0f, progress)) }
 
             val boxColor =
                 getToolbarValue(
-                    MaterialTheme.colorScheme.background,
+                    AppTheme.colors.primaryBack,
                     if (isSystemInDarkTheme()) {
-                        MaterialTheme.colorScheme.surface
+                        AppTheme.colors.secondaryBack
                     } else {
-                        MaterialTheme.colorScheme.background
+                        AppTheme.colors.primaryBack
                     },
                     progress
                 )
@@ -97,7 +97,8 @@ fun TodoItemListCollapsingToolbar(
                         bottom = 10.dp
                     ),
                 fontSize = textSize,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = AppTheme.colors.primary
             )
 
             if (doneCount != null)
@@ -144,7 +145,7 @@ fun TodoItemListCollapsingToolbar(
                     )
                     .height(56.dp),
                 colors = IconButtonDefaults.iconButtonColors(
-                    contentColor = MaterialTheme.colorScheme.primary
+                    contentColor = AppTheme.colors.blue
                 ),
                 enabled = filterState != null
             ) {

@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import ru.gribbirg.todoapp.R
 import ru.gribbirg.todoapp.data.data.TodoImportance
 import ru.gribbirg.todoapp.data.data.TodoItem
+import ru.gribbirg.todoapp.ui.theme.AppTheme
 
 @Composable
 fun TodoItemRow(
@@ -47,7 +48,7 @@ fun TodoItemRow(
     Row(
         modifier = Modifier
             .clip(shape)
-            .background(MaterialTheme.colorScheme.surface)
+            .background(AppTheme.colors.secondaryBack)
             .padding(
                 start = 8.dp,
                 end = 8.dp
@@ -57,13 +58,13 @@ fun TodoItemRow(
             checked = item.completed,
             onCheckedChange = { onChecked(item, it) },
             colors = CheckboxDefaults.colors(
-                checkedColor = MaterialTheme.colorScheme.tertiary,
+                checkedColor = AppTheme.colors.green,
                 uncheckedColor = if (item.importance == TodoImportance.HIGH) {
-                    MaterialTheme.colorScheme.error
+                    AppTheme.colors.red
                 } else {
                     Color.Unspecified
                 },
-                checkmarkColor = MaterialTheme.colorScheme.secondaryContainer
+                checkmarkColor = AppTheme.colors.secondaryBack
             )
         )
         Spacer(modifier = Modifier.width(4.dp))
@@ -73,7 +74,7 @@ fun TodoItemRow(
                 contentDescription = null,
                 modifier = Modifier
                     .padding(top = 12.dp),
-                tint = MaterialTheme.colorScheme.error
+                tint = AppTheme.colors.red
             )
             Spacer(modifier = Modifier.width(5.dp))
         } else if (item.importance == TodoImportance.LOW) {
@@ -82,7 +83,7 @@ fun TodoItemRow(
                 contentDescription = null,
                 modifier = Modifier
                     .padding(top = 12.dp),
-                tint = MaterialTheme.colorScheme.onSurface
+                tint = AppTheme.colors.secondary
             )
             Spacer(modifier = Modifier.width(5.dp))
         }
@@ -104,9 +105,9 @@ fun TodoItemRow(
                 else
                     null,
                 color = if (item.completed)
-                    MaterialTheme.colorScheme.onSurfaceVariant
+                    AppTheme.colors.grayLight
                 else
-                    MaterialTheme.colorScheme.onBackground
+                    AppTheme.colors.gray
             )
             if (item.deadline != null) {
                 Text(
@@ -115,14 +116,14 @@ fun TodoItemRow(
                         item.deadline.dayOfMonth,
                         stringArrayResource(id = R.array.months_names)[item.deadline.monthValue]
                     ),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = AppTheme.colors.grayLight
                 )
             }
         }
         IconButton(
             onClick = { onInfoClicked(item) },
             colors = IconButtonDefaults.iconButtonColors(
-                contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                contentColor = AppTheme.colors.grayLight
             )
         ) {
             Icon(Icons.Outlined.Info, contentDescription = "")
