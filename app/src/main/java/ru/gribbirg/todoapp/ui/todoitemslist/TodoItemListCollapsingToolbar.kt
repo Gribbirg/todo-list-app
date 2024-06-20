@@ -33,7 +33,7 @@ import ru.gribbirg.todoapp.R
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 
 @Composable
-fun TodoItemListCollapsingToolbar(
+internal fun TodoItemListCollapsingToolbar(
     topPadding: Dp,
     doneCount: Int?,
     filterState: TodoItemsListUiState.FilterState?,
@@ -54,7 +54,11 @@ fun TodoItemListCollapsingToolbar(
         toolbar = {
             val progress = topBarState.toolbarState.progress
 
-            val textSize = getToolbarValue(35, 20, progress).sp
+            val textSize = getToolbarValue(
+                AppTheme.typography.titleLarge.fontSize.value,
+                AppTheme.typography.title.fontSize.value,
+                progress
+            ).sp
             val leftPadding = getToolbarValue(60, 16, progress).dp
             val bottomPadding = getToolbarValue(20, 20, progress).dp
 
@@ -85,7 +89,7 @@ fun TodoItemListCollapsingToolbar(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp)
+                    .height(140.dp)
                     .background(boxColor)
                     .padding(0.dp)
                     .pin()
@@ -105,8 +109,8 @@ fun TodoItemListCollapsingToolbar(
                         bottom = 20.dp
                     ),
                 fontSize = textSize,
-                fontWeight = FontWeight.Bold,
-                color = AppTheme.colors.primary
+                color = AppTheme.colors.primary,
+                style = AppTheme.typography.titleLarge
             )
 
             if (doneCount != null)
@@ -127,7 +131,7 @@ fun TodoItemListCollapsingToolbar(
                             bottom = bottomPadding
                         ),
                     color = countColor,
-                    fontSize = 20.sp
+                    style = AppTheme.typography.body
                 )
 
             IconButton(

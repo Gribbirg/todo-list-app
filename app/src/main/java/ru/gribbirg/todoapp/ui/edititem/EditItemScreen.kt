@@ -55,9 +55,9 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 import ru.gribbirg.todoapp.R
@@ -65,7 +65,6 @@ import ru.gribbirg.todoapp.data.data.TodoImportance
 import ru.gribbirg.todoapp.ui.components.ErrorComponent
 import ru.gribbirg.todoapp.ui.components.LoadingComponent
 import ru.gribbirg.todoapp.ui.theme.AppTheme
-import ru.gribbirg.todoapp.ui.todoitemslist.TodoItemsListUiState
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -119,16 +118,17 @@ fun EditItemScreen(
                             enabled = uiState is EditItemUiState.Loaded,
                             colors = ButtonDefaults.textButtonColors(
                                 contentColor = AppTheme.colors.blue,
-                                disabledContentColor =  AppTheme.colors.disable
+                                disabledContentColor = AppTheme.colors.disable
                             )
                         ) {
                             Text(
                                 text = stringResource(id = R.string.save),
                                 textAlign = TextAlign.Center,
-                                fontSize = 18.sp,
+                                style = AppTheme.typography.button,
+                                fontWeight = FontWeight.Bold
                             )
                         }
-                        Spacer(modifier = Modifier.width(16.dp))
+                        Spacer(modifier = Modifier.width(4.dp))
                     }
                 },
                 modifier = Modifier
@@ -266,7 +266,8 @@ private fun ItemTextField(
             unfocusedPlaceholderColor = placeFolderColor,
             cursorColor = cursorColor
         ),
-        shape = RoundedCornerShape(10.dp)
+        shape = RoundedCornerShape(10.dp),
+        textStyle = AppTheme.typography.body
     )
 }
 
@@ -283,7 +284,8 @@ private fun ItemImportanceSelector(
     ) {
         Text(
             text = stringResource(id = R.string.importance),
-            modifier = Modifier.padding(start = 8.dp)
+            modifier = Modifier.padding(start = 8.dp),
+            style = AppTheme.typography.body
         )
         TextButton(
             onClick = { menuOpened = true },
@@ -303,7 +305,10 @@ private fun ItemImportanceSelector(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                 }
-                Text(text = stringResource(id = importance.resourceId), fontSize = 16.sp)
+                Text(
+                    text = stringResource(id = importance.resourceId),
+                    style = AppTheme.typography.subhead
+                )
             }
         }
 
@@ -319,6 +324,7 @@ private fun ItemImportanceSelector(
                     text = {
                         Text(
                             text = stringResource(id = importanceValue.resourceId),
+                            style = AppTheme.typography.body
                         )
                     },
                     onClick = {
@@ -359,7 +365,8 @@ private fun ItemDeadline(
         Column {
             Text(
                 text = stringResource(id = R.string.deadline),
-                modifier = Modifier.padding(start = 8.dp)
+                modifier = Modifier.padding(start = 8.dp),
+                style = AppTheme.typography.body
             )
             TextButton(
                 onClick = { dialogOpened = true },
@@ -374,7 +381,8 @@ private fun ItemDeadline(
                             deadline.dayOfMonth,
                             stringArrayResource(id = R.array.months_names)[deadline.monthValue - 1],
                             deadline.year
-                        )
+                        ),
+                        style = AppTheme.typography.subhead
                     )
                 }
             }
@@ -502,6 +510,9 @@ private fun ItemDelete(enabled: Boolean, onDeleted: () -> Unit, modifier: Modifi
     ) {
         Icon(Icons.Filled.Delete, contentDescription = stringResource(id = R.string.delelte))
         Spacer(modifier = Modifier.width(10.dp))
-        Text(text = stringResource(id = R.string.delelte))
+        Text(
+            text = stringResource(id = R.string.delelte),
+            style = AppTheme.typography.body
+        )
     }
 }

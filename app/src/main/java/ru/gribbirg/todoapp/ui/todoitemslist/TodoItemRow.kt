@@ -122,8 +122,9 @@ fun TodoItemRow(
                     color = if (item.completed)
                         AppTheme.colors.tertiary
                     else
-                        AppTheme.colors.primary
-                )
+                        AppTheme.colors.primary,
+                    style = AppTheme.typography.body
+                    )
                 if (item.deadline != null) {
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
@@ -132,7 +133,8 @@ fun TodoItemRow(
                             item.deadline.dayOfMonth,
                             stringArrayResource(id = R.array.months_names)[item.deadline.monthValue - 1]
                         ),
-                        color = AppTheme.colors.tertiary
+                        color = AppTheme.colors.tertiary,
+                        style = AppTheme.typography.subhead
                     )
                 }
             }

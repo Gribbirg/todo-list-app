@@ -17,12 +17,15 @@ fun ErrorComponent(exception: Throwable, modifier: Modifier = Modifier) {
     ) {
         Text(
             text = stringResource(id = R.string.error_occurred),
-            color = AppTheme.colors.red
+            color = AppTheme.colors.red,
+            style = AppTheme.typography.body,
         )
         Text(
             text =
             exception.localizedMessage ?: exception.message
-            ?: "Unknown error", color = AppTheme.colors.red
+            ?: "Unknown error",
+            color = AppTheme.colors.red,
+            style = AppTheme.typography.body,
         )
     }
 }

@@ -115,7 +115,8 @@ fun TodoListItemScreen(
                                         Text(
                                             text = stringResource(id = R.string.new_item),
                                             modifier = Modifier.padding(20.dp),
-                                            color = AppTheme.colors.secondary
+                                            color = AppTheme.colors.secondary,
+                                            style = AppTheme.typography.body
                                         )
                                     }
                                 }
