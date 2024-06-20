@@ -1,6 +1,5 @@
-package ru.gribbirg.todoapp.ui.todoitemslist
+package ru.gribbirg.todoapp.ui.todoitemslist.components
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -22,7 +21,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,6 +30,7 @@ import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 import ru.gribbirg.todoapp.R
 import ru.gribbirg.todoapp.ui.theme.AppTheme
+import ru.gribbirg.todoapp.ui.todoitemslist.TodoItemsListUiState
 
 @Composable
 internal fun TodoItemListCollapsingToolbar(
@@ -53,8 +52,8 @@ internal fun TodoItemListCollapsingToolbar(
         scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
         toolbarModifier = Modifier.setShadow(topBarState.toolbarState.progress),
         toolbar = {
-            val progress = topBarState.toolbarState.progress.let { if (it == 2.2817403E-7f) 1f else it }
-            Log.i("test", "TodoItemListCollapsingToolbar: $progress")
+            val progress =
+                topBarState.toolbarState.progress.let { if (it == 2.2817403E-7f) 1f else it }
 
             val textSize = getToolbarValue(
                 AppTheme.typography.titleLarge.fontSize.value,
@@ -163,21 +162,26 @@ internal fun TodoItemListCollapsingToolbar(
                 ),
                 enabled = filterState != null
             ) {
-                if (filterState != null && filterState == TodoItemsListUiState.FilterState.ALL) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.baseline_visibility_24),
-                        contentDescription = stringResource(id = R.string.show)
-                    )
-                } else {
-                    Icon(
-                        painter = painterResource(id = R.drawable.baseline_visibility_off_24),
-                        contentDescription = stringResource(id = R.string.hide)
-                    )
-                }
+                FilterIcon(filterState = filterState)
             }
         }
     ) {
         content()
+    }
+}
+
+@Composable
+private fun FilterIcon(filterState: TodoItemsListUiState.FilterState?) {
+    if (filterState != null && filterState == TodoItemsListUiState.FilterState.ALL) {
+        Icon(
+            painter = painterResource(id = R.drawable.baseline_visibility_24),
+            contentDescription = stringResource(id = R.string.show)
+        )
+    } else {
+        Icon(
+            painter = painterResource(id = R.drawable.baseline_visibility_off_24),
+            contentDescription = stringResource(id = R.string.hide)
+        )
     }
 }
 

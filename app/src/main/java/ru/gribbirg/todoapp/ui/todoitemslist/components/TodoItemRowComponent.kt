@@ -1,4 +1,4 @@
-package ru.gribbirg.todoapp.ui.todoitemslist
+package ru.gribbirg.todoapp.ui.todoitemslist.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -37,6 +37,7 @@ import ru.gribbirg.todoapp.R
 import ru.gribbirg.todoapp.data.data.TodoImportance
 import ru.gribbirg.todoapp.data.data.TodoItem
 import ru.gribbirg.todoapp.ui.theme.AppTheme
+import java.time.LocalDate
 
 @Composable
 fun TodoItemRow(
@@ -64,31 +65,10 @@ fun TodoItemRow(
                     top = 4.dp
                 ),
         ) {
-            Checkbox(
-                checked = item.completed,
-                onCheckedChange = { onChecked(item, it) },
-                colors =
-                if (item.importance == TodoImportance.HIGH)
-                    CheckboxColors(
-                        checkedCheckmarkColor = AppTheme.colors.secondaryBack,
-                        uncheckedCheckmarkColor = Color.Unspecified,
-                        checkedBoxColor = AppTheme.colors.green,
-                        uncheckedBoxColor = AppTheme.colors.red.copy(alpha = 0.16f),
-                        disabledCheckedBoxColor = Color.Unspecified,
-                        disabledUncheckedBoxColor = Color.Unspecified,
-                        disabledIndeterminateBoxColor = Color.Unspecified,
-                        checkedBorderColor = AppTheme.colors.green,
-                        uncheckedBorderColor = AppTheme.colors.red,
-                        disabledBorderColor = Color.Unspecified,
-                        disabledUncheckedBorderColor = Color.Unspecified,
-                        disabledIndeterminateBorderColor = Color.Unspecified,
-                    )
-                else
-                    CheckboxDefaults.colors(
-                        checkedColor = AppTheme.colors.green,
-                        uncheckedColor = AppTheme.colors.separator,
-                        checkmarkColor = AppTheme.colors.secondaryBack
-                    )
+            ItemCheckBox(
+                completed = item.completed,
+                highImportance = item.importance == TodoImportance.HIGH,
+                onChecked = { value -> onChecked(item, value) }
             )
             Spacer(modifier = Modifier.width(4.dp))
             if (item.importance != TodoImportance.NO) {
@@ -109,33 +89,13 @@ fun TodoItemRow(
                     .fillMaxWidth()
                     .padding(top = 12.dp)
             ) {
-                Text(
+                ItemText(
                     text = item.text,
-                    modifier = Modifier,
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis,
-                    textDecoration =
-                    if (item.completed)
-                        TextDecoration.LineThrough
-                    else
-                        null,
-                    color = if (item.completed)
-                        AppTheme.colors.tertiary
-                    else
-                        AppTheme.colors.primary,
-                    style = AppTheme.typography.body
-                    )
+                    completed = item.completed
+                )
                 if (item.deadline != null) {
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = stringResource(
-                            id = R.string.day_month_date_template,
-                            item.deadline.dayOfMonth,
-                            stringArrayResource(id = R.array.months_names)[item.deadline.monthValue - 1]
-                        ),
-                        color = AppTheme.colors.tertiary,
-                        style = AppTheme.typography.subhead
-                    )
+                    DeadlineText(item.deadline)
                 }
             }
             IconButton(
@@ -148,6 +108,73 @@ fun TodoItemRow(
             }
         }
     }
+}
+
+@Composable
+private fun DeadlineText(deadline: LocalDate) {
+    Text(
+        text = stringResource(
+            id = R.string.day_month_date_template,
+            deadline.dayOfMonth,
+            stringArrayResource(id = R.array.months_names)[deadline.monthValue - 1]
+        ),
+        color = AppTheme.colors.tertiary,
+        style = AppTheme.typography.subhead
+    )
+}
+
+@Composable
+private fun ItemText(text: String, completed: Boolean) {
+    Text(
+        text = text,
+        modifier = Modifier,
+        maxLines = 3,
+        overflow = TextOverflow.Ellipsis,
+        textDecoration =
+        if (completed)
+            TextDecoration.LineThrough
+        else
+            null,
+        color = if (completed)
+            AppTheme.colors.tertiary
+        else
+            AppTheme.colors.primary,
+        style = AppTheme.typography.body
+    )
+}
+
+@Composable
+private fun ItemCheckBox(
+    completed: Boolean,
+    highImportance: Boolean,
+    onChecked: (Boolean) -> Unit,
+) {
+    Checkbox(
+        checked = completed,
+        onCheckedChange = { onChecked(it) },
+        colors =
+        if (highImportance)
+            CheckboxColors(
+                checkedCheckmarkColor = AppTheme.colors.secondaryBack,
+                uncheckedCheckmarkColor = Color.Unspecified,
+                checkedBoxColor = AppTheme.colors.green,
+                uncheckedBoxColor = AppTheme.colors.red.copy(alpha = 0.16f),
+                disabledCheckedBoxColor = Color.Unspecified,
+                disabledUncheckedBoxColor = Color.Unspecified,
+                disabledIndeterminateBoxColor = Color.Unspecified,
+                checkedBorderColor = AppTheme.colors.green,
+                uncheckedBorderColor = AppTheme.colors.red,
+                disabledBorderColor = Color.Unspecified,
+                disabledUncheckedBorderColor = Color.Unspecified,
+                disabledIndeterminateBorderColor = Color.Unspecified,
+            )
+        else
+            CheckboxDefaults.colors(
+                checkedColor = AppTheme.colors.green,
+                uncheckedColor = AppTheme.colors.separator,
+                checkmarkColor = AppTheme.colors.secondaryBack
+            )
+    )
 }
 
 @Composable

@@ -14,46 +14,27 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDefaults
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -61,14 +42,13 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 import ru.gribbirg.todoapp.R
-import ru.gribbirg.todoapp.data.data.TodoImportance
 import ru.gribbirg.todoapp.ui.components.ErrorComponent
 import ru.gribbirg.todoapp.ui.components.LoadingComponent
+import ru.gribbirg.todoapp.ui.edititem.components.ItemDeadline
+import ru.gribbirg.todoapp.ui.edititem.components.ItemDelete
+import ru.gribbirg.todoapp.ui.edititem.components.ItemImportanceSelector
+import ru.gribbirg.todoapp.ui.edititem.components.ItemTextField
 import ru.gribbirg.todoapp.ui.theme.AppTheme
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
-import java.time.ZoneOffset
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -232,287 +212,4 @@ private fun EdiItemSeparator(
         modifier = modifier,
         color = AppTheme.colors.separator
     )
-}
-
-@Composable
-private fun ItemTextField(
-    text: String,
-    onChanged: (String) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val indicatorColor = Color.Transparent
-    val containerColor = AppTheme.colors.secondaryBack
-    val textColor = AppTheme.colors.primary
-    val placeFolderColor = AppTheme.colors.gray
-    val cursorColor = AppTheme.colors.blue
-    TextField(
-        value = text,
-        onValueChange = { onChanged(it) },
-        modifier = modifier,
-        minLines = 5,
-        placeholder = { Text(text = stringResource(id = R.string.type_text)) },
-        colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = indicatorColor,
-            unfocusedIndicatorColor = indicatorColor,
-            disabledIndicatorColor = indicatorColor,
-            focusedContainerColor = containerColor,
-            unfocusedContainerColor = containerColor,
-            disabledContainerColor = containerColor,
-            focusedTextColor = textColor,
-            unfocusedTextColor = textColor,
-            disabledTextColor = textColor,
-            focusedPlaceholderColor = placeFolderColor,
-            disabledPlaceholderColor = placeFolderColor,
-            unfocusedPlaceholderColor = placeFolderColor,
-            cursorColor = cursorColor
-        ),
-        shape = RoundedCornerShape(10.dp),
-        textStyle = AppTheme.typography.body
-    )
-}
-
-@Composable
-private fun ItemImportanceSelector(
-    importance: TodoImportance,
-    onChanged: (TodoImportance) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    var menuOpened by remember { mutableStateOf(false) }
-
-    Column(
-        modifier = modifier
-    ) {
-        Text(
-            text = stringResource(id = R.string.importance),
-            modifier = Modifier.padding(start = 8.dp),
-            style = AppTheme.typography.body
-        )
-        TextButton(
-            onClick = { menuOpened = true },
-            colors = ButtonDefaults.textButtonColors(
-                contentColor = importance.colorId?.let { colorResource(it) }
-                    ?: AppTheme.colors.gray
-            )
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                if (importance.logoId != null) {
-                    Icon(
-                        painter = painterResource(id = importance.logoId),
-                        contentDescription = stringResource(id = importance.resourceId),
-                        modifier = Modifier,
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                }
-                Text(
-                    text = stringResource(id = importance.resourceId),
-                    style = AppTheme.typography.subhead
-                )
-            }
-        }
-
-        DropdownMenu(
-            expanded = menuOpened,
-            onDismissRequest = { menuOpened = false },
-            modifier = Modifier.background(AppTheme.colors.elevated)
-        ) {
-            for (importanceValue in TodoImportance.entries) {
-                val color = importanceValue.colorId?.let { colorResource(it) }
-                    ?: AppTheme.colors.primary
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = stringResource(id = importanceValue.resourceId),
-                            style = AppTheme.typography.body
-                        )
-                    },
-                    onClick = {
-                        onChanged(importanceValue)
-                        menuOpened = false
-                    },
-                    leadingIcon = importanceValue.logoId?.let {
-                        {
-                            Icon(
-                                painterResource(id = it),
-                                contentDescription = stringResource(id = importanceValue.resourceId)
-                            )
-                        }
-                    },
-                    colors = MenuDefaults.itemColors(
-                        textColor = color,
-                        leadingIconColor = color
-                    )
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun ItemDeadline(
-    deadline: LocalDate?,
-    onChanged: (LocalDate?) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    var dialogOpened by remember {
-        mutableStateOf(false)
-    }
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Column {
-            Text(
-                text = stringResource(id = R.string.deadline),
-                modifier = Modifier.padding(start = 8.dp),
-                style = AppTheme.typography.body
-            )
-            TextButton(
-                onClick = { dialogOpened = true },
-                colors = ButtonDefaults.textButtonColors(
-                    contentColor = AppTheme.colors.blue
-                )
-            ) {
-                if (deadline != null) {
-                    Text(
-                        text = stringResource(
-                            id = R.string.day_month_year_date_template,
-                            deadline.dayOfMonth,
-                            stringArrayResource(id = R.array.months_names)[deadline.monthValue - 1],
-                            deadline.year
-                        ),
-                        style = AppTheme.typography.subhead
-                    )
-                }
-            }
-        }
-        Switch(
-            checked = deadline != null,
-            onCheckedChange = { onChanged(if (it) LocalDate.now() else null) },
-            colors = SwitchDefaults.colors(
-                checkedThumbColor = AppTheme.colors.white,
-                checkedTrackColor = AppTheme.colors.blue,
-                checkedBorderColor = Color.Transparent,
-                uncheckedThumbColor = AppTheme.colors.separator,
-                uncheckedTrackColor = AppTheme.colors.secondaryBack,
-                uncheckedBorderColor = AppTheme.colors.separator
-            )
-        )
-    }
-
-    if (dialogOpened) {
-        ItemDeadlineDatePicker(
-            startingValue = deadline!!,
-            onChanged = onChanged,
-            close = { dialogOpened = false })
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ItemDeadlineDatePicker(
-    startingValue: LocalDate,
-    onChanged: (LocalDate?) -> Unit,
-    close: () -> Unit
-) {
-    val datePickerState = rememberDatePickerState()
-    datePickerState.selectedDateMillis =
-        startingValue.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
-    DatePickerDialog(
-        onDismissRequest = close,
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    onChanged(
-                        Instant
-                            .ofEpochMilli(datePickerState.selectedDateMillis!!)
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate()
-                    )
-                    close()
-                },
-                enabled = datePickerState.selectedDateMillis != null,
-                colors = ButtonDefaults.textButtonColors(contentColor = AppTheme.colors.blue)
-            ) {
-                Text(text = stringResource(id = R.string.ready))
-            }
-        },
-        dismissButton = {
-            TextButton(
-                onClick = close,
-                colors = ButtonDefaults.textButtonColors(contentColor = AppTheme.colors.blue)
-            ) {
-                Text(text = stringResource(id = R.string.cancel))
-            }
-        },
-        colors = DatePickerDefaults.colors(
-            containerColor = AppTheme.colors.secondaryBack
-        )
-    ) {
-        DatePicker(
-            state = datePickerState,
-            colors = DatePickerDefaults.colors(
-                containerColor = AppTheme.colors.secondaryBack,
-                titleContentColor = AppTheme.colors.gray,
-                headlineContentColor = AppTheme.colors.primary,
-                weekdayContentColor = AppTheme.colors.gray,
-                subheadContentColor = Color.Unspecified,
-                navigationContentColor = AppTheme.colors.gray,
-                yearContentColor = AppTheme.colors.primary,
-                disabledYearContentColor = Color.Unspecified,
-                currentYearContentColor = AppTheme.colors.blue,
-                selectedYearContentColor = AppTheme.colors.primary,
-                disabledSelectedYearContentColor = Color.Unspecified,
-                selectedYearContainerColor = AppTheme.colors.blue,
-                disabledSelectedYearContainerColor = Color.Unspecified,
-                dayContentColor = AppTheme.colors.primary,
-                disabledDayContentColor = Color.Unspecified,
-                selectedDayContentColor = AppTheme.colors.primary,
-                disabledSelectedDayContentColor = Color.Unspecified,
-                selectedDayContainerColor = AppTheme.colors.blue,
-                disabledSelectedDayContainerColor = Color.Unspecified,
-                todayContentColor = AppTheme.colors.blue,
-                todayDateBorderColor = Color.Transparent,
-                dividerColor = AppTheme.colors.separator,
-                dateTextFieldColors = TextFieldDefaults.colors(
-                    focusedTextColor = AppTheme.colors.primary,
-                    unfocusedTextColor = AppTheme.colors.primary,
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    cursorColor = AppTheme.colors.blue,
-                    selectionColors = null,
-                    focusedIndicatorColor = AppTheme.colors.blue,
-                    unfocusedIndicatorColor = AppTheme.colors.gray,
-                    focusedLabelColor = AppTheme.colors.blue,
-                    unfocusedLabelColor = AppTheme.colors.gray,
-                    errorCursorColor = AppTheme.colors.red,
-                    errorLabelColor = AppTheme.colors.red,
-                    errorContainerColor = AppTheme.colors.secondaryBack,
-                    errorIndicatorColor = AppTheme.colors.red,
-                    errorTextColor = AppTheme.colors.primary
-                )
-            )
-        )
-    }
-}
-
-@Composable
-private fun ItemDelete(enabled: Boolean, onDeleted: () -> Unit, modifier: Modifier = Modifier) {
-    TextButton(
-        onClick = onDeleted,
-        modifier = modifier,
-        colors = ButtonDefaults.textButtonColors(
-            contentColor = AppTheme.colors.red,
-            disabledContentColor = AppTheme.colors.disable
-        ),
-        enabled = enabled
-    ) {
-        Icon(Icons.Filled.Delete, contentDescription = stringResource(id = R.string.delelte))
-        Spacer(modifier = Modifier.width(10.dp))
-        Text(
-            text = stringResource(id = R.string.delelte),
-            style = AppTheme.typography.body
-        )
-    }
 }

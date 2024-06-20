@@ -32,6 +32,10 @@ import ru.gribbirg.todoapp.data.data.TodoItem
 import ru.gribbirg.todoapp.ui.components.ErrorComponent
 import ru.gribbirg.todoapp.ui.components.LoadingComponent
 import ru.gribbirg.todoapp.ui.theme.AppTheme
+import ru.gribbirg.todoapp.ui.todoitemslist.components.BoxWithSidesForShadow
+import ru.gribbirg.todoapp.ui.todoitemslist.components.Sides
+import ru.gribbirg.todoapp.ui.todoitemslist.components.TodoItemListCollapsingToolbar
+import ru.gribbirg.todoapp.ui.todoitemslist.components.TodoItemRow
 
 @Composable
 fun TodoListItemScreen(
@@ -148,7 +152,7 @@ fun TodoListItemScreen(
                         }
 
                         item {
-                            Spacer(modifier = Modifier.height(40.dp))
+                            Spacer(modifier = Modifier.height(32.dp))
                         }
                     }
                 }
