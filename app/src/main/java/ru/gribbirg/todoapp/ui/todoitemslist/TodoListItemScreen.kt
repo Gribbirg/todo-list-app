@@ -83,20 +83,33 @@ fun TodoListItemScreen(
                             item {
                                 Spacer(modifier = Modifier.height(5.dp))
                             }
-                            item {
+                            item(
+                                key = state.items.first().hashCode()
+                            ) {
                                 TodoItemRow(
                                     item = state.items.first(),
-                                    onChecked = viewModel::onChecked,
-                                    onInfoClicked = toEditItemScreen,
-                                    topBorderRadius = 16.dp
+                                    onChecked = { value ->
+                                        viewModel.onChecked(
+                                            state.items.first(),
+                                            value
+                                        )
+                                    },
+                                    onDeleted = { viewModel.delete(state.items.first()) },
+                                    onInfoClicked = { toEditItemScreen(state.items.first()) },
+                                    topBorderRadius = 16.dp,
+                                    dismissOnCheck = state.filterState == TodoItemsListUiState.FilterState.NOT_COMPLETED
                                 )
                             }
-                            items(state.items.size - 1) {
+                            items(
+                                state.items.size - 1,
+                                key = { i -> state.items[i + 1].hashCode() }) {
                                 val item = state.items[it + 1]
                                 TodoItemRow(
                                     item = item,
-                                    onChecked = viewModel::onChecked,
-                                    onInfoClicked = toEditItemScreen
+                                    onChecked = { value -> viewModel.onChecked(item, value) },
+                                    onDeleted = { viewModel.delete(item) },
+                                    onInfoClicked = { toEditItemScreen(item) },
+                                    dismissOnCheck = state.filterState == TodoItemsListUiState.FilterState.NOT_COMPLETED
                                 )
                             }
                             item {

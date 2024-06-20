@@ -50,6 +50,12 @@ class TodoItemsListViewModel(
         }
     }
 
+    fun delete(item: TodoItem) {
+        viewModelScope.launch {
+            todoItemRepository.deleteItem(item)
+        }
+    }
+
     fun onFilterChange(filterState: TodoItemsListUiState.FilterState) {
         viewModelScope.launch {
             filterFlow.emit(filterState)

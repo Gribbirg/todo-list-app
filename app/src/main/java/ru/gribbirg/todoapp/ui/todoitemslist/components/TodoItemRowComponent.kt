@@ -42,8 +42,10 @@ import java.time.LocalDate
 @Composable
 fun TodoItemRow(
     item: TodoItem,
-    onChecked: (TodoItem, Boolean) -> Unit,
-    onInfoClicked: (TodoItem) -> Unit,
+    onChecked: (Boolean) -> Unit,
+    onDeleted: () -> Unit,
+    onInfoClicked: () -> Unit,
+    dismissOnCheck: Boolean = false,
     topBorderRadius: Dp = 0.dp,
 ) {
     val shape = RoundedCornerShape(
@@ -53,58 +55,65 @@ fun TodoItemRow(
     BoxWithSidesForShadow(
         sides = if (topBorderRadius == 0.dp) Sides.LEFT_AND_RIGHT else Sides.TOP,
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .shadow(2.dp, shape)
-                .clip(shape)
-                .background(AppTheme.colors.secondaryBack)
-                .padding(
-                    start = 8.dp,
-                    end = 8.dp,
-                    top = 4.dp
-                ),
+        TodoItemSwipeToDismiss(
+            onChecked = { onChecked(true) },
+            onDelete = onDeleted,
+            dismissOnCheck = dismissOnCheck,
+            topBorderRadius = topBorderRadius
         ) {
-            ItemCheckBox(
-                completed = item.completed,
-                highImportance = item.importance == TodoImportance.HIGH,
-                onChecked = { value -> onChecked(item, value) }
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            if (item.importance != TodoImportance.NO) {
-                Icon(
-                    painter = painterResource(id = item.importance.logoId!!),
-                    contentDescription = stringResource(id = item.importance.resourceId),
-                    modifier = Modifier
-                        .padding(top = 12.dp),
-                    tint = item.importance.colorId?.let { colorResource(id = it) }
-                        ?: AppTheme.colors.gray
-                )
-                Spacer(modifier = Modifier.width(5.dp))
-            }
-
-            Column(
+            Row(
                 modifier = Modifier
-                    .weight(1f)
                     .fillMaxWidth()
-                    .padding(top = 12.dp)
+                    .shadow(2.dp, shape)
+                    .clip(shape)
+                    .background(AppTheme.colors.secondaryBack)
+                    .padding(
+                        start = 8.dp,
+                        end = 8.dp,
+                        top = 4.dp
+                    ),
             ) {
-                ItemText(
-                    text = item.text,
-                    completed = item.completed
+                ItemCheckBox(
+                    completed = item.completed,
+                    highImportance = item.importance == TodoImportance.HIGH,
+                    onChecked = { value -> onChecked(value) }
                 )
-                if (item.deadline != null) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    DeadlineText(item.deadline)
+                Spacer(modifier = Modifier.width(4.dp))
+                if (item.importance != TodoImportance.NO) {
+                    Icon(
+                        painter = painterResource(id = item.importance.logoId!!),
+                        contentDescription = stringResource(id = item.importance.resourceId),
+                        modifier = Modifier
+                            .padding(top = 12.dp),
+                        tint = item.importance.colorId?.let { colorResource(id = it) }
+                            ?: AppTheme.colors.gray
+                    )
+                    Spacer(modifier = Modifier.width(5.dp))
                 }
-            }
-            IconButton(
-                onClick = { onInfoClicked(item) },
-                colors = IconButtonDefaults.iconButtonColors(
-                    contentColor = AppTheme.colors.tertiary
-                )
-            ) {
-                Icon(Icons.Outlined.Info, contentDescription = "")
+
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .padding(top = 12.dp)
+                ) {
+                    ItemText(
+                        text = item.text,
+                        completed = item.completed
+                    )
+                    if (item.deadline != null) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        DeadlineText(item.deadline)
+                    }
+                }
+                IconButton(
+                    onClick = { onInfoClicked() },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = AppTheme.colors.tertiary
+                    )
+                ) {
+                    Icon(Icons.Outlined.Info, contentDescription = "")
+                }
             }
         }
     }
