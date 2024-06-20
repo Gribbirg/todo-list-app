@@ -91,22 +91,14 @@ fun TodoItemRow(
                     )
             )
             Spacer(modifier = Modifier.width(4.dp))
-            if (item.importance == TodoImportance.HIGH) {
+            if (item.importance != TodoImportance.NO) {
                 Icon(
-                    painter = painterResource(id = R.drawable.baseline_priority_high_24),
-                    contentDescription = null,
+                    painter = painterResource(id = item.importance.logoId!!),
+                    contentDescription = stringResource(id = item.importance.resourceId),
                     modifier = Modifier
                         .padding(top = 12.dp),
-                    tint = colorResource(id = TodoImportance.HIGH.colorId!!)
-                )
-                Spacer(modifier = Modifier.width(5.dp))
-            } else if (item.importance == TodoImportance.LOW) {
-                Icon(
-                    painter = painterResource(id = R.drawable.baseline_south_24),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(top = 12.dp),
-                    tint = AppTheme.colors.tertiary
+                    tint = item.importance.colorId?.let { colorResource(id = it) }
+                        ?: AppTheme.colors.tertiary
                 )
                 Spacer(modifier = Modifier.width(5.dp))
             }

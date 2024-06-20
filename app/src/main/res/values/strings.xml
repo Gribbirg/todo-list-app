@@ -21,7 +21,7 @@
         <item>Dec</item>
     </string-array>
     <string name="save">SAVE</string>
-    <string name="type_text">Type text here</string>
+    <string name="type_text">What to do...</string>
     <string name="importance">Importance</string>
     <string name="importance_low">Low</string>
     <string name="importence_no">No</string>
@@ -31,4 +31,9 @@
     <string name="cancel">CANCEL</string>
     <string name="delelte">Delete</string>
     <string name="day_month_year_date_template">%2$s %1$s, %3$s</string>
+    <string name="add">Add</string>
+    <string name="show">Show</string>
+    <string name="hide">Hide</string>
+    <string name="close">Close</string>
+    <string name="error_occurred">An error has occurred:</string>
 </resources>

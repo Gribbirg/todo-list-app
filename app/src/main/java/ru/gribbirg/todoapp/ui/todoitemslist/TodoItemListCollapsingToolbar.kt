@@ -56,10 +56,18 @@ fun TodoItemListCollapsingToolbar(
 
             val textSize = getToolbarValue(35, 20, progress).sp
             val leftPadding = getToolbarValue(60, 16, progress).dp
-            val bottomPadding = getToolbarValue(30, 10, progress).dp
+            val bottomPadding = getToolbarValue(20, 20, progress).dp
 
-            val countColor = AppTheme.colors.grayLight
-                .let { it.copy(alpha = getToolbarValue(it.alpha, 0f, progress)) }
+            val countColor = AppTheme.colors.tertiary
+                .let {
+                    it.copy(
+                        alpha = getToolbarValue(
+                            it.alpha,
+                            0f,
+                            maxOf(0f, progress * 2 - 1f)
+                        )
+                    )
+                }
 
             val boxColor =
                 getToolbarValue(
@@ -77,7 +85,7 @@ fun TodoItemListCollapsingToolbar(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
+                    .height(150.dp)
                     .background(boxColor)
                     .padding(0.dp)
                     .pin()
@@ -94,7 +102,7 @@ fun TodoItemListCollapsingToolbar(
                         start = leftPadding,
                         top = 16.dp,
                         end = 16.dp,
-                        bottom = 10.dp
+                        bottom = 20.dp
                     ),
                 fontSize = textSize,
                 fontWeight = FontWeight.Bold,
@@ -152,12 +160,12 @@ fun TodoItemListCollapsingToolbar(
                 if (filterState != null && filterState == TodoItemsListUiState.FilterState.ALL) {
                     Icon(
                         painter = painterResource(id = R.drawable.baseline_visibility_24),
-                        contentDescription = null
+                        contentDescription = stringResource(id = R.string.show)
                     )
                 } else {
                     Icon(
                         painter = painterResource(id = R.drawable.baseline_visibility_off_24),
-                        contentDescription = null
+                        contentDescription = stringResource(id = R.string.hide)
                     )
                 }
             }

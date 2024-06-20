@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,7 +20,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
@@ -62,7 +62,10 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 import ru.gribbirg.todoapp.R
 import ru.gribbirg.todoapp.data.data.TodoImportance
+import ru.gribbirg.todoapp.ui.components.ErrorComponent
+import ru.gribbirg.todoapp.ui.components.LoadingComponent
 import ru.gribbirg.todoapp.ui.theme.AppTheme
+import ru.gribbirg.todoapp.ui.todoitemslist.TodoItemsListUiState
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -108,15 +111,21 @@ fun EditItemScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.End
                     ) {
-                        TextButton(onClick = {
-                            viewModel.save()
-                            onClose()
-                        }) {
+                        TextButton(
+                            onClick = {
+                                viewModel.save()
+                                onClose()
+                            },
+                            enabled = uiState is EditItemUiState.Loaded,
+                            colors = ButtonDefaults.textButtonColors(
+                                contentColor = AppTheme.colors.blue,
+                                disabledContentColor =  AppTheme.colors.disable
+                            )
+                        ) {
                             Text(
                                 text = stringResource(id = R.string.save),
                                 textAlign = TextAlign.Center,
-                                fontSize = 20.sp,
-                                color = AppTheme.colors.blue
+                                fontSize = 18.sp,
                             )
                         }
                         Spacer(modifier = Modifier.width(16.dp))
@@ -135,7 +144,7 @@ fun EditItemScreen(
                     IconButton(onClick = onClose) {
                         Icon(
                             Icons.Filled.Close,
-                            contentDescription = null,
+                            contentDescription = stringResource(id = R.string.close),
                             tint = AppTheme.colors.primary
                         )
                     }
@@ -195,8 +204,21 @@ fun EditItemScreen(
                 }
             }
 
-            else -> {
-                CircularProgressIndicator()
+            is EditItemUiState.Error -> {
+                ErrorComponent(
+                    exception = (uiState as EditItemUiState.Error).exception,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(paddingValue)
+                )
+            }
+
+            EditItemUiState.Loading -> {
+                LoadingComponent(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValue)
+                )
             }
         }
     }
@@ -276,7 +298,7 @@ private fun ItemImportanceSelector(
                 if (importance.logoId != null) {
                     Icon(
                         painter = painterResource(id = importance.logoId),
-                        contentDescription = null,
+                        contentDescription = stringResource(id = importance.resourceId),
                         modifier = Modifier,
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -288,11 +310,11 @@ private fun ItemImportanceSelector(
         DropdownMenu(
             expanded = menuOpened,
             onDismissRequest = { menuOpened = false },
-            modifier = Modifier.background(AppTheme.colors.secondaryBack)
+            modifier = Modifier.background(AppTheme.colors.grayLight)
         ) {
             for (importanceValue in TodoImportance.entries) {
                 val color = importanceValue.colorId?.let { colorResource(it) }
-                    ?: AppTheme.colors.gray
+                    ?: AppTheme.colors.primary
                 DropdownMenuItem(
                     text = {
                         Text(
@@ -307,7 +329,7 @@ private fun ItemImportanceSelector(
                         {
                             Icon(
                                 painterResource(id = it),
-                                contentDescription = null
+                                contentDescription = stringResource(id = importanceValue.resourceId)
                             )
                         }
                     },
@@ -472,10 +494,13 @@ private fun ItemDelete(enabled: Boolean, onDeleted: () -> Unit, modifier: Modifi
     TextButton(
         onClick = onDeleted,
         modifier = modifier,
-        colors = ButtonDefaults.textButtonColors(contentColor = AppTheme.colors.red),
+        colors = ButtonDefaults.textButtonColors(
+            contentColor = AppTheme.colors.red,
+            disabledContentColor = AppTheme.colors.disable
+        ),
         enabled = enabled
     ) {
-        Icon(Icons.Filled.Delete, contentDescription = null)
+        Icon(Icons.Filled.Delete, contentDescription = stringResource(id = R.string.delelte))
         Spacer(modifier = Modifier.width(10.dp))
         Text(text = stringResource(id = R.string.delelte))
     }

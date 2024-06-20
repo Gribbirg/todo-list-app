@@ -1,5 +1,6 @@
 package ru.gribbirg.todoapp.ui.todoitemslist
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -9,6 +10,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -23,12 +25,18 @@ class TodoItemsListViewModel(
     private val filterFlow = MutableStateFlow(TodoItemsListUiState.FilterState.NOT_COMPLETED)
     val uiState: StateFlow<TodoItemsListUiState> =
         todoItemRepository.getItemsFlow()
-            .combine(filterFlow) { list, filter ->
+            .combine<List<TodoItem>, TodoItemsListUiState.FilterState, TodoItemsListUiState>(
+                filterFlow
+            ) { list, filter ->
                 TodoItemsListUiState.Loaded(
                     items = list.filter(filter.filter),
                     filterState = filter,
                     doneCount = list.count { it.completed }
                 )
+            }
+            .catch { e ->
+                Log.e("ListFlow", "Todo list flow error: ${e.message ?: e.cause}")
+                emit(TodoItemsListUiState.Error(e))
             }
             .stateIn(viewModelScope, SharingStarted.Eagerly, TodoItemsListUiState.Loading)
 

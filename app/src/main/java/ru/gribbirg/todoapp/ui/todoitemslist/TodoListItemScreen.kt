@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -14,7 +15,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -29,6 +29,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.gribbirg.todoapp.R
 import ru.gribbirg.todoapp.data.data.TodoItem
+import ru.gribbirg.todoapp.ui.components.ErrorComponent
+import ru.gribbirg.todoapp.ui.components.LoadingComponent
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 
 @Composable
@@ -43,14 +45,15 @@ fun TodoListItemScreen(
     Scaffold(
         containerColor = AppTheme.colors.primaryBack,
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = { toEditItemScreen(null) },
-                shape = CircleShape,
-                containerColor = AppTheme.colors.blue,
-                contentColor = AppTheme.colors.white
-            ) {
-                Icon(Icons.Filled.Add, contentDescription = null)
-            }
+            if (uiState is TodoItemsListUiState.Loaded)
+                FloatingActionButton(
+                    onClick = { toEditItemScreen(null) },
+                    shape = CircleShape,
+                    containerColor = AppTheme.colors.blue,
+                    contentColor = AppTheme.colors.white
+                ) {
+                    Icon(Icons.Filled.Add, contentDescription = stringResource(id = R.string.add))
+                }
         }
     ) { paddingValue ->
         TodoItemListCollapsingToolbar(
@@ -149,9 +152,20 @@ fun TodoListItemScreen(
                     }
                 }
 
-                else -> {
-                    CircularProgressIndicator(
+                is TodoItemsListUiState.Error -> {
+                    ErrorComponent(
+                        exception = (uiState as TodoItemsListUiState.Error).exception,
                         modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(paddingValue)
+                    )
+                }
+
+                TodoItemsListUiState.Loading -> {
+                    LoadingComponent(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValue)
                     )
                 }
             }

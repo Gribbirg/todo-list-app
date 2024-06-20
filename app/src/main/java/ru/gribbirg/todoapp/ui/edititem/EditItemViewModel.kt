@@ -37,8 +37,9 @@ class EditItemViewModel(
                             EditItemUiState.ItemState.EDIT
                         )
                 )
+                throw Exception()
             } catch (e: Exception) {
-                _uiState.emit(EditItemUiState.Error(e.message.toString()))
+                _uiState.emit(EditItemUiState.Error(e))
             }
         }
     }

@@ -4,7 +4,7 @@ import ru.gribbirg.todoapp.data.data.TodoItem
 
 sealed class TodoItemsListUiState {
     data object Loading : TodoItemsListUiState()
-    data class Error(val text: String) : TodoItemsListUiState()
+    data class Error(val exception: Throwable) : TodoItemsListUiState()
 
     data class Loaded(
         val items: List<TodoItem>,

@@ -20,7 +20,7 @@
         <item>декобря</item>
     </string-array>
     <string name="save">СОХРАНИТЬ</string>
-    <string name="type_text">Напиши текст тут</string>
+    <string name="type_text">Что надо сделать...</string>
     <string name="importance">Важность</string>
     <string name="importance_low">Низкая</string>
     <string name="importence_no">Нет</string>
@@ -29,5 +29,10 @@
     <string name="ready">ГОТОВО</string>
     <string name="cancel">ОТМЕНА</string>
     <string name="delelte">Удалить</string>
-    <string name="day_month_year_date_template">%1$1 %2$s %3$s</string>
+    <string name="day_month_year_date_template">%1$s %2$s %3$s</string>
+    <string name="add">Добавить</string>
+    <string name="show">Показать</string>
+    <string name="hide">Скрыть</string>
+    <string name="close">Закрыть</string>
+    <string name="error_occurred">Произошла ошибка:</string>
 </resources>
