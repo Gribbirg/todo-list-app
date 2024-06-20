@@ -1,12 +1,12 @@
 package ru.gribbirg.todoapp.data.data
 
+import ru.gribbirg.todoapp.R
 import java.time.LocalDate
-import java.util.Date
 
 data class TodoItem(
     val id: String = "",
     val text: String = "",
-    val importance: TodoImportance = TodoImportance.MEDIUM,
+    val importance: TodoImportance = TodoImportance.NO,
     val deadline: LocalDate? = null,
     val completed: Boolean = false,
     val creationDate: LocalDate = LocalDate.now(),
@@ -14,8 +14,17 @@ data class TodoItem(
 )
 
 
-enum class TodoImportance {
-    LOW,
-    MEDIUM,
-    HIGH
+enum class TodoImportance(val resourceId: Int, val logoId: Int? = null, val colorId: Int? = null) {
+    NO(
+        resourceId = R.string.importence_no
+    ),
+    LOW(
+        resourceId = R.string.importance_low,
+        logoId = R.drawable.baseline_south_24
+    ),
+    HIGH(
+        resourceId = R.string.importance_high,
+        logoId = R.drawable.baseline_priority_high_24,
+        colorId = R.color.red
+    )
 }

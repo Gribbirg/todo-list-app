@@ -51,6 +51,8 @@ android {
 
 dependencies {
 
+    implementation("androidx.compose.material3:material3:1.3.0-beta03")
+
     // Compose navigation
     implementation(libs.androidx.navigation.navigation.compose)
 

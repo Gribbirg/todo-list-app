@@ -45,8 +45,31 @@ class EditItemViewModel(
 
     fun save() {
         viewModelScope.launch {
-            if (uiState.value is EditItemUiState.Loaded)
-                todoItemRepository.saveItem(item = (uiState.value as EditItemUiState.Loaded).item)
+            if (uiState.value is EditItemUiState.Loaded) {
+                val state = (uiState.value as EditItemUiState.Loaded)
+                when (state.itemState) {
+                    EditItemUiState.ItemState.EDIT -> todoItemRepository.saveItem(item = state.item)
+                    EditItemUiState.ItemState.NEW -> todoItemRepository.addItem(item = state.item)
+                }
+            }
+        }
+    }
+
+    fun edit(item: TodoItem) {
+        if (uiState.value is EditItemUiState.Loaded) {
+            _uiState.update {
+                val state = it as EditItemUiState.Loaded
+                state.copy(
+                    item = item
+                )
+            }
+        }
+    }
+
+    fun delete() {
+        require(uiState.value is EditItemUiState.Loaded)
+        viewModelScope.launch {
+            todoItemRepository.deleteItem((uiState.value as EditItemUiState.Loaded).item)
         }
     }
 

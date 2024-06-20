@@ -30,7 +30,7 @@ class TodoItemsRepositoryHardCodeImpl : TodoItemRepository {
     }
 
     override suspend fun deleteItem(item: TodoItem) {
-        itemsFlow.update { state -> state.filter { it != item }.toMutableStateList() }
+        itemsFlow.update { state -> state.filter { it.id != item.id }.toMutableStateList() }
     }
 
     companion object {
