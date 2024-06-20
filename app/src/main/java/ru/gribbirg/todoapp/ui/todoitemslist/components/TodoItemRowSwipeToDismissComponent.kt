@@ -23,6 +23,7 @@ import ru.gribbirg.todoapp.data.data.TodoItem
 
 @Composable
 fun TodoItemSwipeToDismiss(
+    completed: Boolean,
     onChecked: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
@@ -85,7 +86,7 @@ fun TodoItemSwipeToDismiss(
                     topBorderRadius
                 )
             },
-//            enableDismissFromStartToEnd = !completed
+            enableDismissFromStartToEnd = !completed
         ) {
             content()
         }

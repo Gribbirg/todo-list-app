@@ -56,6 +56,7 @@ fun TodoItemRow(
         sides = if (topBorderRadius == 0.dp) Sides.LEFT_AND_RIGHT else Sides.TOP,
     ) {
         TodoItemSwipeToDismiss(
+            completed = item.completed,
             onChecked = { onChecked(true) },
             onDelete = onDeleted,
             dismissOnCheck = dismissOnCheck,
