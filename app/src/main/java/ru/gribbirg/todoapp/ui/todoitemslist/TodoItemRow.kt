@@ -23,11 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -142,7 +138,7 @@ fun TodoItemRow(
                         text = stringResource(
                             id = R.string.day_month_date_template,
                             item.deadline.dayOfMonth,
-                            stringArrayResource(id = R.array.months_names)[item.deadline.monthValue]
+                            stringArrayResource(id = R.array.months_names)[item.deadline.monthValue - 1]
                         ),
                         color = AppTheme.colors.tertiary
                     )

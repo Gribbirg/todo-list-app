@@ -348,9 +348,10 @@ private fun ItemDeadline(
                 if (deadline != null) {
                     Text(
                         text = stringResource(
-                            id = R.string.day_month_date_template,
+                            id = R.string.day_month_year_date_template,
                             deadline.dayOfMonth,
-                            stringArrayResource(id = R.array.months_names)[deadline.monthValue]
+                            stringArrayResource(id = R.array.months_names)[deadline.monthValue - 1],
+                            deadline.year
                         )
                     )
                 }

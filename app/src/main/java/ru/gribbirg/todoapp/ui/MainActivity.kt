@@ -1,4 +1,4 @@
-package ru.gribbirg.todoapp
+package ru.gribbirg.todoapp.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

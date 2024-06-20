@@ -29,4 +29,5 @@
     <string name="ready">ГОТОВО</string>
     <string name="cancel">ОТМЕНА</string>
     <string name="delelte">Удалить</string>
+    <string name="day_month_year_date_template">%1$1 %2$s %3$s</string>
 </resources>

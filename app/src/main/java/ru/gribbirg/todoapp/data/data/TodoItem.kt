@@ -1,5 +1,7 @@
 package ru.gribbirg.todoapp.data.data
 
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import ru.gribbirg.todoapp.R
 import java.time.LocalDate
@@ -17,8 +19,8 @@ data class TodoItem(
 
 enum class TodoImportance(
     @StringRes val resourceId: Int,
-    @StringRes val logoId: Int? = null,
-    @StringRes val colorId: Int? = null
+    @DrawableRes val logoId: Int? = null,
+    @ColorRes val colorId: Int? = null
 ) {
     NO(
         resourceId = R.string.importence_no

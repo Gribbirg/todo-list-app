@@ -151,12 +151,12 @@ fun TodoItemListCollapsingToolbar(
             ) {
                 if (filterState != null && filterState == TodoItemsListUiState.FilterState.ALL) {
                     Icon(
-                        painter = painterResource(id = R.drawable.baseline_visibility_off_24),
+                        painter = painterResource(id = R.drawable.baseline_visibility_24),
                         contentDescription = null
                     )
                 } else {
                     Icon(
-                        painter = painterResource(id = R.drawable.baseline_visibility_24),
+                        painter = painterResource(id = R.drawable.baseline_visibility_off_24),
                         contentDescription = null
                     )
                 }
