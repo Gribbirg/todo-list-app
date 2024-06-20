@@ -315,7 +315,7 @@ private fun ItemImportanceSelector(
         DropdownMenu(
             expanded = menuOpened,
             onDismissRequest = { menuOpened = false },
-            modifier = Modifier.background(AppTheme.colors.grayLight)
+            modifier = Modifier.background(AppTheme.colors.elevated)
         ) {
             for (importanceValue in TodoImportance.entries) {
                 val color = importanceValue.colorId?.let { colorResource(it) }
@@ -394,9 +394,9 @@ private fun ItemDeadline(
                 checkedThumbColor = AppTheme.colors.white,
                 checkedTrackColor = AppTheme.colors.blue,
                 checkedBorderColor = Color.Transparent,
-                uncheckedThumbColor = AppTheme.colors.gray,
-                uncheckedTrackColor = AppTheme.colors.grayLight,
-                uncheckedBorderColor = AppTheme.colors.gray
+                uncheckedThumbColor = AppTheme.colors.separator,
+                uncheckedTrackColor = AppTheme.colors.secondaryBack,
+                uncheckedBorderColor = AppTheme.colors.separator
             )
         )
     }

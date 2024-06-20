@@ -86,7 +86,7 @@ fun TodoItemRow(
                 else
                     CheckboxDefaults.colors(
                         checkedColor = AppTheme.colors.green,
-                        uncheckedColor = AppTheme.colors.tertiary,
+                        uncheckedColor = AppTheme.colors.separator,
                         checkmarkColor = AppTheme.colors.secondaryBack
                     )
             )
@@ -98,7 +98,7 @@ fun TodoItemRow(
                     modifier = Modifier
                         .padding(top = 12.dp),
                     tint = item.importance.colorId?.let { colorResource(id = it) }
-                        ?: AppTheme.colors.tertiary
+                        ?: AppTheme.colors.gray
                 )
                 Spacer(modifier = Modifier.width(5.dp))
             }

@@ -1,5 +1,6 @@
 package ru.gribbirg.todoapp.ui.todoitemslist
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -52,7 +53,8 @@ internal fun TodoItemListCollapsingToolbar(
         scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
         toolbarModifier = Modifier.setShadow(topBarState.toolbarState.progress),
         toolbar = {
-            val progress = topBarState.toolbarState.progress
+            val progress = topBarState.toolbarState.progress.let { if (it == 2.2817403E-7f) 1f else it }
+            Log.i("test", "TodoItemListCollapsingToolbar: $progress")
 
             val textSize = getToolbarValue(
                 AppTheme.typography.titleLarge.fontSize.value,
