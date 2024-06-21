@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Список дел</string>
     <string name="todo_items_list">Мои дела</string>
-    <string name="hello_blank_fragment">Привет</string>
     <string name="done_count">Выполнено — %1d</string>
     <string name="new_item">Новое</string>
     <string name="day_month_date_template">%1$s %2$s</string>
