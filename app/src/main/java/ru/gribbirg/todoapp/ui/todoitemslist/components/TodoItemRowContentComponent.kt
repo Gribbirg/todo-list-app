@@ -8,16 +8,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxColors
 import androidx.compose.material3.CheckboxDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,7 +25,6 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.gribbirg.todoapp.R
 import ru.gribbirg.todoapp.data.data.TodoImportance
@@ -52,7 +48,7 @@ fun TodoItemRowContent(
             onChecked = { value -> onChecked(value) }
         )
         Spacer(modifier = Modifier.width(4.dp))
-        if (item.importance != TodoImportance.NO) {
+        if (item.importance.logoId != null) {
             ImportanceIcon(importance = item.importance, modifier = Modifier.padding(top = 12.dp))
             Spacer(modifier = Modifier.width(5.dp))
         }
@@ -65,7 +61,8 @@ fun TodoItemRowContent(
         ) {
             ItemText(
                 text = item.text,
-                completed = item.completed
+                completed = item.completed,
+                modifier = Modifier.padding(top = 4.dp)
             )
             if (item.deadline != null) {
                 Spacer(modifier = Modifier.height(8.dp))
@@ -82,7 +79,7 @@ fun TodoItemRowContent(
 private fun ImportanceIcon(importance: TodoImportance, modifier: Modifier = Modifier) {
     Icon(
         painter = painterResource(id = importance.logoId!!),
-        contentDescription = stringResource(id = importance.resourceId),
+        contentDescription = stringResource(id = importance.nameId),
         modifier = modifier,
         tint = importance.colorId?.let { colorResource(id = it) }
             ?: AppTheme.colors.gray

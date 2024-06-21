@@ -94,21 +94,21 @@ class AppColors(
     )
 
     fun updateColorsFrom(other: AppColors) {
-        primary = this.primary
-        secondary = this.secondary
-        tertiary = this.tertiary
-        disable = this.disable
-        separator = this.separator
-        overlay = this.overlay
-        primaryBack = this.primaryBack
-        secondaryBack = this.secondaryBack
-        elevated = this.elevated
-        red = this.red
-        green = this.green
-        blue = this.blue
-        gray = this.gray
-        grayLight = this.grayLight
-        white = this.white
+        primary = other.primary
+        secondary = other.secondary
+        tertiary = other.tertiary
+        disable = other.disable
+        separator = other.separator
+        overlay = other.overlay
+        primaryBack = other.primaryBack
+        secondaryBack = other.secondaryBack
+        elevated = other.elevated
+        red = other.red
+        green = other.green
+        blue = other.blue
+        gray = other.gray
+        grayLight = other.grayLight
+        white = other.white
     }
 
     companion object {

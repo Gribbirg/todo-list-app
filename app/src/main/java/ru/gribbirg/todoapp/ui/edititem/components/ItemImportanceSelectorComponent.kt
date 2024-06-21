@@ -61,13 +61,13 @@ internal fun ItemImportanceSelector(
                 if (importance.logoId != null) {
                     Icon(
                         painter = painterResource(id = importance.logoId),
-                        contentDescription = stringResource(id = importance.resourceId),
+                        contentDescription = stringResource(id = importance.nameId),
                         modifier = Modifier,
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                 }
                 Text(
-                    text = stringResource(id = importance.resourceId),
+                    text = stringResource(id = importance.nameId),
                     style = AppTheme.typography.subhead
                 )
             }
@@ -84,7 +84,7 @@ internal fun ItemImportanceSelector(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = stringResource(id = importanceValue.resourceId),
+                            text = stringResource(id = importanceValue.nameId),
                             style = AppTheme.typography.body
                         )
                     },
@@ -96,7 +96,7 @@ internal fun ItemImportanceSelector(
                         importanceValue.logoId?.let {
                             Icon(
                                 painterResource(id = it),
-                                contentDescription = stringResource(id = importanceValue.resourceId)
+                                contentDescription = stringResource(id = importanceValue.nameId)
                             )
                         } ?: Spacer(modifier = Modifier)
                     },

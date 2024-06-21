@@ -72,11 +72,11 @@ fun EditItemScreen(
     }
 
     val topElevation = remember {
-        androidx.compose.animation.core.Animatable(if (scrollState.canScrollBackward) 30f else 0f)
+        androidx.compose.animation.core.Animatable(if (scrollState.canScrollBackward) 10f else 0f)
     }
 
     LaunchedEffect(scrollState.canScrollBackward) {
-        launch { topElevation.animateTo(if (scrollState.canScrollBackward) 30f else 0f) }
+        launch { topElevation.animateTo(if (scrollState.canScrollBackward) 10f else 0f) }
         launch { topColor.animateTo(if (scrollState.canScrollBackward) scrolledAppBarColor else appBarColor) }
     }
 
@@ -192,6 +192,7 @@ fun EditItemScreen(
                         },
                         onClick = focusManager::clearFocus,
                     )
+                    Spacer(modifier = Modifier.height(paddingValue.calculateBottomPadding()))
                 }
             }
 

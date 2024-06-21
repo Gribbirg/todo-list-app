@@ -140,10 +140,10 @@ fun TodoListItemScreen(
                         } else {
                             item {
                                 val shape = RoundedCornerShape(
-                                    bottomEnd = 16.dp,
-                                    bottomStart = 16.dp,
-                                    topEnd = 16.dp,
-                                    topStart = 16.dp
+                                    bottomEnd = 8.dp,
+                                    bottomStart = 8.dp,
+                                    topEnd = 8.dp,
+                                    topStart = 8.dp
                                 )
                                 Row(
                                     modifier = Modifier

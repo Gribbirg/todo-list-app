@@ -53,7 +53,10 @@ internal fun ItemDeadlineDatePicker(
                 onClick = close,
                 colors = ButtonDefaults.textButtonColors(contentColor = AppTheme.colors.blue)
             ) {
-                Text(text = stringResource(id = R.string.cancel), style = AppTheme.typography.button)
+                Text(
+                    text = stringResource(id = R.string.cancel),
+                    style = AppTheme.typography.button
+                )
             }
         },
         colors = DatePickerDefaults.colors(

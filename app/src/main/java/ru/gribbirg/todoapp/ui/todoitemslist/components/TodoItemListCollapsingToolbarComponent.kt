@@ -1,7 +1,6 @@
 package ru.gribbirg.todoapp.ui.todoitemslist.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -52,16 +51,16 @@ internal fun TodoItemListCollapsingToolbar(
         scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
         toolbarModifier = Modifier.setShadow(topBarState.toolbarState.progress),
         toolbar = {
-            val progress =
-                topBarState.toolbarState.progress.let { if (it == 2.2817403E-7f) 1f else it }
+            val progress = topBarState.toolbarState
+                .progress
+                .let { if (it != 0f && it < 0.0001f) 1f else it }
 
             val textSize = getToolbarValue(
                 AppTheme.typography.titleLarge.fontSize.value,
                 AppTheme.typography.title.fontSize.value,
                 progress
             ).sp
-            val leftPadding = getToolbarValue(60, 16, progress).dp
-            val bottomPadding = getToolbarValue(20, 20, progress).dp
+            val leftPadding = getToolbarValue(60f, 16f, progress).dp
 
             val countColor = AppTheme.colors.tertiary
                 .let {
@@ -75,15 +74,14 @@ internal fun TodoItemListCollapsingToolbar(
                 }
 
             val boxColor =
-                getToolbarValue(
-                    AppTheme.colors.primaryBack,
-                    if (isSystemInDarkTheme()) {
-                        AppTheme.colors.secondaryBack
-                    } else {
-                        AppTheme.colors.primaryBack
-                    },
-                    progress
-                )
+                if (!AppTheme.colors.isDark)
+                    AppTheme.colors.primaryBack
+                else
+                    getToolbarValue(
+                        AppTheme.colors.primaryBack,
+                        AppTheme.colors.secondaryBack,
+                        progress
+                    )
 
             systemUiController.setStatusBarColor(color = boxColor)
 
@@ -92,7 +90,6 @@ internal fun TodoItemListCollapsingToolbar(
                     .fillMaxWidth()
                     .height(140.dp)
                     .background(boxColor)
-                    .padding(0.dp)
                     .pin()
             )
 
@@ -129,7 +126,7 @@ internal fun TodoItemListCollapsingToolbar(
                             start = leftPadding,
                             top = 16.dp,
                             end = 16.dp,
-                            bottom = bottomPadding
+                            bottom = 20.dp
                         ),
                     color = countColor,
                     style = AppTheme.typography.body
@@ -154,9 +151,8 @@ internal fun TodoItemListCollapsingToolbar(
                         start = leftPadding,
                         top = 16.dp,
                         end = 16.dp,
-                        bottom = 10.dp
-                    )
-                    .height(56.dp),
+                        bottom = 20.dp
+                    ),
                 colors = IconButtonDefaults.iconButtonColors(
                     contentColor = AppTheme.colors.blue
                 ),
@@ -213,9 +209,6 @@ private fun Modifier.setShadow(progress: Float) =
 
 private fun getToolbarValue(startValue: Float, endValue: Float, progress: Float) =
     endValue + (startValue - endValue) * progress
-
-private fun getToolbarValue(startValue: Int, endValue: Int, progress: Float) =
-    getToolbarValue(startValue.toFloat(), endValue.toFloat(), progress)
 
 private fun getToolbarValue(startValue: Color, endValue: Color, progress: Float) =
     Color(

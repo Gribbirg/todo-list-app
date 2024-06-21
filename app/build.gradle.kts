@@ -51,8 +51,6 @@ android {
 
 dependencies {
 
-    implementation(libs.androidx.material)
-
     // Splash screen
     implementation(libs.androidx.core.splashscreen)
 
