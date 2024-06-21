@@ -50,10 +50,10 @@ class TodoItemsRepositoryHardCodeImpl : TodoItemRepository {
 
     companion object {
         val defaultItems
-            get() = Array(20) {
+            get() = Array(30) {
                 TodoItem(
                     id = it.toString(),
-                    text = "Дело $it",
+                    text = "Дело $it ".repeat(it * 5 % 15 + 1),
                     importance = TodoImportance.entries[it % 3],
                     deadline = LocalDate.now(),
                     completed = false,

@@ -31,7 +31,7 @@ enum class TodoImportance(
     ),
     HIGH(
         resourceId = R.string.importance_high,
-        logoId = R.drawable.baseline_priority_high_24,
+        logoId = R.drawable.round_priority_high_24,
         colorId = R.color.red
     )
 }

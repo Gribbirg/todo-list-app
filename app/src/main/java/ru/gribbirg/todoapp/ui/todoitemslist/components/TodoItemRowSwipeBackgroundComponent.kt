@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 
 @Composable
-fun TodoItemRowSwipeBackground(dismissState: SwipeToDismissBoxState, topBorderRadius: Dp = 0.dp) {
+fun TodoItemRowSwipeBackground(dismissState: SwipeToDismissBoxState) {
     val color = when (dismissState.dismissDirection) {
         SwipeToDismissBoxValue.StartToEnd -> AppTheme.colors.green
         SwipeToDismissBoxValue.EndToStart -> AppTheme.colors.red
@@ -33,7 +33,6 @@ fun TodoItemRowSwipeBackground(dismissState: SwipeToDismissBoxState, topBorderRa
     Row(
         modifier = Modifier
             .fillMaxSize()
-            .clip(RoundedCornerShape(topStart = topBorderRadius, topEnd = topBorderRadius))
             .background(color)
             .padding(horizontal = 12.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,

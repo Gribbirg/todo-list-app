@@ -16,9 +16,17 @@ import ru.gribbirg.todoapp.R
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 
 @Composable
-internal fun ItemDelete(enabled: Boolean, onDeleted: () -> Unit, modifier: Modifier = Modifier) {
+internal fun ItemDelete(
+    enabled: Boolean,
+    onDeleted: () -> Unit,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+) {
     TextButton(
-        onClick = onDeleted,
+        onClick = {
+            onClick()
+            onDeleted()
+        },
         modifier = modifier,
         colors = ButtonDefaults.textButtonColors(
             contentColor = AppTheme.colors.red,

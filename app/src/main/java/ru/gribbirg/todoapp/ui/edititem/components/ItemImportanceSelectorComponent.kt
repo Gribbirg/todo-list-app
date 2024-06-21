@@ -32,7 +32,8 @@ import ru.gribbirg.todoapp.ui.theme.AppTheme
 internal fun ItemImportanceSelector(
     importance: TodoImportance,
     onChanged: (TodoImportance) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
 ) {
     var menuOpened by remember { mutableStateOf(false) }
 
@@ -45,7 +46,10 @@ internal fun ItemImportanceSelector(
             style = AppTheme.typography.body
         )
         TextButton(
-            onClick = { menuOpened = true },
+            onClick = {
+                onClick()
+                menuOpened = true
+            },
             colors = ButtonDefaults.textButtonColors(
                 contentColor = importance.colorId?.let { colorResource(it) }
                     ?: AppTheme.colors.tertiary

@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
@@ -29,8 +30,7 @@ fun TodoItemSwipeToDismiss(
     modifier: Modifier = Modifier,
     animationDuration: Int = 500,
     dismissOnCheck: Boolean = false,
-    topBorderRadius: Dp = 0.dp,
-    content: @Composable () -> Unit
+    content: @Composable (SwipeToDismissBoxState) -> Unit
 ) {
     var deleted by remember { mutableStateOf(false) }
     var checked by remember { mutableStateOf(false) }
@@ -83,12 +83,11 @@ fun TodoItemSwipeToDismiss(
             backgroundContent = {
                 TodoItemRowSwipeBackground(
                     dismissState = dismissState,
-                    topBorderRadius
                 )
             },
             enableDismissFromStartToEnd = !completed
         ) {
-            content()
+            content(dismissState)
         }
     }
 }

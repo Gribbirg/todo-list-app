@@ -27,7 +27,8 @@ import java.time.LocalDate
 internal fun ItemDeadline(
     deadline: LocalDate?,
     onChanged: (LocalDate?) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
 ) {
     var dialogOpened by remember {
         mutableStateOf(false)
@@ -43,7 +44,10 @@ internal fun ItemDeadline(
                 style = AppTheme.typography.body
             )
             TextButton(
-                onClick = { dialogOpened = true },
+                onClick = {
+                    onClick()
+                    dialogOpened = true
+                },
                 colors = ButtonDefaults.textButtonColors(
                     contentColor = AppTheme.colors.blue
                 )
@@ -63,7 +67,10 @@ internal fun ItemDeadline(
         }
         Switch(
             checked = deadline != null,
-            onCheckedChange = { onChanged(if (it) LocalDate.now() else null) },
+            onCheckedChange = {
+                onClick()
+                onChanged(if (it) LocalDate.now() else null)
+            },
             colors = SwitchDefaults.colors(
                 checkedThumbColor = AppTheme.colors.white,
                 checkedTrackColor = AppTheme.colors.blue,

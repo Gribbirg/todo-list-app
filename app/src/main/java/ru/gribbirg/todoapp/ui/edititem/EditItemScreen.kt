@@ -36,8 +36,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -60,6 +60,7 @@ fun EditItemScreen(
     val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
     val systemUiController = rememberSystemUiController()
+    val focusManager = LocalFocusManager.current
 
     val appBarColor = AppTheme.colors.primaryBack
     val scrolledAppBarColor = if (isSystemInDarkTheme())
@@ -93,6 +94,7 @@ fun EditItemScreen(
                     ) {
                         TextButton(
                             onClick = {
+                                focusManager.clearFocus()
                                 viewModel.save()
                                 onClose()
                             },
@@ -148,12 +150,15 @@ fun EditItemScreen(
 
                     val inputShape = RoundedCornerShape(10.dp)
 
+                    Spacer(modifier = Modifier.height(4.dp))
                     ItemTextField(
                         text = state.item.text,
                         onChanged = { newText ->
                             viewModel.edit(item = state.item.copy(text = newText))
                         },
-                        modifier = Modifier.fillMaxWidth().shadow(2.dp, inputShape),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .shadow(2.dp, inputShape),
                         shape = inputShape
                     )
                     Spacer(modifier = Modifier.height(16.dp))
@@ -161,7 +166,8 @@ fun EditItemScreen(
                         importance = state.item.importance,
                         onChanged = { importance ->
                             viewModel.edit(state.item.copy(importance = importance))
-                        }
+                        },
+                        onClick = focusManager::clearFocus,
                     )
                     EdiItemSeparator(
                         modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
@@ -171,7 +177,8 @@ fun EditItemScreen(
                         onChanged = { newDeadline ->
                             viewModel.edit(state.item.copy(deadline = newDeadline))
                         },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = focusManager::clearFocus,
                     )
                     Spacer(modifier = Modifier.height(32.dp))
                     EdiItemSeparator(
@@ -182,7 +189,8 @@ fun EditItemScreen(
                         onDeleted = {
                             viewModel.delete()
                             onClose()
-                        }
+                        },
+                        onClick = focusManager::clearFocus,
                     )
                 }
             }

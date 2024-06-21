@@ -79,31 +79,30 @@ fun TodoListItemScreen(
                         userScrollEnabled = true,
                         state = lazyListState
                     ) {
+                        item {
+                            Spacer(modifier = Modifier.height(5.dp))
+                        }
                         if (state.items.isNotEmpty()) {
                             item {
-                                Spacer(modifier = Modifier.height(5.dp))
-                            }
-                            item(
-                                key = state.items.first().hashCode()
-                            ) {
-                                TodoItemRow(
-                                    item = state.items.first(),
-                                    onChecked = { value ->
-                                        viewModel.onChecked(
-                                            state.items.first(),
-                                            value
-                                        )
-                                    },
-                                    onDeleted = { viewModel.delete(state.items.first()) },
-                                    onInfoClicked = { toEditItemScreen(state.items.first()) },
-                                    topBorderRadius = 16.dp,
-                                    dismissOnCheck = state.filterState == TodoItemsListUiState.FilterState.NOT_COMPLETED
+                                val shape = RoundedCornerShape(
+                                    topEnd = 8.dp,
+                                    topStart = 8.dp
                                 )
+                                BoxWithSidesForShadow(
+                                    Sides.TOP,
+                                ) {
+                                    Spacer(
+                                        modifier = Modifier
+                                            .shadow(2.dp, shape)
+                                            .clip(shape)
+                                            .background(AppTheme.colors.secondaryBack)
+                                            .fillMaxWidth()
+                                            .height(7.dp)
+                                    )
+                                }
                             }
-                            items(
-                                state.items.size - 1,
-                                key = { i -> state.items[i + 1].hashCode() }) {
-                                val item = state.items[it + 1]
+                            items(state.items.size, key = { i -> state.items[i].hashCode() }) {
+                                val item = state.items[it]
                                 TodoItemRow(
                                     item = item,
                                     onChecked = { value -> viewModel.onChecked(item, value) },
@@ -113,13 +112,13 @@ fun TodoListItemScreen(
                                 )
                             }
                             item {
+                                val shape = RoundedCornerShape(
+                                    bottomEnd = 8.dp,
+                                    bottomStart = 8.dp
+                                )
                                 BoxWithSidesForShadow(
-                                    Sides.BOTTOM
+                                    Sides.BOTTOM,
                                 ) {
-                                    val shape = RoundedCornerShape(
-                                        bottomEnd = 16.dp,
-                                        bottomStart = 16.dp
-                                    )
                                     Row(
                                         modifier = Modifier
                                             .fillMaxWidth()
@@ -158,7 +157,8 @@ fun TodoListItemScreen(
                                     Text(
                                         text = stringResource(id = R.string.new_item),
                                         modifier = Modifier.padding(20.dp),
-                                        color = AppTheme.colors.primary
+                                        color = AppTheme.colors.secondary,
+                                        style = AppTheme.typography.body
                                     )
                                 }
                             }
