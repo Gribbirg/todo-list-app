@@ -1,10 +1,8 @@
 package ru.gribbirg.todoapp.data.repositories
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -23,11 +21,27 @@ class TodoItemsRepositoryHardCodeImpl : TodoItemRepository {
     override fun getItemsFlow(): StateFlow<SnapshotStateList<TodoItem>> = itemsFlow
 
     override suspend fun addItem(item: TodoItem) {
-        itemsFlow.update { state -> state.also { it.add(item) }.toMutableStateList() }
+        itemsFlow.update { state ->
+            state.also {
+                it.add(
+                    item.copy(
+                        id = (state.last().id.toLong() + 1L).toString(),
+                        creationDate = LocalDate.now()
+                    )
+                )
+            }.toMutableStateList()
+        }
     }
 
     override suspend fun saveItem(item: TodoItem) {
-        itemsFlow.update { state -> state.map { if (it.id == item.id) item else it }.toMutableStateList() }
+        itemsFlow.update { state ->
+            state.map {
+                if (it.id == item.id)
+                    item.copy(editDate = LocalDate.now())
+                else
+                    it
+            }.toMutableStateList()
+        }
     }
 
     override suspend fun deleteItem(item: TodoItem) {
