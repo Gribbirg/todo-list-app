@@ -140,16 +140,16 @@ fun TodoListItemScreen(
                             }
                         } else {
                             item {
+                                val shape = RoundedCornerShape(
+                                    bottomEnd = 16.dp,
+                                    bottomStart = 16.dp,
+                                    topEnd = 16.dp,
+                                    topStart = 16.dp
+                                )
                                 Row(
                                     modifier = Modifier
-                                        .clip(
-                                            RoundedCornerShape(
-                                                bottomEnd = 16.dp,
-                                                bottomStart = 16.dp,
-                                                topEnd = 16.dp,
-                                                topStart = 16.dp
-                                            )
-                                        )
+                                        .shadow(2.dp, shape)
+                                        .clip(shape)
                                         .background(AppTheme.colors.secondaryBack)
                                         .fillMaxWidth()
                                         .clickable { toEditItemScreen(null) }

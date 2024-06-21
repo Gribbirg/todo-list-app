@@ -48,7 +48,7 @@ internal fun ItemImportanceSelector(
             onClick = { menuOpened = true },
             colors = ButtonDefaults.textButtonColors(
                 contentColor = importance.colorId?.let { colorResource(it) }
-                    ?: AppTheme.colors.gray
+                    ?: AppTheme.colors.tertiary
             )
         ) {
             Row(
@@ -88,13 +88,13 @@ internal fun ItemImportanceSelector(
                         onChanged(importanceValue)
                         menuOpened = false
                     },
-                    leadingIcon = importanceValue.logoId?.let {
-                        {
+                    leadingIcon = {
+                        importanceValue.logoId?.let {
                             Icon(
                                 painterResource(id = it),
                                 contentDescription = stringResource(id = importanceValue.resourceId)
                             )
-                        }
+                        } ?: Spacer(modifier = Modifier)
                     },
                     colors = MenuDefaults.itemColors(
                         textColor = color,

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -104,8 +105,7 @@ fun EditItemScreen(
                             Text(
                                 text = stringResource(id = R.string.save),
                                 textAlign = TextAlign.Center,
-                                style = AppTheme.typography.button,
-                                fontWeight = FontWeight.Bold
+                                style = AppTheme.typography.button
                             )
                         }
                         Spacer(modifier = Modifier.width(4.dp))
@@ -146,12 +146,15 @@ fun EditItemScreen(
                 ) {
                     val state = uiState as EditItemUiState.Loaded
 
+                    val inputShape = RoundedCornerShape(10.dp)
+
                     ItemTextField(
                         text = state.item.text,
                         onChanged = { newText ->
                             viewModel.edit(item = state.item.copy(text = newText))
                         },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth().shadow(2.dp, inputShape),
+                        shape = inputShape
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     ItemImportanceSelector(

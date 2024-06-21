@@ -6,7 +6,9 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.gribbirg.todoapp.R
@@ -16,7 +18,8 @@ import ru.gribbirg.todoapp.ui.theme.AppTheme
 internal fun ItemTextField(
     text: String,
     onChanged: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    shape: Shape = RoundedCornerShape(10.dp),
 ) {
     val indicatorColor = Color.Transparent
     val containerColor = AppTheme.colors.secondaryBack
@@ -26,7 +29,7 @@ internal fun ItemTextField(
     TextField(
         value = text,
         onValueChange = { onChanged(it) },
-        modifier = modifier,
+        modifier = modifier.shadow(2.dp),
         minLines = 5,
         placeholder = { Text(text = stringResource(id = R.string.type_text)) },
         colors = TextFieldDefaults.colors(
@@ -44,7 +47,7 @@ internal fun ItemTextField(
             unfocusedPlaceholderColor = placeFolderColor,
             cursorColor = cursorColor
         ),
-        shape = RoundedCornerShape(10.dp),
+        shape = shape,
         textStyle = AppTheme.typography.body
     )
 }

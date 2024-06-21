@@ -45,7 +45,7 @@ internal fun ItemDeadlineDatePicker(
                 enabled = datePickerState.selectedDateMillis != null,
                 colors = ButtonDefaults.textButtonColors(contentColor = AppTheme.colors.blue)
             ) {
-                Text(text = stringResource(id = R.string.ready))
+                Text(text = stringResource(id = R.string.ready), style = AppTheme.typography.button)
             }
         },
         dismissButton = {
@@ -53,7 +53,7 @@ internal fun ItemDeadlineDatePicker(
                 onClick = close,
                 colors = ButtonDefaults.textButtonColors(contentColor = AppTheme.colors.blue)
             ) {
-                Text(text = stringResource(id = R.string.cancel))
+                Text(text = stringResource(id = R.string.cancel), style = AppTheme.typography.button)
             }
         },
         colors = DatePickerDefaults.colors(
@@ -64,21 +64,21 @@ internal fun ItemDeadlineDatePicker(
             state = datePickerState,
             colors = DatePickerDefaults.colors(
                 containerColor = AppTheme.colors.secondaryBack,
-                titleContentColor = AppTheme.colors.gray,
+                titleContentColor = AppTheme.colors.tertiary,
                 headlineContentColor = AppTheme.colors.primary,
-                weekdayContentColor = AppTheme.colors.gray,
+                weekdayContentColor = AppTheme.colors.tertiary,
                 subheadContentColor = Color.Unspecified,
-                navigationContentColor = AppTheme.colors.gray,
+                navigationContentColor = AppTheme.colors.primary,
                 yearContentColor = AppTheme.colors.primary,
                 disabledYearContentColor = Color.Unspecified,
                 currentYearContentColor = AppTheme.colors.blue,
-                selectedYearContentColor = AppTheme.colors.primary,
+                selectedYearContentColor = AppTheme.colors.white,
                 disabledSelectedYearContentColor = Color.Unspecified,
                 selectedYearContainerColor = AppTheme.colors.blue,
                 disabledSelectedYearContainerColor = Color.Unspecified,
                 dayContentColor = AppTheme.colors.primary,
                 disabledDayContentColor = Color.Unspecified,
-                selectedDayContentColor = AppTheme.colors.primary,
+                selectedDayContentColor = AppTheme.colors.white,
                 disabledSelectedDayContentColor = Color.Unspecified,
                 selectedDayContainerColor = AppTheme.colors.blue,
                 disabledSelectedDayContainerColor = Color.Unspecified,
