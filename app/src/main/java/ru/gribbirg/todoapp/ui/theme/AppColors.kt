@@ -22,7 +22,8 @@ class AppColors(
     gray: Color,
     grayLight: Color,
     white: Color,
-    isDark: Boolean
+    appBar: Color,
+    isDark: Boolean,
 ) {
     var primary by mutableStateOf(primary)
         private set
@@ -54,6 +55,8 @@ class AppColors(
         private set
     var white by mutableStateOf(white)
         private set
+    var appBar by mutableStateOf(appBar)
+        internal set
     var isDark by mutableStateOf(isDark)
         internal set
 
@@ -73,7 +76,8 @@ class AppColors(
         gray: Color = this.gray,
         grayLight: Color = this.grayLight,
         white: Color = this.white,
-        isDark: Boolean = this.isDark
+        appBar: Color = this.appBar,
+        isDark: Boolean = this.isDark,
     ) = AppColors(
         primary,
         secondary,
@@ -90,6 +94,7 @@ class AppColors(
         gray,
         grayLight,
         white,
+        appBar,
         isDark
     )
 
@@ -109,6 +114,7 @@ class AppColors(
         gray = other.gray
         grayLight = other.grayLight
         white = other.white
+        appBar = other.appBar
     }
 
     companion object {
@@ -168,6 +174,7 @@ class AppColors(
             blue: Color = LightBlue,
             gray: Color = LightGray,
             grayLight: Color = LightGrayLight,
+            appBar: Color = primaryBack,
             white: Color = White
         ) = AppColors(
             primary,
@@ -185,6 +192,7 @@ class AppColors(
             gray,
             grayLight,
             white,
+            appBar,
             isDark = false
         )
 
@@ -203,6 +211,7 @@ class AppColors(
             blue: Color = DarkBlue,
             gray: Color = DarkGray,
             grayLight: Color = DarkGrayLight,
+            appBar: Color = secondaryBack,
             white: Color = White
         ) = AppColors(
             primary,
@@ -220,6 +229,7 @@ class AppColors(
             gray,
             grayLight,
             white,
+            appBar,
             isDark = true
         )
     }

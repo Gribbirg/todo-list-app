@@ -74,12 +74,9 @@ internal fun TodoItemListCollapsingToolbar(
                 }
 
             val boxColor =
-                if (!AppTheme.colors.isDark)
-                    AppTheme.colors.primaryBack
-                else
                     getToolbarValue(
                         AppTheme.colors.primaryBack,
-                        AppTheme.colors.secondaryBack,
+                        AppTheme.colors.appBar,
                         progress
                     )
 

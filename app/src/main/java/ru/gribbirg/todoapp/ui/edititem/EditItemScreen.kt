@@ -3,7 +3,6 @@ package ru.gribbirg.todoapp.ui.edititem
 import androidx.compose.animation.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -63,10 +62,8 @@ fun EditItemScreen(
     val focusManager = LocalFocusManager.current
 
     val appBarColor = AppTheme.colors.primaryBack
-    val scrolledAppBarColor = if (isSystemInDarkTheme())
-        AppTheme.colors.secondaryBack
-    else
-        AppTheme.colors.primaryBack
+    val scrolledAppBarColor = AppTheme.colors.appBar
+
     val topColor = remember {
         Animatable(if (scrollState.canScrollBackward) appBarColor else scrolledAppBarColor)
     }
