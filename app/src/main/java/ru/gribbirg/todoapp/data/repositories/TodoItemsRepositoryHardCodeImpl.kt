@@ -2,6 +2,7 @@ package ru.gribbirg.todoapp.data.repositories
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import ru.gribbirg.todoapp.data.data.TodoImportance
 import ru.gribbirg.todoapp.data.data.TodoItem
@@ -11,9 +12,7 @@ class TodoItemsRepositoryHardCodeImpl : TodoItemRepository {
 
     private val _itemsFlow = MutableStateFlow(defaultItems)
 
-    override val itemsFlow: StateFlow<List<TodoItem>> = _itemsFlow
-
-    override suspend fun getItems(): List<TodoItem> = itemsFlow.value
+    override fun getItemsFlow(): StateFlow<List<TodoItem>> = _itemsFlow.asStateFlow()
 
     override suspend fun addItem(item: TodoItem) {
         _itemsFlow.update { state ->
