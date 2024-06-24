@@ -24,7 +24,7 @@ class TodoItemsListViewModel(
 
     private val filterFlow = MutableStateFlow(TodoItemsListUiState.FilterState.NOT_COMPLETED)
     val uiState: StateFlow<TodoItemsListUiState> =
-        todoItemRepository.itemsFlow
+        todoItemRepository.getItemsFlow()
             .combine<List<TodoItem>, TodoItemsListUiState.FilterState, TodoItemsListUiState>(
                 filterFlow
             ) { list, filter ->

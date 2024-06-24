@@ -15,16 +15,16 @@ import ru.gribbirg.todoapp.data.data.TodoItem
 import ru.gribbirg.todoapp.data.repositories.TodoItemRepository
 
 class EditItemViewModel(
-    val todoItemRepository: TodoItemRepository
+    private val todoItemRepository: TodoItemRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<EditItemUiState>(EditItemUiState.Loading)
     val uiState: StateFlow<EditItemUiState> = _uiState
 
-    fun setItem(item: TodoItem?) {
-        _uiState.update { EditItemUiState.Loading }
+    fun setItem(itemId: String?) {
         viewModelScope.launch {
             try {
+                val item = itemId?.let { todoItemRepository.getItem(itemId) }
                 _uiState.emit(
                     if (item == null)
                         EditItemUiState.Loaded(

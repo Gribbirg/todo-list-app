@@ -27,8 +27,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import kotlinx.serialization.Serializable
 import ru.gribbirg.todoapp.R
-import ru.gribbirg.todoapp.data.data.TodoItem
 import ru.gribbirg.todoapp.ui.components.ErrorComponent
 import ru.gribbirg.todoapp.ui.components.LoadingComponent
 import ru.gribbirg.todoapp.ui.theme.AppTheme
@@ -37,10 +37,13 @@ import ru.gribbirg.todoapp.ui.todoitemslist.components.Sides
 import ru.gribbirg.todoapp.ui.todoitemslist.components.TodoItemListCollapsingToolbar
 import ru.gribbirg.todoapp.ui.todoitemslist.components.TodoItemRow
 
+@Serializable
+data object TodoList
+
 @Composable
 fun TodoListItemScreen(
     viewModel: TodoItemsListViewModel,
-    toEditItemScreen: (item: TodoItem?) -> Unit
+    toEditItemScreen: (itemId: String?) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val lazyListState = rememberLazyListState()
@@ -107,7 +110,7 @@ fun TodoListItemScreen(
                                     item = item,
                                     onChecked = { value -> viewModel.onChecked(item, value) },
                                     onDeleted = { viewModel.delete(item) },
-                                    onInfoClicked = { toEditItemScreen(item) },
+                                    onInfoClicked = { toEditItemScreen(item.id) },
                                     dismissOnCheck = state.filterState == TodoItemsListUiState.FilterState.NOT_COMPLETED
                                 )
                             }

@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -51,6 +53,9 @@ android {
 
 dependencies {
 
+    // Serialization
+    implementation(libs.kotlinx.serialization.json)
+
     // Splash screen
     implementation(libs.androidx.core.splashscreen)
 
@@ -58,7 +63,7 @@ dependencies {
     implementation(libs.material3)
 
     // Compose navigation
-    implementation(libs.androidx.navigation.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
 
     // System bar colors
     implementation(libs.accompanist.systemuicontroller)

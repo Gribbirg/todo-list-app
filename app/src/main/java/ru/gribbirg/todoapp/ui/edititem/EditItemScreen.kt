@@ -41,6 +41,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 import ru.gribbirg.todoapp.R
 import ru.gribbirg.todoapp.ui.components.ErrorComponent
 import ru.gribbirg.todoapp.ui.components.LoadingComponent
@@ -50,12 +51,20 @@ import ru.gribbirg.todoapp.ui.edititem.components.ItemImportanceSelector
 import ru.gribbirg.todoapp.ui.edititem.components.ItemTextField
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 
+@Serializable
+data class EditItem(
+    val itemId: String?
+)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditItemScreen(
+    itemId: String?,
     viewModel: EditItemViewModel,
     onClose: () -> Unit
 ) {
+    viewModel.setItem(itemId)
+
     val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
     val systemUiController = rememberSystemUiController()

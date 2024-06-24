@@ -9,9 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
+import ru.gribbirg.todoapp.ui.edititem.EditItem
 import ru.gribbirg.todoapp.ui.edititem.EditItemScreen
 import ru.gribbirg.todoapp.ui.edititem.EditItemViewModel
 import ru.gribbirg.todoapp.ui.todoitemslist.TodoItemsListViewModel
+import ru.gribbirg.todoapp.ui.todoitemslist.TodoList
 import ru.gribbirg.todoapp.ui.todoitemslist.TodoListItemScreen
 
 @Composable
@@ -22,10 +25,9 @@ fun NavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.List.route,
+        startDestination = TodoList,
     ) {
-        composable(
-            Screen.List.route,
+        composable<TodoList>(
             enterTransition = {
                 fadeIn(
                     animationSpec = tween(durationMillis = 300),
@@ -41,14 +43,12 @@ fun NavGraph(
         ) {
             TodoListItemScreen(
                 viewModel = listViewModel,
-                toEditItemScreen = { item ->
-                    editItemViewModel.setItem(item)
-                    navController.navigate(Screen.Edit.route)
+                toEditItemScreen = { id ->
+                    navController.navigate(EditItem(id)) { launchSingleTop = true }
                 }
             )
         }
-        composable(
-            Screen.Edit.route,
+        composable<EditItem>(
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Start,
@@ -67,10 +67,15 @@ fun NavGraph(
                     )
                 )
             },
-        ) {
+        ) { backStackEntry ->
+            val editItem: EditItem = backStackEntry.toRoute()
             EditItemScreen(
+                itemId = editItem.itemId,
                 viewModel = editItemViewModel,
-                onClose = { navController.popBackStack() })
+                onClose = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }
