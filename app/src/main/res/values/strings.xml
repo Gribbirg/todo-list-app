@@ -34,4 +34,5 @@
     <string name="hide">Hide</string>
     <string name="close">Close</string>
     <string name="error_occurred">An error has occurred:</string>
+    <string name="unknown_error">Unknown error</string>
 </resources>

@@ -34,4 +34,5 @@
     <string name="hide">Скрыть</string>
     <string name="close">Закрыть</string>
     <string name="error_occurred">Произошла ошибка:</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
 </resources>

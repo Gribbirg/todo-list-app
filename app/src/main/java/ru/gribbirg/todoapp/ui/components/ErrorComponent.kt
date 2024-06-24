@@ -21,7 +21,7 @@ fun ErrorComponent(exception: Throwable, modifier: Modifier = Modifier) {
             style = AppTheme.typography.body,
         )
         Text(
-            text = exception.localizedMessage ?: exception.message ?: "Unknown error",
+            text = exception.localizedMessage ?: exception.message ?: stringResource(R.string.unknown_error),
             color = AppTheme.colors.red,
             style = AppTheme.typography.body,
         )
