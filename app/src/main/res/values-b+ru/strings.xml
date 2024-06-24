@@ -3,21 +3,6 @@
     <string name="todo_items_list">Мои дела</string>
     <string name="done_count">Выполнено — %1d</string>
     <string name="new_item">Новое</string>
-    <string name="day_month_date_template">%1$s %2$s</string>
-    <string-array name="months_names">
-        <item>января</item>
-        <item>февраля</item>
-        <item>марта</item>
-        <item>апреля</item>
-        <item>мая</item>
-        <item>июня</item>
-        <item>июля</item>
-        <item>августа</item>
-        <item>сентября</item>
-        <item>октября</item>
-        <item>ноября</item>
-        <item>декобря</item>
-    </string-array>
     <string name="save">СОХРАНИТЬ</string>
     <string name="type_text">Что надо сделать…</string>
     <string name="importance">Важность</string>
@@ -28,7 +13,6 @@
     <string name="ready">ГОТОВО</string>
     <string name="cancel">ОТМЕНА</string>
     <string name="delelte">Удалить</string>
-    <string name="day_month_year_date_template">%1$s %2$s %3$s</string>
     <string name="add">Добавить</string>
     <string name="show">Показать</string>
     <string name="hide">Скрыть</string>

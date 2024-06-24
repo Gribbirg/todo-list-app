@@ -21,16 +21,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import ru.gribbirg.todoapp.R
 import ru.gribbirg.todoapp.data.data.TodoImportance
 import ru.gribbirg.todoapp.data.data.TodoItem
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 @Composable
 fun TodoItemRowContent(
@@ -100,12 +100,9 @@ private fun InfoIconButton(onInfoClicked: () -> Unit) {
 
 @Composable
 private fun DeadlineText(deadline: LocalDate, modifier: Modifier = Modifier) {
+    val dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
     Text(
-        text = stringResource(
-            id = R.string.day_month_date_template,
-            deadline.dayOfMonth,
-            stringArrayResource(id = R.array.months_names)[deadline.monthValue - 1]
-        ),
+        text = dateFormatter.format(deadline),
         modifier = modifier,
         color = AppTheme.colors.tertiary,
         style = AppTheme.typography.subhead

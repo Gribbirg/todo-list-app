@@ -16,12 +16,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.gribbirg.todoapp.R
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 @Composable
 internal fun ItemDeadline(
@@ -33,6 +34,8 @@ internal fun ItemDeadline(
     var dialogOpened by remember {
         mutableStateOf(false)
     }
+    val dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
+
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -54,12 +57,7 @@ internal fun ItemDeadline(
             ) {
                 if (deadline != null) {
                     Text(
-                        text = stringResource(
-                            id = R.string.day_month_year_date_template,
-                            deadline.dayOfMonth,
-                            stringArrayResource(id = R.array.months_names)[deadline.monthValue - 1],
-                            deadline.year
-                        ),
+                        text = dateFormatter.format(deadline),
                         style = AppTheme.typography.subhead
                     )
                 }
