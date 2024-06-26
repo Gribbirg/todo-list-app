@@ -1,6 +1,7 @@
 package ru.gribbirg.todoapp.ui.edititem.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,6 +27,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.gribbirg.todoapp.R
 import ru.gribbirg.todoapp.data.data.TodoImportance
+import ru.gribbirg.todoapp.ui.previews.DefaultPreview
+import ru.gribbirg.todoapp.ui.previews.LanguagePreviews
+import ru.gribbirg.todoapp.ui.previews.LayoutDirectionPreviews
+import ru.gribbirg.todoapp.ui.previews.ScreenPreviewTemplate
+import ru.gribbirg.todoapp.ui.previews.ThemePreviews
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 
 @Composable
@@ -42,8 +48,9 @@ internal fun ItemImportanceSelector(
     ) {
         Text(
             text = stringResource(id = R.string.importance),
-            modifier = Modifier.padding(start = 8.dp),
-            style = AppTheme.typography.body
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+            style = AppTheme.typography.body,
+            color = AppTheme.colors.primary
         )
         TextButton(
             onClick = {
@@ -106,6 +113,24 @@ internal fun ItemImportanceSelector(
                     )
                 )
             }
+        }
+    }
+}
+
+@DefaultPreview
+@ThemePreviews
+@LanguagePreviews
+@LayoutDirectionPreviews
+@Composable
+private fun ItemImportanceSelectorPreview() {
+    ScreenPreviewTemplate {
+        Box(
+            modifier = Modifier
+                .background(AppTheme.colors.primaryBack)
+                .padding(it)
+        ) {
+            var importance by remember { mutableStateOf(TodoImportance.NO) }
+            ItemImportanceSelector(importance = importance, onChanged = { importance = it })
         }
     }
 }

@@ -26,19 +26,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import kotlinx.serialization.Serializable
 import ru.gribbirg.todoapp.R
+import ru.gribbirg.todoapp.data.data.TodoItem
 import ru.gribbirg.todoapp.ui.components.ErrorComponent
 import ru.gribbirg.todoapp.ui.components.LoadingComponent
+import ru.gribbirg.todoapp.ui.previews.DefaultPreview
+import ru.gribbirg.todoapp.ui.previews.FontScalePreviews
+import ru.gribbirg.todoapp.ui.previews.LanguagePreviews
+import ru.gribbirg.todoapp.ui.previews.LayoutDirectionPreviews
+import ru.gribbirg.todoapp.ui.previews.OrientationPreviews
+import ru.gribbirg.todoapp.ui.previews.ScreenPreviewTemplate
+import ru.gribbirg.todoapp.ui.previews.ThemePreviews
+import ru.gribbirg.todoapp.ui.previews.TodoItemPreviewParameterProvider
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 import ru.gribbirg.todoapp.ui.todoitemslist.components.BoxWithSidesForShadow
 import ru.gribbirg.todoapp.ui.todoitemslist.components.Sides
 import ru.gribbirg.todoapp.ui.todoitemslist.components.TodoItemListCollapsingToolbar
 import ru.gribbirg.todoapp.ui.todoitemslist.components.TodoItemRow
-
-@Serializable
-data object TodoList
 
 @Composable
 fun TodoListItemScreen(
@@ -46,6 +53,23 @@ fun TodoListItemScreen(
     toEditItemScreen: (itemId: String?) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    TodoItemsListScreenContent(
+        uiState = uiState,
+        toEditItemScreen = toEditItemScreen,
+        onFilterChange = viewModel::onFilterChange,
+        onChecked = viewModel::onChecked,
+        onDelete = viewModel::delete
+    )
+}
+
+@Composable
+private fun TodoItemsListScreenContent(
+    uiState: TodoItemsListUiState,
+    toEditItemScreen: (itemId: String?) -> Unit,
+    onFilterChange: (TodoItemsListUiState.FilterState) -> Unit,
+    onChecked: (TodoItem, Boolean) -> Unit,
+    onDelete: (TodoItem) -> Unit,
+) {
     val lazyListState = rememberLazyListState()
 
 
@@ -67,11 +91,10 @@ fun TodoListItemScreen(
             topPadding = paddingValue.calculateTopPadding(),
             doneCount = (uiState as? TodoItemsListUiState.Loaded)?.doneCount,
             filterState = (uiState as? TodoItemsListUiState.Loaded)?.filterState,
-            onFilterChange = viewModel::onFilterChange
+            onFilterChange = onFilterChange
         ) {
             when (uiState) {
                 is TodoItemsListUiState.Loaded -> {
-                    val state = uiState as TodoItemsListUiState.Loaded
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -85,7 +108,7 @@ fun TodoListItemScreen(
                         item {
                             Spacer(modifier = Modifier.height(5.dp))
                         }
-                        if (state.items.isNotEmpty()) {
+                        if (uiState.items.isNotEmpty()) {
                             item {
                                 val shape = RoundedCornerShape(
                                     topEnd = 8.dp,
@@ -104,14 +127,14 @@ fun TodoListItemScreen(
                                     )
                                 }
                             }
-                            items(state.items.size, key = { i -> state.items[i].hashCode() }) {
-                                val item = state.items[it]
+                            items(uiState.items.size, key = { i -> uiState.items[i].hashCode() }) {
+                                val item = uiState.items[it]
                                 TodoItemRow(
                                     item = item,
-                                    onChecked = { value -> viewModel.onChecked(item, value) },
-                                    onDeleted = { viewModel.delete(item) },
+                                    onChecked = { value -> onChecked(item, value) },
+                                    onDeleted = { onDelete(item) },
                                     onInfoClicked = { toEditItemScreen(item.id) },
-                                    dismissOnCheck = state.filterState == TodoItemsListUiState.FilterState.NOT_COMPLETED
+                                    dismissOnCheck = uiState.filterState == TodoItemsListUiState.FilterState.NOT_COMPLETED
                                 )
                             }
                             item {
@@ -175,7 +198,7 @@ fun TodoListItemScreen(
 
                 is TodoItemsListUiState.Error -> {
                     ErrorComponent(
-                        exception = (uiState as TodoItemsListUiState.Error).exception,
+                        exception = uiState.exception,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(paddingValue)
@@ -192,4 +215,39 @@ fun TodoListItemScreen(
             }
         }
     }
+}
+
+@DefaultPreview
+@ThemePreviews
+@LayoutDirectionPreviews
+@LanguagePreviews
+@FontScalePreviews
+@OrientationPreviews
+@Composable
+private fun TodoListItemScreenPreview(
+    @PreviewParameter(TodoItemsListUiStatePreviewParameterProvider::class) state: TodoItemsListUiState
+) {
+    ScreenPreviewTemplate {
+        TodoItemsListScreenContent(
+            uiState = state,
+            toEditItemScreen = {},
+            onFilterChange = {},
+            onChecked = { _, _ -> },
+            onDelete = {}
+        )
+    }
+}
+
+private class TodoItemsListUiStatePreviewParameterProvider :
+    PreviewParameterProvider<TodoItemsListUiState> {
+    override val values: Sequence<TodoItemsListUiState>
+        get() = sequenceOf(
+            TodoItemsListUiState.Loading,
+            TodoItemsListUiState.Error(Exception()),
+            TodoItemsListUiState.Loaded(
+                items = TodoItemPreviewParameterProvider().values.toList(),
+                filterState = TodoItemsListUiState.FilterState.ALL,
+                doneCount = 0
+            ),
+        )
 }

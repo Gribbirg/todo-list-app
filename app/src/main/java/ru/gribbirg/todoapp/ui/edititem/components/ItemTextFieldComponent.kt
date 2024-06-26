@@ -5,6 +5,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -12,6 +16,11 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.gribbirg.todoapp.R
+import ru.gribbirg.todoapp.ui.previews.DefaultPreview
+import ru.gribbirg.todoapp.ui.previews.ItemPreviewTemplate
+import ru.gribbirg.todoapp.ui.previews.LanguagePreviews
+import ru.gribbirg.todoapp.ui.previews.LayoutDirectionPreviews
+import ru.gribbirg.todoapp.ui.previews.ThemePreviews
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 
 @Composable
@@ -29,7 +38,7 @@ internal fun ItemTextField(
     TextField(
         value = text,
         onValueChange = { onChanged(it) },
-        modifier = modifier.shadow(2.dp),
+        modifier = modifier.shadow(2.dp, shape),
         minLines = 5,
         placeholder = { Text(text = stringResource(id = R.string.type_text)) },
         colors = TextFieldDefaults.colors(
@@ -50,4 +59,16 @@ internal fun ItemTextField(
         shape = shape,
         textStyle = AppTheme.typography.body
     )
+}
+
+@DefaultPreview
+@ThemePreviews
+@LanguagePreviews
+@LayoutDirectionPreviews
+@Composable
+private fun ItemTextFieldPreview() {
+    ItemPreviewTemplate {
+        var text by remember { mutableStateOf("") }
+        ItemTextField(text = text, onChanged = { text = it })
+    }
 }

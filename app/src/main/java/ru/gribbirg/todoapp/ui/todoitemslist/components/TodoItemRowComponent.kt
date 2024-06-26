@@ -6,11 +6,22 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import ru.gribbirg.todoapp.data.data.TodoItem
+import ru.gribbirg.todoapp.ui.previews.DefaultPreview
+import ru.gribbirg.todoapp.ui.previews.FontScalePreviews
+import ru.gribbirg.todoapp.ui.previews.ItemPreviewTemplate
+import ru.gribbirg.todoapp.ui.previews.LayoutDirectionPreviews
+import ru.gribbirg.todoapp.ui.previews.ThemePreviews
+import ru.gribbirg.todoapp.ui.previews.TodoItemPreviewParameterProvider
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 
 @Composable
@@ -82,8 +93,29 @@ internal fun BoxWithSidesForShadow(
     }
 }
 
+
 internal enum class Sides {
     LEFT_AND_RIGHT,
     BOTTOM,
     TOP
+}
+
+@DefaultPreview
+@ThemePreviews
+@LayoutDirectionPreviews
+@FontScalePreviews
+@Composable
+private fun TodoItemRowPreview(
+    @PreviewParameter(TodoItemPreviewParameterProvider::class) item: TodoItem
+) {
+    var itemState by remember {
+        mutableStateOf(item)
+    }
+    ItemPreviewTemplate {
+        TodoItemRow(
+            item = itemState,
+            onChecked = { itemState = item.copy(completed = it) },
+            onDeleted = { },
+            onInfoClicked = { })
+    }
 }

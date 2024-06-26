@@ -1,14 +1,19 @@
 package ru.gribbirg.todoapp.data.repositories
 
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.withContext
 import ru.gribbirg.todoapp.data.data.TodoImportance
 import ru.gribbirg.todoapp.data.data.TodoItem
 import java.time.LocalDate
 
-class TodoItemsRepositoryHardCodeImpl : TodoItemRepository {
+class TodoItemsRepositoryHardCodeImpl(
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : TodoItemRepository {
 
     private val _itemsFlow = MutableStateFlow(defaultItems)
 
@@ -17,7 +22,7 @@ class TodoItemsRepositoryHardCodeImpl : TodoItemRepository {
     override suspend fun getItem(id: String): TodoItem? =
         _itemsFlow.value.firstOrNull { it.id == id }
 
-    override suspend fun addItem(item: TodoItem) {
+    override suspend fun addItem(item: TodoItem) = withContext(dispatcher) {
         _itemsFlow.update { state ->
             state + listOf(
                 item.copy(
@@ -29,7 +34,7 @@ class TodoItemsRepositoryHardCodeImpl : TodoItemRepository {
         }
     }
 
-    override suspend fun saveItem(item: TodoItem) {
+    override suspend fun saveItem(item: TodoItem) = withContext(dispatcher) {
         _itemsFlow.update { state ->
             state.map {
                 if (it.id == item.id)
@@ -40,8 +45,8 @@ class TodoItemsRepositoryHardCodeImpl : TodoItemRepository {
         }
     }
 
-    override suspend fun deleteItem(item: TodoItem) {
-        _itemsFlow.update { state -> state.filter { it.id != item.id } }
+    override suspend fun deleteItem(itemId: String) = withContext(dispatcher) {
+        _itemsFlow.update { state -> state.filter { it.id != itemId } }
     }
 
     companion object {

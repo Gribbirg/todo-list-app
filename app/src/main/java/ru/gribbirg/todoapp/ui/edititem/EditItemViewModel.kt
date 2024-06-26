@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -21,55 +22,63 @@ class EditItemViewModel(
     private val _uiState = MutableStateFlow<EditItemUiState>(EditItemUiState.Loading)
     val uiState: StateFlow<EditItemUiState> = _uiState
 
+    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
+        _uiState.update { EditItemUiState.Error(exception) }
+    }
+
     fun setItem(itemId: String?) {
-        viewModelScope.launch {
-            try {
-                val item = itemId?.let { todoItemRepository.getItem(itemId) }
-                _uiState.emit(
-                    if (item == null)
-                        EditItemUiState.Loaded(
-                            TodoItem(),
-                            EditItemUiState.ItemState.NEW
-                        )
-                    else
-                        EditItemUiState.Loaded(
-                            item,
-                            EditItemUiState.ItemState.EDIT
-                        )
-                )
-            } catch (e: Exception) {
-                _uiState.emit(EditItemUiState.Error(e))
+        viewModelScope.launch(coroutineExceptionHandler) {
+            _uiState.update { EditItemUiState.Loading }
+            val item = itemId?.let { todoItemRepository.getItem(itemId) }
+            _uiState.update {
+                if (item == null)
+                    EditItemUiState.Loaded(
+                        TodoItem(),
+                        EditItemUiState.ItemState.NEW
+                    )
+                else
+                    EditItemUiState.Loaded(
+                        item,
+                        EditItemUiState.ItemState.EDIT
+                    )
             }
         }
     }
 
     fun save() {
-        viewModelScope.launch {
-            if (uiState.value is EditItemUiState.Loaded) {
-                val state = (uiState.value as EditItemUiState.Loaded)
+        viewModelScope.launch(coroutineExceptionHandler) {
+            val state = uiState.value
+            _uiState.update { EditItemUiState.Saving }
+            if (state is EditItemUiState.Loaded) {
                 when (state.itemState) {
                     EditItemUiState.ItemState.EDIT -> todoItemRepository.saveItem(item = state.item)
                     EditItemUiState.ItemState.NEW -> todoItemRepository.addItem(item = state.item)
                 }
             }
+            _uiState.update { EditItemUiState.Finish }
         }
     }
 
     fun edit(item: TodoItem) {
-        if (uiState.value is EditItemUiState.Loaded) {
-            _uiState.update {
-                val state = it as EditItemUiState.Loaded
-                state.copy(
-                    item = item
-                )
+        viewModelScope.launch(coroutineExceptionHandler) {
+            if (uiState.value is EditItemUiState.Loaded) {
+                _uiState.update { state ->
+                    if (state is EditItemUiState.Loaded)
+                        state.copy(
+                            item = item
+                        )
+                    else
+                        state
+                }
             }
         }
     }
 
     fun delete() {
-        require(uiState.value is EditItemUiState.Loaded)
-        viewModelScope.launch {
-            todoItemRepository.deleteItem((uiState.value as EditItemUiState.Loaded).item)
+        viewModelScope.launch(coroutineExceptionHandler) {
+            val state = uiState.value
+            if (state is EditItemUiState.Loaded)
+                todoItemRepository.deleteItem(state.item.id)
         }
     }
 

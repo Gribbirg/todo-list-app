@@ -1,5 +1,6 @@
 package ru.gribbirg.todoapp.ui.edititem
 
+import android.util.Log
 import androidx.compose.animation.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
@@ -31,41 +32,68 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
 import ru.gribbirg.todoapp.R
+import ru.gribbirg.todoapp.data.data.TodoItem
 import ru.gribbirg.todoapp.ui.components.ErrorComponent
 import ru.gribbirg.todoapp.ui.components.LoadingComponent
 import ru.gribbirg.todoapp.ui.edititem.components.ItemDeadline
 import ru.gribbirg.todoapp.ui.edititem.components.ItemDelete
 import ru.gribbirg.todoapp.ui.edititem.components.ItemImportanceSelector
 import ru.gribbirg.todoapp.ui.edititem.components.ItemTextField
+import ru.gribbirg.todoapp.ui.previews.DefaultPreview
+import ru.gribbirg.todoapp.ui.previews.FontScalePreviews
+import ru.gribbirg.todoapp.ui.previews.LanguagePreviews
+import ru.gribbirg.todoapp.ui.previews.LayoutDirectionPreviews
+import ru.gribbirg.todoapp.ui.previews.OrientationPreviews
+import ru.gribbirg.todoapp.ui.previews.ScreenPreviewTemplate
+import ru.gribbirg.todoapp.ui.previews.ThemePreviews
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 
-@Serializable
-data class EditItem(
-    val itemId: String?
-)
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditItemScreen(
     itemId: String?,
     viewModel: EditItemViewModel,
     onClose: () -> Unit
 ) {
-    viewModel.setItem(itemId)
+    LaunchedEffect(itemId) {
+        viewModel.setItem(itemId)
+    }
 
     val uiState by viewModel.uiState.collectAsState()
+
+    EditItemScreenContent(
+        uiState = uiState,
+        onClose = onClose,
+        onSave = viewModel::save,
+        onEdit = viewModel::edit,
+        onDelete = viewModel::delete
+    )
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun EditItemScreenContent(
+    uiState: EditItemUiState,
+    onClose: () -> Unit,
+    onSave: () -> Unit,
+    onEdit: (TodoItem) -> Unit,
+    onDelete: () -> Unit,
+) {
     val scrollState = rememberScrollState()
     val systemUiController = rememberSystemUiController()
     val focusManager = LocalFocusManager.current
@@ -101,8 +129,7 @@ fun EditItemScreen(
                         TextButton(
                             onClick = {
                                 focusManager.clearFocus()
-                                viewModel.save()
-                                onClose()
+                                onSave()
                             },
                             enabled = uiState is EditItemUiState.Loaded,
                             colors = ButtonDefaults.textButtonColors(
@@ -152,15 +179,13 @@ fun EditItemScreen(
                         .verticalScroll(scrollState)
                         .focusable()
                 ) {
-                    val state = uiState as EditItemUiState.Loaded
-
                     val inputShape = RoundedCornerShape(10.dp)
 
                     Spacer(modifier = Modifier.height(4.dp))
                     ItemTextField(
-                        text = state.item.text,
+                        text = uiState.item.text,
                         onChanged = { newText ->
-                            viewModel.edit(item = state.item.copy(text = newText))
+                            onEdit(uiState.item.copy(text = newText))
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -169,9 +194,9 @@ fun EditItemScreen(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     ItemImportanceSelector(
-                        importance = state.item.importance,
+                        importance = uiState.item.importance,
                         onChanged = { importance ->
-                            viewModel.edit(state.item.copy(importance = importance))
+                            onEdit(uiState.item.copy(importance = importance))
                         },
                         onClick = focusManager::clearFocus,
                     )
@@ -179,9 +204,9 @@ fun EditItemScreen(
                         modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
                     )
                     ItemDeadline(
-                        deadline = state.item.deadline,
+                        deadline = uiState.item.deadline,
                         onChanged = { newDeadline ->
-                            viewModel.edit(state.item.copy(deadline = newDeadline))
+                            onEdit(uiState.item.copy(deadline = newDeadline))
                         },
                         modifier = Modifier.fillMaxWidth(),
                         onClick = focusManager::clearFocus,
@@ -191,9 +216,9 @@ fun EditItemScreen(
                         modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
                     )
                     ItemDelete(
-                        enabled = state.itemState == EditItemUiState.ItemState.EDIT,
+                        enabled = uiState.itemState == EditItemUiState.ItemState.EDIT,
                         onDeleted = {
-                            viewModel.delete()
+                            onDelete()
                             onClose()
                         },
                         onClick = focusManager::clearFocus,
@@ -204,7 +229,7 @@ fun EditItemScreen(
 
             is EditItemUiState.Error -> {
                 ErrorComponent(
-                    exception = (uiState as EditItemUiState.Error).exception,
+                    exception = uiState.exception,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(paddingValue)
@@ -218,6 +243,32 @@ fun EditItemScreen(
                         .padding(paddingValue)
                 )
             }
+
+            EditItemUiState.Saving -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValue),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    LoadingComponent()
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Text(
+                        text = stringResource(R.string.saving),
+                        style = AppTheme.typography.body,
+                        color = AppTheme.colors.blue,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+
+            EditItemUiState.Finish -> {
+                LaunchedEffect(Unit) {
+                    Log.i("test","Finishing!")
+                    onClose()
+                }
+            }
         }
     }
 }
@@ -229,5 +280,51 @@ private fun EdiItemSeparator(
     HorizontalDivider(
         modifier = modifier,
         color = AppTheme.colors.separator
+    )
+}
+
+@DefaultPreview
+@ThemePreviews
+@LanguagePreviews
+@LayoutDirectionPreviews
+@FontScalePreviews
+@OrientationPreviews
+@Composable
+private fun EditItemScreenPreview(
+    @PreviewParameter(EditItemUiStatePreviewProvider::class) uiState: EditItemUiState
+) {
+    ScreenPreviewTemplate {
+        var state by remember {
+            mutableStateOf(
+                uiState
+            )
+        }
+        EditItemScreenContent(
+            uiState = state,
+            onClose = { },
+            onSave = { },
+            onEdit = {
+                if (state is EditItemUiState.Loaded) state =
+                    (state as EditItemUiState.Loaded).copy(item = it)
+            },
+            onDelete = { },
+        )
+    }
+}
+
+private class EditItemUiStatePreviewProvider : PreviewParameterProvider<EditItemUiState> {
+    override val values: Sequence<EditItemUiState> = sequenceOf(
+        EditItemUiState.Loading,
+        EditItemUiState.Saving,
+        EditItemUiState.Error(Exception()),
+        EditItemUiState.Loaded(TodoItem(), EditItemUiState.ItemState.EDIT),
+        EditItemUiState.Loaded(
+            TodoItem(
+                text = "Фьючерсный контракт — это договор между покупателем и продавцом о покупке/продаже какого-то актива в будущем. Стороны заранее оговаривают, через какой срок и по какой цене состоится сделка.\n" +
+                        "\n" +
+                        "Например, сейчас одна акция «Лукойла» стоит около 5700 рублей. Фьючерс на акции «Лукойла» — это, например, договор между покупателем и продавцом о том, что покупатель купит акции «Лукойла» у продавца по цене 5700 рублей через 3 месяца. При этом не важно, какая цена будет у акций через 3 месяца: цена сделки между покупателем и продавцом все равно останется 5700 рублей. Если реальная цена акции через три месяца не останется прежней, одна из сторон в любом случае понесет убытки."
+            ), EditItemUiState.ItemState.EDIT
+        ),
+        EditItemUiState.Loaded(TodoItem(), EditItemUiState.ItemState.NEW)
     )
 }
