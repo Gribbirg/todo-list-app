@@ -1,6 +1,5 @@
 package ru.gribbirg.todoapp.ui.edititem
 
-import android.util.Log
 import androidx.compose.animation.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
@@ -45,6 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 import ru.gribbirg.todoapp.R
@@ -67,14 +67,14 @@ import ru.gribbirg.todoapp.ui.theme.AppTheme
 @Composable
 fun EditItemScreen(
     itemId: String?,
-    viewModel: EditItemViewModel,
+    viewModel: EditItemViewModel = viewModel(factory = EditItemViewModel.Factory),
     onClose: () -> Unit
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+
     LaunchedEffect(itemId) {
         viewModel.setItem(itemId)
     }
-
-    val uiState by viewModel.uiState.collectAsState()
 
     EditItemScreenContent(
         uiState = uiState,
@@ -265,7 +265,6 @@ private fun EditItemScreenContent(
 
             EditItemUiState.Finish -> {
                 LaunchedEffect(Unit) {
-                    Log.i("test","Finishing!")
                     onClose()
                 }
             }

@@ -6,20 +6,19 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import ru.gribbirg.todoapp.ui.edititem.EditItemScreen
-import ru.gribbirg.todoapp.ui.edititem.EditItemViewModel
 import ru.gribbirg.todoapp.ui.todoitemslist.TodoItemsListViewModel
 import ru.gribbirg.todoapp.ui.todoitemslist.TodoListItemScreen
 
 @Composable
 fun NavGraph(
     navController: NavHostController,
-    listViewModel: TodoItemsListViewModel,
-    editItemViewModel: EditItemViewModel
 ) {
+    val listViewModel: TodoItemsListViewModel = viewModel(factory = TodoItemsListViewModel.Factory)
     NavHost(
         navController = navController,
         startDestination = Screen.TodoList.route,
@@ -74,7 +73,6 @@ fun NavGraph(
             val itemId = backStackEntry.arguments?.getString(Screen.Edit.arguments.first().name)
             EditItemScreen(
                 itemId = itemId,
-                viewModel = editItemViewModel,
                 onClose = {
                     navController.popBackStack()
                 }
