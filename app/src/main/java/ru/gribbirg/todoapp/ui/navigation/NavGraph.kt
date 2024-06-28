@@ -74,7 +74,7 @@ fun NavGraph(
             EditItemScreen(
                 itemId = itemId,
                 onClose = {
-                    navController.popBackStack()
+                    navController.popBackStack(Screen.TodoList.route, false)
                 }
             )
         }
