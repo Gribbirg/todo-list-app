@@ -69,10 +69,8 @@ fun NavGraph(
                     )
                 )
             },
-        ) { backStackEntry ->
-            val itemId = backStackEntry.arguments?.getString(Screen.Edit.arguments.first().name)
+        ) {
             EditItemScreen(
-                itemId = itemId,
                 onClose = {
                     navController.popBackStack(Screen.TodoList.route, false)
                 }

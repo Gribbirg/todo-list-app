@@ -66,15 +66,10 @@ import ru.gribbirg.todoapp.ui.theme.AppTheme
 
 @Composable
 fun EditItemScreen(
-    itemId: String?,
     viewModel: EditItemViewModel = viewModel(factory = EditItemViewModel.Factory),
     onClose: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
-
-    //LaunchedEffect(itemId) {
-    //    viewModel.setItem(itemId)
-    //}
 
     EditItemScreenContent(
         uiState = uiState,
