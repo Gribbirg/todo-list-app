@@ -34,9 +34,8 @@ class EditItemViewModel(
         setItem(savedStateHandle[Screen.Edit.arguments.first().name])
     }
 
-    fun setItem(itemId: String?) {
+    private fun setItem(itemId: String?) {
         viewModelScope.launch(coroutineExceptionHandler) {
-            _uiState.update { EditItemUiState.Loading }
             val item = itemId?.let { todoItemRepository.getItem(itemId) }
             _uiState.update {
                 if (item == null)

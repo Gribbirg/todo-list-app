@@ -78,25 +78,27 @@ private fun AppColorsPreview() {
         Column(
             modifier = Modifier.width(500.dp),
         ) {
-            for (method in AppTypography::class.java.declaredMethods.filter {
+            AppTypography::class.java.declaredMethods.filter {
                 java.lang.reflect.Modifier.isPublic(it.modifiers)
                         && !java.lang.reflect.Modifier.isStatic(it.modifiers)
                         && it.returnType == TextStyle::class.java
                         && "get" in it.name
-            }) {
-                val style = method.invoke(AppTheme.typography) as TextStyle
-                Text(
-                    text = "${
-                        method.name.replace(
-                            "get",
-                            ""
-                        )
-                    } — ${style.fontSize.value.toInt()} / ${style.lineHeight.value.toInt()}",
-                    modifier = Modifier.padding(20.dp),
-                    style = style,
-                    color = AppTheme.colors.primary
-                )
             }
+                .map { it to it.invoke(AppTheme.typography) as TextStyle }
+                .sortedByDescending { it.second.fontSize.value }
+                .forEach { (method, style) ->
+                    Text(
+                        text = "${
+                            method.name.replace(
+                                "get",
+                                ""
+                            )
+                        } — ${style.fontSize.value.toInt()} / ${style.lineHeight.value.toInt()}",
+                        modifier = Modifier.padding(20.dp),
+                        style = style,
+                        color = AppTheme.colors.primary
+                    )
+                }
         }
     }
 }

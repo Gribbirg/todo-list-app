@@ -264,11 +264,11 @@ private fun AppColorsPreview() {
         Column(
             modifier = Modifier.width(250.dp),
         ) {
-            for (method in AppColors::class.java.declaredMethods.filter {
+            AppColors::class.java.declaredMethods.filter {
                 java.lang.reflect.Modifier.isPublic(it.modifiers) &&
                         !java.lang.reflect.Modifier.isStatic(it.modifiers) &&
                         it.returnType == Long::class.java
-            }) {
+            }.forEach { method ->
                 val color = Color((method.invoke(AppTheme.colors) as Long).toColorInt())
                 Row(
                     modifier = Modifier.fillMaxWidth(),
