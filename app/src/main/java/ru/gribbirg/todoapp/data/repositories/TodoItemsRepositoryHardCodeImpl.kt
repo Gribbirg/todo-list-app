@@ -19,8 +19,9 @@ class TodoItemsRepositoryHardCodeImpl(
 
     override fun getItemsFlow(): StateFlow<List<TodoItem>> = _itemsFlow.asStateFlow()
 
-    override suspend fun getItem(id: String): TodoItem? =
-        _itemsFlow.value.firstOrNull { it.id == id }
+    override suspend fun getItem(id: String): TodoItem? = withContext(dispatcher) {
+        return@withContext _itemsFlow.value.firstOrNull { it.id == id }
+    }
 
     override suspend fun addItem(item: TodoItem) = withContext(dispatcher) {
         _itemsFlow.update { state ->

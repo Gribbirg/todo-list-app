@@ -2,7 +2,6 @@ package ru.gribbirg.todoapp.ui.todoitemslist
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -66,7 +65,6 @@ fun TodoListItemScreen(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun TodoItemsListScreenContent(
     uiState: TodoItemsListUiState,
