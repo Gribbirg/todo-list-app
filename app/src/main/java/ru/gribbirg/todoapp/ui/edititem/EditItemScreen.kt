@@ -72,9 +72,9 @@ fun EditItemScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    LaunchedEffect(itemId) {
-        viewModel.setItem(itemId)
-    }
+    //LaunchedEffect(itemId) {
+    //    viewModel.setItem(itemId)
+    //}
 
     EditItemScreenContent(
         uiState = uiState,

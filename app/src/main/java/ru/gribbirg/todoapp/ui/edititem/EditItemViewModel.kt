@@ -1,8 +1,10 @@
 package ru.gribbirg.todoapp.ui.edititem
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -14,9 +16,11 @@ import kotlinx.coroutines.launch
 import ru.gribbirg.todoapp.TodoApplication
 import ru.gribbirg.todoapp.data.data.TodoItem
 import ru.gribbirg.todoapp.data.repositories.TodoItemRepository
+import ru.gribbirg.todoapp.ui.navigation.Screen
 
 class EditItemViewModel(
-    private val todoItemRepository: TodoItemRepository
+    savedStateHandle: SavedStateHandle,
+    private val todoItemRepository: TodoItemRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<EditItemUiState>(EditItemUiState.Loading)
@@ -24,6 +28,10 @@ class EditItemViewModel(
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
         _uiState.update { EditItemUiState.Error(exception) }
+    }
+
+    init {
+        setItem(savedStateHandle[Screen.Edit.arguments.first().name])
     }
 
     fun setItem(itemId: String?) {
@@ -87,8 +95,10 @@ class EditItemViewModel(
             initializer {
                 val todoItemRepository =
                     (this[APPLICATION_KEY] as TodoApplication).todoItemRepository
+                val savedStateHandle = createSavedStateHandle()
                 EditItemViewModel(
-                    todoItemRepository = todoItemRepository
+                    todoItemRepository = todoItemRepository,
+                    savedStateHandle = savedStateHandle
                 )
             }
         }
