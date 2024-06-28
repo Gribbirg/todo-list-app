@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,13 +23,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import androidx.compose.ui.unit.dp
 import ru.gribbirg.todoapp.R
 import ru.gribbirg.todoapp.data.data.TodoItem
 import ru.gribbirg.todoapp.ui.components.ErrorComponent
@@ -99,99 +100,73 @@ private fun TodoItemsListScreenContent(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(
-                                start = 8.dp,
-                                end = 8.dp
+                                start = AppTheme.dimensions.paddingMedium,
+                                end = AppTheme.dimensions.paddingMedium,
                             ),
                         userScrollEnabled = true,
                         state = lazyListState
                     ) {
                         item {
-                            Spacer(modifier = Modifier.height(5.dp))
+                            Spacer(modifier = Modifier.height(AppTheme.dimensions.paddingSmall))
                         }
-                        if (uiState.items.isNotEmpty()) {
-                            item {
-                                val shape = RoundedCornerShape(
-                                    topEnd = 8.dp,
-                                    topStart = 8.dp
-                                )
-                                BoxWithSidesForShadow(
-                                    Sides.TOP,
-                                ) {
-                                    Spacer(
-                                        modifier = Modifier
-                                            .shadow(2.dp, shape)
-                                            .clip(shape)
-                                            .background(AppTheme.colors.secondaryBack)
-                                            .fillMaxWidth()
-                                            .height(7.dp)
-                                    )
-                                }
-                            }
-                            items(uiState.items.size, key = { i -> uiState.items[i].hashCode() }) {
-                                val item = uiState.items[it]
-                                TodoItemRow(
-                                    item = item,
-                                    onChecked = { value -> onChecked(item, value) },
-                                    onDeleted = { onDelete(item) },
-                                    onInfoClicked = { toEditItemScreen(item.id) },
-                                    dismissOnCheck = uiState.filterState == TodoItemsListUiState.FilterState.NOT_COMPLETED
-                                )
-                            }
-                            item {
-                                val shape = RoundedCornerShape(
-                                    bottomEnd = 8.dp,
-                                    bottomStart = 8.dp
-                                )
-                                BoxWithSidesForShadow(
-                                    Sides.BOTTOM,
-                                ) {
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .shadow(2.dp, shape)
-                                            .clip(shape)
-                                            .background(AppTheme.colors.secondaryBack)
-                                            .clickable { toEditItemScreen(null) }
-                                    ) {
-                                        Spacer(modifier = Modifier.width(45.dp))
-                                        Text(
-                                            text = stringResource(id = R.string.new_item),
-                                            modifier = Modifier.padding(20.dp),
-                                            color = AppTheme.colors.secondary,
-                                            style = AppTheme.typography.body
-                                        )
-                                    }
-                                }
-                            }
-                        } else {
-                            item {
-                                val shape = RoundedCornerShape(
-                                    bottomEnd = 8.dp,
-                                    bottomStart = 8.dp,
-                                    topEnd = 8.dp,
-                                    topStart = 8.dp
-                                )
-                                Row(
+                        item {
+                            val shape = RoundedCornerShape(
+                                topEnd = AppTheme.dimensions.cardCornersRadius,
+                                topStart = AppTheme.dimensions.cardCornersRadius
+                            )
+                            BoxWithSidesForShadow(
+                                Sides.TOP,
+                            ) {
+                                Spacer(
                                     modifier = Modifier
-                                        .shadow(2.dp, shape)
+                                        .shadow(AppTheme.dimensions.shadowElevationSmall, shape)
                                         .clip(shape)
                                         .background(AppTheme.colors.secondaryBack)
                                         .fillMaxWidth()
-                                        .clickable { toEditItemScreen(null) }
+                                        .height(AppTheme.dimensions.paddingMedium)
+                                )
+                            }
+                        }
+                        items(uiState.items.size, key = { i -> uiState.items[i].hashCode() }) {
+                            val item = uiState.items[it]
+                            TodoItemRow(
+                                item = item,
+                                onChecked = { value -> onChecked(item, value) },
+                                onDeleted = { onDelete(item) },
+                                onInfoClicked = { toEditItemScreen(item.id) },
+                                dismissOnCheck = uiState.filterState == TodoItemsListUiState.FilterState.NOT_COMPLETED
+                            )
+                        }
+                        item {
+                            val shape = RoundedCornerShape(
+                                bottomEnd = AppTheme.dimensions.cardCornersRadius,
+                                bottomStart = AppTheme.dimensions.cardCornersRadius
+                            )
+                            BoxWithSidesForShadow(
+                                Sides.BOTTOM,
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .defaultMinSize(minHeight = AppTheme.dimensions.sizeItemMinHeight)
+                                        .fillMaxWidth()
+                                        .shadow(AppTheme.dimensions.shadowElevationSmall, shape)
+                                        .clip(shape)
+                                        .background(AppTheme.colors.secondaryBack)
+                                        .clickable { toEditItemScreen(null) },
+                                    verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Spacer(modifier = Modifier.width(45.dp))
+                                    Spacer(modifier = Modifier.width(AppTheme.dimensions.paddingExtraExtraLarge))
                                     Text(
                                         text = stringResource(id = R.string.new_item),
-                                        modifier = Modifier.padding(20.dp),
+                                        modifier = Modifier.padding(AppTheme.dimensions.paddingLarge),
                                         color = AppTheme.colors.secondary,
                                         style = AppTheme.typography.body
                                     )
                                 }
                             }
                         }
-
                         item {
-                            Spacer(modifier = Modifier.height(32.dp))
+                            Spacer(modifier = Modifier.height(AppTheme.dimensions.paddingExtraLarge))
                         }
                     }
                 }

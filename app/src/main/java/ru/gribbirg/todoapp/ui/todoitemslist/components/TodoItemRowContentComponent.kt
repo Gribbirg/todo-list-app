@@ -29,7 +29,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
 import ru.gribbirg.todoapp.data.data.TodoImportance
 import ru.gribbirg.todoapp.data.data.TodoItem
 import ru.gribbirg.todoapp.ui.previews.DefaultPreview
@@ -58,25 +57,28 @@ fun TodoItemRowContent(
             highImportance = item.importance == TodoImportance.HIGH,
             onChecked = { value -> onChecked(value) }
         )
-        Spacer(modifier = Modifier.width(4.dp))
+        Spacer(modifier = Modifier.width(AppTheme.dimensions.paddingSmall))
         if (item.importance.logoId != null) {
-            ImportanceIcon(importance = item.importance, modifier = Modifier.padding(top = 12.dp))
-            Spacer(modifier = Modifier.width(5.dp))
+            ImportanceIcon(
+                importance = item.importance,
+                modifier = Modifier.padding(top = AppTheme.dimensions.paddingMediumLarge)
+            )
+            Spacer(modifier = Modifier.width(AppTheme.dimensions.paddingSmall))
         }
 
         Column(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
-                .padding(top = 12.dp)
+                .padding(top = AppTheme.dimensions.paddingMediumLarge)
         ) {
             ItemText(
                 text = item.text,
                 completed = item.completed,
-                modifier = Modifier.padding(top = 4.dp)
+                modifier = Modifier.padding(top = AppTheme.dimensions.paddingSmall)
             )
             if (item.deadline != null) {
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(AppTheme.dimensions.paddingMedium))
                 DeadlineText(item.deadline)
             }
         }
@@ -191,6 +193,6 @@ private fun TodoItemRowContentPreview(
         TodoItemRowContent(
             item = itemState,
             onChecked = { itemState = itemState.copy(completed = it) },
-            onInfoClicked = {  })
+            onInfoClicked = { })
     }
 }

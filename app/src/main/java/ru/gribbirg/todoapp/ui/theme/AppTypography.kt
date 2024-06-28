@@ -94,7 +94,7 @@ private fun AppColorsPreview() {
                                 ""
                             )
                         } — ${style.fontSize.value.toInt()} / ${style.lineHeight.value.toInt()}",
-                        modifier = Modifier.padding(20.dp),
+                        modifier = Modifier.padding(AppTheme.dimensions.paddingLarge),
                         style = style,
                         color = AppTheme.colors.primary
                     )

@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import ru.gribbirg.todoapp.ui.edititem.EditItemScreen
+import ru.gribbirg.todoapp.ui.theme.AppTheme
 import ru.gribbirg.todoapp.ui.todoitemslist.TodoItemsListViewModel
 import ru.gribbirg.todoapp.ui.todoitemslist.TodoListItemScreen
 
@@ -19,6 +20,7 @@ fun NavGraph(
     navController: NavHostController,
 ) {
     val listViewModel: TodoItemsListViewModel = viewModel(factory = TodoItemsListViewModel.Factory)
+    val animationDuration = AppTheme.dimensions.animationDurationNavigationTransition
     NavHost(
         navController = navController,
         startDestination = Screen.TodoList.route,
@@ -28,13 +30,13 @@ fun NavGraph(
             arguments = Screen.Edit.arguments,
             enterTransition = {
                 fadeIn(
-                    animationSpec = tween(durationMillis = 500),
+                    animationSpec = tween(durationMillis = animationDuration),
                     initialAlpha = 0.999f
                 )
             },
             exitTransition = {
                 fadeOut(
-                    animationSpec = tween(durationMillis = 500),
+                    animationSpec = tween(durationMillis = animationDuration),
                     targetAlpha = 0.999f
                 )
             },
@@ -55,7 +57,7 @@ fun NavGraph(
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Start,
                     animationSpec = tween(
-                        500,
+                        animationDuration,
                         easing = FastOutSlowInEasing
                     )
                 )
@@ -64,7 +66,7 @@ fun NavGraph(
                 slideOutOfContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.End,
                     animationSpec = tween(
-                        500,
+                        animationDuration,
                         easing = FastOutSlowInEasing
                     )
                 )

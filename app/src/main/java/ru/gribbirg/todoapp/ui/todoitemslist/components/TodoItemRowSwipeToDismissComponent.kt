@@ -35,7 +35,7 @@ fun TodoItemSwipeToDismiss(
     onChecked: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
-    animationDuration: Int = 500,
+    animationDuration: Int = AppTheme.dimensions.animationDuration,
     dismissOnCheck: Boolean = false,
     content: @Composable (SwipeToDismissBoxState) -> Unit
 ) {

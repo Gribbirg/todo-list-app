@@ -100,12 +100,15 @@ private fun EditItemScreenContent(
         Animatable(if (scrollState.canScrollBackward) appBarColor else scrolledAppBarColor)
     }
 
+    val elevationNo = AppTheme.dimensions.shadowElevationNo.value
+    val elevationFull = AppTheme.dimensions.shadowElevationLarge.value
+
     val topElevation = remember {
-        androidx.compose.animation.core.Animatable(if (scrollState.canScrollBackward) 10f else 0f)
+        androidx.compose.animation.core.Animatable(if (scrollState.canScrollBackward) elevationFull else elevationNo)
     }
 
     LaunchedEffect(scrollState.canScrollBackward) {
-        launch { topElevation.animateTo(if (scrollState.canScrollBackward) 10f else 0f) }
+        launch { topElevation.animateTo(if (scrollState.canScrollBackward) elevationFull else elevationNo) }
         launch { topColor.animateTo(if (scrollState.canScrollBackward) scrolledAppBarColor else appBarColor) }
     }
 
@@ -138,7 +141,7 @@ private fun EditItemScreenContent(
                                 style = AppTheme.typography.button
                             )
                         }
-                        Spacer(modifier = Modifier.width(4.dp))
+                        Spacer(modifier = Modifier.width(AppTheme.dimensions.paddingSmall))
                     }
                 },
                 modifier = Modifier
@@ -168,15 +171,15 @@ private fun EditItemScreenContent(
                     modifier = Modifier
                         .padding(
                             top = paddingValue.calculateTopPadding(),
-                            start = 16.dp,
-                            end = 16.dp
+                            start = AppTheme.dimensions.paddingScreenMedium,
+                            end = AppTheme.dimensions.paddingScreenMedium
                         )
                         .verticalScroll(scrollState)
                         .focusable()
                 ) {
-                    val inputShape = RoundedCornerShape(10.dp)
+                    val inputShape = RoundedCornerShape(AppTheme.dimensions.cardCornersRadius)
 
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(AppTheme.dimensions.paddingSmall))
                     ItemTextField(
                         text = uiState.item.text,
                         onChanged = { newText ->
@@ -184,10 +187,10 @@ private fun EditItemScreenContent(
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .shadow(2.dp, inputShape),
+                            .shadow(AppTheme.dimensions.shadowElevationSmall, inputShape),
                         shape = inputShape
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(AppTheme.dimensions.paddingLarge))
                     ItemImportanceSelector(
                         importance = uiState.item.importance,
                         onChanged = { importance ->
@@ -196,7 +199,10 @@ private fun EditItemScreenContent(
                         onClick = focusManager::clearFocus,
                     )
                     EdiItemSeparator(
-                        modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
+                        modifier = Modifier.padding(
+                            top = AppTheme.dimensions.paddingMedium,
+                            bottom = AppTheme.dimensions.paddingLarge
+                        )
                     )
                     ItemDeadline(
                         deadline = uiState.item.deadline,
@@ -206,9 +212,12 @@ private fun EditItemScreenContent(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = focusManager::clearFocus,
                     )
-                    Spacer(modifier = Modifier.height(32.dp))
+                    Spacer(modifier = Modifier.height(AppTheme.dimensions.paddingExtraLarge))
                     EdiItemSeparator(
-                        modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
+                        modifier = Modifier.padding(
+                            top = AppTheme.dimensions.paddingMedium,
+                            bottom = AppTheme.dimensions.paddingLarge
+                        )
                     )
                     ItemDelete(
                         enabled = uiState.itemState == EditItemUiState.ItemState.EDIT,
@@ -248,7 +257,7 @@ private fun EditItemScreenContent(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     LoadingComponent()
-                    Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(AppTheme.dimensions.paddingLarge))
                     Text(
                         text = stringResource(R.string.saving),
                         style = AppTheme.typography.body,

@@ -15,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import ru.gribbirg.todoapp.R
 import ru.gribbirg.todoapp.ui.previews.DefaultPreview
 import ru.gribbirg.todoapp.ui.previews.ItemPreviewTemplate
@@ -44,7 +43,7 @@ internal fun ItemDelete(
         enabled = enabled
     ) {
         Icon(Icons.Filled.Delete, contentDescription = stringResource(id = R.string.delelte))
-        Spacer(modifier = Modifier.width(10.dp))
+        Spacer(modifier = Modifier.width(AppTheme.dimensions.paddingMedium))
         Text(
             text = stringResource(id = R.string.delelte),
             style = AppTheme.typography.body

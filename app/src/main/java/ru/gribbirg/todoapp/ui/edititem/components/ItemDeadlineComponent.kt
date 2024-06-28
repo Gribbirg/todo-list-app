@@ -18,7 +18,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import ru.gribbirg.todoapp.R
 import ru.gribbirg.todoapp.ui.previews.DefaultPreview
 import ru.gribbirg.todoapp.ui.previews.ItemPreviewTemplate
@@ -49,7 +48,7 @@ internal fun ItemDeadline(
         Column {
             Text(
                 text = stringResource(id = R.string.deadline),
-                modifier = Modifier.padding(start = 8.dp),
+                modifier = Modifier.padding(start = AppTheme.dimensions.paddingMedium),
                 style = AppTheme.typography.body,
                 color = AppTheme.colors.primary
             )
