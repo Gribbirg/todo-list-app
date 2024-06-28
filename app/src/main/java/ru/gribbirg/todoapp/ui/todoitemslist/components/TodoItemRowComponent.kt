@@ -25,15 +25,17 @@ import ru.gribbirg.todoapp.ui.previews.TodoItemPreviewParameterProvider
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 
 @Composable
-fun TodoItemRow(
+internal fun TodoItemRow(
     item: TodoItem,
     onChecked: (Boolean) -> Unit,
     onDeleted: () -> Unit,
     onInfoClicked: () -> Unit,
+    modifier: Modifier = Modifier,
     dismissOnCheck: Boolean = false,
 ) {
     BoxWithSidesForShadow(
         sides = Sides.LEFT_AND_RIGHT,
+        modifier = modifier,
     ) {
         TodoItemSwipeToDismiss(
             completed = item.completed,
@@ -64,7 +66,8 @@ fun TodoItemRow(
 @Composable
 internal fun BoxWithSidesForShadow(
     sides: Sides,
-    content: @Composable () -> Unit
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
 ) {
     val shadowShape =
         when (sides) {
@@ -83,11 +86,12 @@ internal fun BoxWithSidesForShadow(
                 lineTo(maxSize, size.height + maxSize)
                 lineTo(0f, size.height + maxSize)
             }
+
+            Sides.ALL -> null
         }
 
     Box(
-        modifier = Modifier
-            .clip(shadowShape)
+        modifier = shadowShape?.let { modifier.clip(shadowShape) } ?: modifier
     ) {
         content()
     }
@@ -97,7 +101,9 @@ internal fun BoxWithSidesForShadow(
 internal enum class Sides {
     LEFT_AND_RIGHT,
     BOTTOM,
-    TOP
+    TOP,
+    ALL,
+    ;
 }
 
 @DefaultPreview

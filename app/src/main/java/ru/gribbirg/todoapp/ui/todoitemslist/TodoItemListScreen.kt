@@ -1,5 +1,8 @@
 package ru.gribbirg.todoapp.ui.todoitemslist
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -63,6 +66,7 @@ fun TodoListItemScreen(
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun TodoItemsListScreenContent(
     uiState: TodoItemsListUiState,
@@ -72,7 +76,6 @@ private fun TodoItemsListScreenContent(
     onDelete: (TodoItem) -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
-
 
     Scaffold(
         containerColor = AppTheme.colors.primaryBack,
@@ -98,6 +101,7 @@ private fun TodoItemsListScreenContent(
                 is TodoItemsListUiState.Loaded -> {
                     LazyColumn(
                         modifier = Modifier
+                            .animateContentSize()
                             .fillMaxWidth()
                             .padding(
                                 start = AppTheme.dimensions.paddingMedium,
@@ -134,23 +138,35 @@ private fun TodoItemsListScreenContent(
                                 onChecked = { value -> onChecked(item, value) },
                                 onDeleted = { onDelete(item) },
                                 onInfoClicked = { toEditItemScreen(item.id) },
-                                dismissOnCheck = uiState.filterState == TodoItemsListUiState.FilterState.NOT_COMPLETED
+                                dismissOnCheck = uiState.filterState == TodoItemsListUiState.FilterState.NOT_COMPLETED,
+                                modifier = Modifier.animateItem(
+                                    fadeOutSpec = tween(
+                                        durationMillis = AppTheme.dimensions.animationDuration,
+                                    ),
+                                    fadeInSpec = tween(
+                                        durationMillis = AppTheme.dimensions.animationDuration,
+                                    ),
+                                )
                             )
                         }
-                        item {
-                            val shape = RoundedCornerShape(
-                                bottomEnd = AppTheme.dimensions.cardCornersRadius,
-                                bottomStart = AppTheme.dimensions.cardCornersRadius
-                            )
+                        item(key = -1) {
                             BoxWithSidesForShadow(
-                                Sides.BOTTOM,
+                                Sides.LEFT_AND_RIGHT,
+                                modifier = Modifier
+                                    .animateItem(
+                                        fadeOutSpec = tween(
+                                            durationMillis = AppTheme.dimensions.animationDuration,
+                                        ),
+                                        fadeInSpec = tween(
+                                            durationMillis = AppTheme.dimensions.animationDuration,
+                                        ),
+                                    )
                             ) {
                                 Row(
                                     modifier = Modifier
                                         .defaultMinSize(minHeight = AppTheme.dimensions.sizeItemMinHeight)
                                         .fillMaxWidth()
-                                        .shadow(AppTheme.dimensions.shadowElevationSmall, shape)
-                                        .clip(shape)
+                                        .shadow(AppTheme.dimensions.shadowElevationSmall)
                                         .background(AppTheme.colors.secondaryBack)
                                         .clickable { toEditItemScreen(null) },
                                     verticalAlignment = Alignment.CenterVertically
@@ -165,8 +181,50 @@ private fun TodoItemsListScreenContent(
                                 }
                             }
                         }
-                        item {
-                            Spacer(modifier = Modifier.height(AppTheme.dimensions.paddingExtraLarge))
+                        item(key = -2) {
+                            val shape = RoundedCornerShape(
+                                bottomEnd = AppTheme.dimensions.cardCornersRadius,
+                                bottomStart = AppTheme.dimensions.cardCornersRadius
+                            )
+                            BoxWithSidesForShadow(
+                                Sides.BOTTOM,
+                                modifier = Modifier
+                                    .animateItem(
+                                        fadeOutSpec = tween(
+                                            durationMillis = AppTheme.dimensions.animationDuration,
+                                        ),
+                                        fadeInSpec = tween(
+                                            durationMillis = AppTheme.dimensions.animationDuration,
+                                        ),
+                                    )
+                            ) {
+                                Spacer(
+                                    modifier = Modifier
+                                        .padding(bottom = AppTheme.dimensions.paddingSmall)
+                                        .shadow(AppTheme.dimensions.shadowElevationSmall, shape)
+                                        .clip(shape)
+                                        .background(AppTheme.colors.secondaryBack)
+                                        .fillMaxWidth()
+                                        .height(AppTheme.dimensions.paddingMedium)
+                                )
+                            }
+                        }
+                        item(key = -3) {
+                            Spacer(
+                                modifier = Modifier
+                                    .animateItem(
+                                        fadeOutSpec = tween(
+                                            durationMillis = AppTheme.dimensions.animationDuration,
+                                        ),
+                                        fadeInSpec = tween(
+                                            durationMillis = AppTheme.dimensions.animationDuration,
+                                        ),
+                                    )
+                                    .height(
+                                        AppTheme.dimensions.paddingExtraExtraLarge +
+                                                paddingValue.calculateBottomPadding()
+                                    )
+                            )
                         }
                     }
                 }
