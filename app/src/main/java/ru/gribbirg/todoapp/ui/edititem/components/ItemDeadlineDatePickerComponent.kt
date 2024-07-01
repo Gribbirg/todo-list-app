@@ -1,5 +1,8 @@
 package ru.gribbirg.todoapp.ui.edititem.components
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
@@ -10,9 +13,17 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import ru.gribbirg.todoapp.R
+import ru.gribbirg.todoapp.ui.previews.DefaultPreview
+import ru.gribbirg.todoapp.ui.previews.FontScalePreviews
+import ru.gribbirg.todoapp.ui.previews.LanguagePreviews
+import ru.gribbirg.todoapp.ui.previews.LayoutDirectionPreviews
+import ru.gribbirg.todoapp.ui.previews.OrientationPreviews
+import ru.gribbirg.todoapp.ui.previews.ScreenPreviewTemplate
+import ru.gribbirg.todoapp.ui.previews.ThemePreviews
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 import java.time.Instant
 import java.time.LocalDate
@@ -107,5 +118,25 @@ internal fun ItemDeadlineDatePicker(
                 )
             )
         )
+    }
+}
+
+@DefaultPreview
+@ThemePreviews
+@LanguagePreviews
+@LayoutDirectionPreviews
+@FontScalePreviews
+@OrientationPreviews
+@Composable
+private fun ItemDeadlineDatePickerComponentPreview() {
+    ScreenPreviewTemplate {
+        Box(
+            modifier = Modifier.fillMaxSize().padding(it)
+        ) {
+            ItemDeadlineDatePicker(
+                startingValue = LocalDate.now().plusDays(1),
+                onChanged = {},
+                close = {})
+        }
     }
 }

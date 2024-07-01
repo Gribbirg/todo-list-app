@@ -1,6 +1,7 @@
 package ru.gribbirg.todoapp.ui.edititem.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,9 +24,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import ru.gribbirg.todoapp.R
 import ru.gribbirg.todoapp.data.data.TodoImportance
+import ru.gribbirg.todoapp.ui.previews.DefaultPreview
+import ru.gribbirg.todoapp.ui.previews.LanguagePreviews
+import ru.gribbirg.todoapp.ui.previews.LayoutDirectionPreviews
+import ru.gribbirg.todoapp.ui.previews.ScreenPreviewTemplate
+import ru.gribbirg.todoapp.ui.previews.ThemePreviews
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 
 @Composable
@@ -42,8 +47,12 @@ internal fun ItemImportanceSelector(
     ) {
         Text(
             text = stringResource(id = R.string.importance),
-            modifier = Modifier.padding(start = 8.dp),
-            style = AppTheme.typography.body
+            modifier = Modifier.padding(
+                horizontal = AppTheme.dimensions.paddingMedium,
+                vertical = AppTheme.dimensions.paddingSmall
+            ),
+            style = AppTheme.typography.body,
+            color = AppTheme.colors.primary
         )
         TextButton(
             onClick = {
@@ -64,7 +73,7 @@ internal fun ItemImportanceSelector(
                         contentDescription = stringResource(id = importance.nameId),
                         modifier = Modifier,
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(AppTheme.dimensions.paddingMedium))
                 }
                 Text(
                     text = stringResource(id = importance.nameId),
@@ -73,39 +82,71 @@ internal fun ItemImportanceSelector(
             }
         }
 
-        DropdownMenu(
-            expanded = menuOpened,
-            onDismissRequest = { menuOpened = false },
-            modifier = Modifier.background(AppTheme.colors.elevated)
-        ) {
-            for (importanceValue in TodoImportance.entries) {
-                val color = importanceValue.colorId?.let { colorResource(it) }
-                    ?: AppTheme.colors.primary
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = stringResource(id = importanceValue.nameId),
-                            style = AppTheme.typography.body
-                        )
-                    },
-                    onClick = {
-                        onChanged(importanceValue)
-                        menuOpened = false
-                    },
-                    leadingIcon = {
-                        importanceValue.logoId?.let {
-                            Icon(
-                                painterResource(id = it),
-                                contentDescription = stringResource(id = importanceValue.nameId)
-                            )
-                        } ?: Spacer(modifier = Modifier)
-                    },
-                    colors = MenuDefaults.itemColors(
-                        textColor = color,
-                        leadingIconColor = color
+        ItemImportanceMenu(
+            menuOpened = menuOpened,
+            onChanged = onChanged,
+            onClose = { menuOpened = false }
+        )
+    }
+}
+
+@Composable
+private fun ItemImportanceMenu(
+    menuOpened: Boolean,
+    onChanged: (TodoImportance) -> Unit,
+    onClose: () -> Unit,
+) {
+    DropdownMenu(
+        expanded = menuOpened,
+        onDismissRequest = onClose,
+        modifier = Modifier.background(AppTheme.colors.elevated)
+    ) {
+        for (importanceValue in TodoImportance.entries) {
+            val color = importanceValue.colorId?.let { colorResource(it) }
+                ?: AppTheme.colors.primary
+            DropdownMenuItem(
+                text = {
+                    Text(
+                        text = stringResource(id = importanceValue.nameId),
+                        style = AppTheme.typography.body
                     )
+                },
+                onClick = {
+                    onChanged(importanceValue)
+                    onClose()
+                },
+                leadingIcon = {
+                    importanceValue.logoId?.let {
+                        Icon(
+                            painterResource(id = it),
+                            contentDescription = stringResource(id = importanceValue.nameId)
+                        )
+                    } ?: Spacer(modifier = Modifier)
+                },
+                colors = MenuDefaults.itemColors(
+                    textColor = color,
+                    leadingIconColor = color
                 )
-            }
+            )
+        }
+    }
+}
+
+@DefaultPreview
+@ThemePreviews
+@LanguagePreviews
+@LayoutDirectionPreviews
+@Composable
+private fun ItemImportanceSelectorPreview() {
+    ScreenPreviewTemplate { paddingValue ->
+        Row(
+            modifier = Modifier
+                .background(AppTheme.colors.primaryBack)
+                .padding(paddingValue),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            var importance by remember { mutableStateOf(TodoImportance.NO) }
+            ItemImportanceSelector(importance = importance, onChanged = { importance = it })
         }
     }
 }

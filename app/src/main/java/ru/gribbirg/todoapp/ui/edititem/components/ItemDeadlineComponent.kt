@@ -3,6 +3,7 @@ package ru.gribbirg.todoapp.ui.edititem.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Switch
@@ -17,8 +18,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import ru.gribbirg.todoapp.R
+import ru.gribbirg.todoapp.ui.previews.DefaultPreview
+import ru.gribbirg.todoapp.ui.previews.ItemPreviewTemplate
+import ru.gribbirg.todoapp.ui.previews.LanguagePreviews
+import ru.gribbirg.todoapp.ui.previews.LayoutDirectionPreviews
+import ru.gribbirg.todoapp.ui.previews.ThemePreviews
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -43,8 +48,9 @@ internal fun ItemDeadline(
         Column {
             Text(
                 text = stringResource(id = R.string.deadline),
-                modifier = Modifier.padding(start = 8.dp),
-                style = AppTheme.typography.body
+                modifier = Modifier.padding(start = AppTheme.dimensions.paddingMedium),
+                style = AppTheme.typography.body,
+                color = AppTheme.colors.primary
             )
             TextButton(
                 onClick = {
@@ -85,5 +91,21 @@ internal fun ItemDeadline(
             startingValue = deadline!!,
             onChanged = onChanged,
             close = { dialogOpened = false })
+    }
+}
+
+@DefaultPreview
+@ThemePreviews
+@LanguagePreviews
+@LayoutDirectionPreviews
+@Composable
+private fun DeadlineComponentPreview() {
+    ItemPreviewTemplate {
+        var deadline by remember { mutableStateOf(LocalDate.now()) }
+        ItemDeadline(
+            deadline = deadline,
+            onChanged = { deadline = if (deadline == null) LocalDate.now() else null },
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }

@@ -28,11 +28,13 @@ fun TodoAppTheme(
     colors: AppColors? = null,
     typography: AppTypography = AppTheme.typography,
     dimensions: AppDimensions = AppTheme.dimensions,
+    darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
     val appColors =
-        colors ?: if (isSystemInDarkTheme()) AppColors.darkColors() else AppColors.lightColors()
+        colors ?: if (darkTheme) AppColors.darkColors() else AppColors.lightColors()
     val rememberedColors = remember { appColors.copy() }.apply { updateColorsFrom(appColors) }
+
     CompositionLocalProvider(
         LocalColors provides rememberedColors,
         LocalDimensions provides dimensions,

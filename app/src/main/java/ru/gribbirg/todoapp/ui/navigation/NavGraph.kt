@@ -6,37 +6,37 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
-import ru.gribbirg.todoapp.ui.edititem.EditItem
 import ru.gribbirg.todoapp.ui.edititem.EditItemScreen
-import ru.gribbirg.todoapp.ui.edititem.EditItemViewModel
+import ru.gribbirg.todoapp.ui.theme.AppTheme
 import ru.gribbirg.todoapp.ui.todoitemslist.TodoItemsListViewModel
-import ru.gribbirg.todoapp.ui.todoitemslist.TodoList
 import ru.gribbirg.todoapp.ui.todoitemslist.TodoListItemScreen
 
 @Composable
 fun NavGraph(
     navController: NavHostController,
-    listViewModel: TodoItemsListViewModel,
-    editItemViewModel: EditItemViewModel
 ) {
+    val listViewModel: TodoItemsListViewModel = viewModel(factory = TodoItemsListViewModel.Factory)
+    val animationDuration = AppTheme.dimensions.animationDurationNavigationTransition
     NavHost(
         navController = navController,
-        startDestination = TodoList,
+        startDestination = Screen.TodoList.route,
     ) {
-        composable<TodoList>(
+        composable(
+            Screen.TodoList.route,
+            arguments = Screen.Edit.arguments,
             enterTransition = {
                 fadeIn(
-                    animationSpec = tween(durationMillis = 300),
+                    animationSpec = tween(durationMillis = animationDuration),
                     initialAlpha = 0.999f
                 )
             },
             exitTransition = {
                 fadeOut(
-                    animationSpec = tween(durationMillis = 300),
+                    animationSpec = tween(durationMillis = animationDuration),
                     targetAlpha = 0.999f
                 )
             },
@@ -44,16 +44,20 @@ fun NavGraph(
             TodoListItemScreen(
                 viewModel = listViewModel,
                 toEditItemScreen = { id ->
-                    navController.navigate(EditItem(id)) { launchSingleTop = true }
+                    navController.navigate(Screen.Edit.getRoute(itemId = id)) {
+                        launchSingleTop = true
+                    }
                 }
             )
         }
-        composable<EditItem>(
+        composable(
+            Screen.Edit.route,
+            arguments = Screen.Edit.arguments,
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Start,
                     animationSpec = tween(
-                        300,
+                        animationDuration,
                         easing = FastOutSlowInEasing
                     )
                 )
@@ -62,18 +66,15 @@ fun NavGraph(
                 slideOutOfContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.End,
                     animationSpec = tween(
-                        300,
+                        animationDuration,
                         easing = FastOutSlowInEasing
                     )
                 )
             },
-        ) { backStackEntry ->
-            val editItem: EditItem = backStackEntry.toRoute()
+        ) {
             EditItemScreen(
-                itemId = editItem.itemId,
-                viewModel = editItemViewModel,
                 onClose = {
-                    navController.popBackStack()
+                    navController.popBackStack(Screen.TodoList.route, false)
                 }
             )
         }

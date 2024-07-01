@@ -7,6 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import ru.gribbirg.todoapp.ui.previews.DefaultPreview
+import ru.gribbirg.todoapp.ui.previews.ItemPreviewTemplate
+import ru.gribbirg.todoapp.ui.previews.ThemePreviews
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 
 @Composable
@@ -20,5 +23,14 @@ fun LoadingComponent(modifier: Modifier = Modifier) {
                 .padding(16.dp),
             color = AppTheme.colors.blue
         )
+    }
+}
+
+@DefaultPreview
+@ThemePreviews
+@Composable
+private fun LoadingComponentPreview() {
+    ItemPreviewTemplate {
+        LoadingComponent()
     }
 }

@@ -1,14 +1,22 @@
 package ru.gribbirg.todoapp.ui.theme
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.gribbirg.todoapp.R
+import ru.gribbirg.todoapp.ui.previews.DefaultPreview
 
 data class AppTypography(
     val titleLarge: TextStyle = TextStyle(
@@ -62,3 +70,35 @@ val robotoFontFamily = FontFamily(
 )
 
 internal val LocalTypography = staticCompositionLocalOf { AppTypography() }
+
+@DefaultPreview
+@Composable
+private fun AppColorsPreview() {
+    TodoAppTheme {
+        Column(
+            modifier = Modifier.width(500.dp),
+        ) {
+            AppTypography::class.java.declaredMethods.filter {
+                java.lang.reflect.Modifier.isPublic(it.modifiers)
+                        && !java.lang.reflect.Modifier.isStatic(it.modifiers)
+                        && it.returnType == TextStyle::class.java
+                        && "get" in it.name
+            }
+                .map { it to it.invoke(AppTheme.typography) as TextStyle }
+                .sortedByDescending { it.second.fontSize.value }
+                .forEach { (method, style) ->
+                    Text(
+                        text = "${
+                            method.name.replace(
+                                "get",
+                                ""
+                            )
+                        } — ${style.fontSize.value.toInt()} / ${style.lineHeight.value.toInt()}",
+                        modifier = Modifier.padding(AppTheme.dimensions.paddingLarge),
+                        style = style,
+                        color = AppTheme.colors.primary
+                    )
+                }
+        }
+    }
+}

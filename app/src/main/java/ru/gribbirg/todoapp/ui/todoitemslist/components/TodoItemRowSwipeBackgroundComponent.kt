@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 
 @Composable
@@ -31,7 +30,10 @@ fun TodoItemRowSwipeBackground(dismissState: SwipeToDismissBoxState) {
         modifier = Modifier
             .fillMaxSize()
             .background(color)
-            .padding(horizontal = 12.dp, vertical = 8.dp),
+            .padding(
+                horizontal = AppTheme.dimensions.paddingMediumLarge,
+                vertical = AppTheme.dimensions.paddingMedium
+            ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
