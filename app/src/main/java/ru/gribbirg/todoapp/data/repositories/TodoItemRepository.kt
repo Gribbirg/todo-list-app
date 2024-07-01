@@ -1,10 +1,10 @@
 package ru.gribbirg.todoapp.data.repositories
 
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 import ru.gribbirg.todoapp.data.data.TodoItem
 
 interface TodoItemRepository {
-    fun getItemsFlow(): StateFlow<List<TodoItem>>
+    fun getItemsFlow(): Flow<List<TodoItem>>
 
     suspend fun getItem(id: String): TodoItem?
 
