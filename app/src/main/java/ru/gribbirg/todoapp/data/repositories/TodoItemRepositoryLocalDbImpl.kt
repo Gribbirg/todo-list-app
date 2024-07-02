@@ -31,7 +31,7 @@ class TodoItemRepositoryLocalDbImpl(
         todoDao.updateItem(item.toLocalDbItem())
     }
 
-    override suspend fun deleteItem(item: TodoItem) = withContext(dispatcher) {
-        todoDao.deleteItem(item.toLocalDbItem())
+    override suspend fun deleteItem(itemId: String) = withContext(dispatcher) {
+        todoDao.deleteItemById(itemId)
     }
 }

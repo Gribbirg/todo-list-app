@@ -1,7 +1,6 @@
 package ru.gribbirg.todoapp.data.db
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
@@ -22,8 +21,8 @@ interface TodoDao {
     @Insert
     suspend fun addItem(item: TodoDbEntity)
 
-    @Delete
-    suspend fun deleteItem(item: TodoDbEntity)
+    @Query("DELETE FROM $DB_NAME WHERE id = :id")
+    suspend fun deleteItemById(id: String)
 
     @Insert
     suspend fun addAll(items: List<TodoDbEntity>)
