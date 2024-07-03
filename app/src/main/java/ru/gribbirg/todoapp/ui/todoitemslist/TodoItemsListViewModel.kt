@@ -1,5 +1,6 @@
 package ru.gribbirg.todoapp.ui.todoitemslist
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -19,6 +20,7 @@ import kotlinx.coroutines.launch
 import ru.gribbirg.todoapp.TodoApplication
 import ru.gribbirg.todoapp.data.data.TodoItem
 import ru.gribbirg.todoapp.data.repositories.TodoItemRepository
+import ru.gribbirg.todoapp.network.NetworkState
 
 class TodoItemsListViewModel(
     private val todoItemRepository: TodoItemRepository
@@ -39,7 +41,7 @@ class TodoItemsListViewModel(
                 .combine<
                         List<TodoItem>,
                         TodoItemsListUiState.FilterState,
-                        TodoItemsListUiState,
+                        TodoItemsListUiState
                         >(filterFlow) { list, filter ->
                     TodoItemsListUiState.Loaded(
                         items = list.filter(filter.filter),
@@ -53,6 +55,26 @@ class TodoItemsListViewModel(
                 .stateIn(viewModelScope, SharingStarted.Eagerly, TodoItemsListUiState.Loading)
                 .collect { state ->
                     _uiState.update { state }
+                }
+        }
+        viewModelScope.launch(coroutineExceptionHandler) {
+            todoItemRepository
+                .getNetworkStateFlow()
+                .stateIn(viewModelScope, SharingStarted.Eagerly, NetworkState.Loading)
+                .collect { networkState ->
+                    _uiState.update { state ->
+                        when (networkState) {
+                            is NetworkState.Success -> if (state is TodoItemsListUiState.Loaded) state.copy(
+                                isUpdating = false
+                            ) else state
+
+                            is NetworkState.Updating -> if (state is TodoItemsListUiState.Loaded) state.copy(
+                                isUpdating = true
+                            ) else state
+
+                            else -> state
+                        }
+                    }
                 }
         }
     }
@@ -75,6 +97,13 @@ class TodoItemsListViewModel(
     fun onFilterChange(filterState: TodoItemsListUiState.FilterState) {
         viewModelScope.launch(coroutineExceptionHandler) {
             filterFlow.emit(filterState)
+        }
+    }
+
+    fun onUpdate() {
+        viewModelScope.launch(coroutineExceptionHandler) {
+            Log.i("test", "onUpdate: ")
+            todoItemRepository.updateItems()
         }
     }
 

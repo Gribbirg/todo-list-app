@@ -6,13 +6,17 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.gribbirg.todoapp.data.data.TodoItem
 import ru.gribbirg.todoapp.data.db.TodoDao
 import ru.gribbirg.todoapp.data.db.toLocalDbItem
 import ru.gribbirg.todoapp.network.ApiClient
+import ru.gribbirg.todoapp.network.NetworkState
 import ru.gribbirg.todoapp.network.dto.toNetworkDto
 import java.time.LocalDate
 import java.util.UUID
@@ -24,12 +28,18 @@ class TodoItemRepositoryLocalDbImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : TodoItemRepository {
 
+    private val _networkStateFlow: MutableStateFlow<NetworkState> =
+        MutableStateFlow(NetworkState.Updating)
+
     override fun getItemsFlow(): Flow<List<TodoItem>> {
         CoroutineScope(dispatcher).launch {
             updateItems()
         }
         return todoDao.getItemsFlow().map { list -> list.map { it.toTodoItem() } }
     }
+
+    override fun getNetworkStateFlow(): Flow<NetworkState> =
+        _networkStateFlow.asStateFlow()
 
     override suspend fun getItem(id: String): TodoItem? = withContext(dispatcher) {
         return@withContext todoDao.getItem(id)?.toTodoItem()
@@ -59,10 +69,12 @@ class TodoItemRepositoryLocalDbImpl(
         apiClient.delete(itemId, revision)
     }
 
-    private suspend fun updateItems(): Int = withContext(dispatcher) {
+    override suspend fun updateItems(): Int = withContext(dispatcher) {
+        _networkStateFlow.update { NetworkState.Updating }
         val response = apiClient.getAll()
         todoDao.deleteAll()
         todoDao.addAll(response.list.map { it.toTodoItem().toLocalDbItem() })
+        _networkStateFlow.update { NetworkState.Success }
         return@withContext response.revision
     }
 
