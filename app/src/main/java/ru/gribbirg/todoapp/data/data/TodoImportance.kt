@@ -21,5 +21,7 @@ enum class TodoImportance(
         nameId = R.string.importance_high,
         logoId = R.drawable.round_priority_high_24,
         colorId = R.color.red
-    )
+    );
+
+    companion object
 }

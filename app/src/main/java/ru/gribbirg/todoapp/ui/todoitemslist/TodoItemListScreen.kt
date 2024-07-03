@@ -129,7 +129,7 @@ private fun TodoItemsListScreenContent(
                                 )
                             }
                         }
-                        items(uiState.items.size, key = { i -> uiState.items[i].hashCode() }) {
+                        items(uiState.items.size, key = { i -> uiState.items[i].id }) {
                             val item = uiState.items[it]
                             TodoItemRow(
                                 item = item,

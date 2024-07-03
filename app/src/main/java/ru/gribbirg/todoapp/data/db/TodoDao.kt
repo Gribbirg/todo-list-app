@@ -26,4 +26,7 @@ interface TodoDao {
 
     @Insert
     suspend fun addAll(items: List<TodoDbEntity>)
+
+    @Query("DELETE FROM $DB_NAME")
+    suspend fun deleteAll()
 }

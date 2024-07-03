@@ -1,9 +1,12 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.compose.compiler)
     id("com.google.devtools.ksp")
+    id("kotlinx-serialization")
 }
 
 android {
@@ -41,6 +44,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -50,9 +54,28 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    defaultConfig {
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").inputStream())
+        buildConfigField("String", "API_KEY", properties.getProperty("API_KEY"))
+    }
 }
 
 dependencies {
+
+    // Ktor
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.logging.jvm)
+    implementation(libs.ktor.client.serialization)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.client.auth)
+    implementation(libs.ktor.client.websockets)
+    //implementation(libs.ktor.client.auth.oauth)
+    runtimeOnly(libs.ktor.client.auth)
+    implementation(libs.ktor.client.android)
+    implementation(libs.kotlin.stdlib.jdk8)
+
 
     // Room
     implementation(libs.androidx.room.runtime)
