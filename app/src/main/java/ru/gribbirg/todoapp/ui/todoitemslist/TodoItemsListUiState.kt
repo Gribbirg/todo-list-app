@@ -12,7 +12,6 @@ sealed class TodoItemsListUiState {
         val items: List<TodoItem>,
         val filterState: FilterState,
         val doneCount: Int,
-        val isUpdating: Boolean = false,
     ) : TodoItemsListUiState()
 
     enum class FilterState(val filter: (TodoItem) -> Boolean) {

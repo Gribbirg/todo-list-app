@@ -2,6 +2,7 @@ package ru.gribbirg.todoapp.data.repositories
 
 import android.content.Context
 import android.provider.Settings
+import android.util.Log
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -20,8 +21,6 @@ import ru.gribbirg.todoapp.network.ApiResponse
 import ru.gribbirg.todoapp.network.NetworkState
 import ru.gribbirg.todoapp.network.dto.toNetworkDto
 import java.time.LocalDateTime
-import java.time.ZoneId
-import java.util.UUID
 import java.util.concurrent.Executors
 
 class TodoItemRepositoryImpl(
@@ -50,14 +49,10 @@ class TodoItemRepositoryImpl(
     }
 
     override suspend fun addItem(item: TodoItem): Unit = withContext(dispatcher) {
-        val itemCopy = item.copy(
-            id = UUID.randomUUID().toString(),
-            creationDate = LocalDateTime.now(ZoneId.of("UTC"))
-        )
-        todoDao.addItem(itemCopy.toLocalDbItem())
+        todoDao.addItem(item.toLocalDbItem())
         makeRequest {
             apiClient.add(
-                itemCopy.toNetworkDto(
+                item.toNetworkDto(
                     getDeviceId()
                 )
             )
@@ -65,9 +60,8 @@ class TodoItemRepositoryImpl(
     }
 
     override suspend fun saveItem(item: TodoItem): Unit = withContext(dispatcher) {
-        val itemCopy = item.copy(editDate = LocalDateTime.now(ZoneId.of("UTC")))
-        todoDao.updateItem(itemCopy.toLocalDbItem())
-        makeRequest { apiClient.update(itemCopy.toNetworkDto(getDeviceId())) }
+        todoDao.updateItem(item.toLocalDbItem())
+        makeRequest { apiClient.update(item.toNetworkDto(getDeviceId())) }
     }
 
     override suspend fun deleteItem(itemId: String): Unit = withContext(dispatcher) {
@@ -76,6 +70,7 @@ class TodoItemRepositoryImpl(
     }
 
     override suspend fun updateItems(): Unit = withContext(dispatcher) {
+        _networkStateFlow.update { NetworkState.Updating }
         val lastUpdateTime = apiClient.lastUpdateTime
         val response = makeRequest { apiClient.getAll() } ?: return@withContext
 
@@ -93,7 +88,6 @@ class TodoItemRepositoryImpl(
 
 
     private suspend fun <T> makeRequest(request: suspend () -> ApiResponse<T>): T? {
-        _networkStateFlow.update { NetworkState.Updating }
         when (val response = request()) {
             is ApiResponse.Success -> {
                 _networkStateFlow.update { NetworkState.Success }
@@ -153,6 +147,7 @@ class TodoItemRepositoryImpl(
         internetMap.forEach { (key, internetValue) ->
             if (key !in cacheMap.keys && internetValue.editDate >= lastUpdateTime) {
                 res.add(internetValue)
+                Log.i("test", "mergeLists: ${internetValue.editDate} >= $lastUpdateTime")
             }
         }
 

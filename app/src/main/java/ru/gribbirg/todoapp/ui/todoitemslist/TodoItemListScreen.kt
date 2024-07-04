@@ -63,15 +63,18 @@ fun TodoListItemScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val uiEvent by viewModel.uiEventsFlow.collectAsState()
+    val isUpdating by viewModel.networkStateFlow.collectAsState()
 
     TodoItemsListScreenContent(
         uiState = uiState,
         uiEvent = uiEvent,
+        isUpdating = isUpdating,
         toEditItemScreen = toEditItemScreen,
         onFilterChange = viewModel::onFilterChange,
         onChecked = viewModel::onChecked,
         onDelete = viewModel::delete,
-        onRefresh = viewModel::onUpdate
+        onRefresh = viewModel::onUpdate,
+        onResetEvent = viewModel::onResetEvent
     )
 }
 
@@ -79,11 +82,13 @@ fun TodoListItemScreen(
 private fun TodoItemsListScreenContent(
     uiState: TodoItemsListUiState,
     uiEvent: TodoItemsListUiEvent?,
+    isUpdating: Boolean,
     toEditItemScreen: (itemId: String?) -> Unit,
     onFilterChange: (TodoItemsListUiState.FilterState) -> Unit,
     onChecked: (TodoItem, Boolean) -> Unit,
     onDelete: (TodoItem) -> Unit,
     onRefresh: () -> Unit,
+    onResetEvent: () -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -97,6 +102,7 @@ private fun TodoItemsListScreenContent(
 
             null -> {}
         }
+        onResetEvent()
     }
 
     Scaffold(
@@ -117,7 +123,7 @@ private fun TodoItemsListScreenContent(
         }
     ) { paddingValue ->
         TodoItemsListPullToRefreshBox(
-            isRefreshing = (uiState as? TodoItemsListUiState.Loaded)?.isUpdating ?: false,
+            isRefreshing = isUpdating,
             onRefresh = onRefresh,
             modifier = Modifier.fillMaxSize()
         ) {
@@ -295,11 +301,13 @@ private fun TodoListItemScreenPreview(
         TodoItemsListScreenContent(
             uiState = state,
             uiEvent = null,
+            isUpdating = false,
             toEditItemScreen = {},
             onFilterChange = {},
             onChecked = { _, _ -> },
             onDelete = {},
             onRefresh = {},
+            onResetEvent = {},
         )
     }
 }

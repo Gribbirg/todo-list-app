@@ -26,7 +26,8 @@ import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -46,16 +47,16 @@ import ru.gribbirg.todoapp.utils.toTimestamp
 import java.io.IOException
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.util.concurrent.Executors
 import kotlin.coroutines.CoroutineContext
 
-class ApiClient(
+class ApiClient @OptIn(ExperimentalCoroutinesApi::class) constructor(
     private val dataStore: DataStoreUtil,
     private val coroutineContext: CoroutineContext =
-        Executors.newSingleThreadExecutor().asCoroutineDispatcher(),
+        Dispatchers.IO.limitedParallelism(1),
 ) {
     private val client = HttpClient(Android) {
         expectSuccess = true
+        followRedirects = false
 
         install(ContentNegotiation) {
             json(json = Json {
@@ -117,7 +118,8 @@ class ApiClient(
     init {
         runBlocking {
             lastRevision = dataStore.getItem("lastRevision")?.toInt() ?: lastRevision
-            lastUpdateTime = dataStore.getItem("lastUpdateTime")?.toLong()?.toLocalDateTime() ?: lastUpdateTime
+            lastUpdateTime =
+                dataStore.getItem("lastUpdateTime")?.toLong()?.toLocalDateTime() ?: lastUpdateTime
         }
     }
 
@@ -125,13 +127,13 @@ class ApiClient(
         return client.safeRequest<TodoListResponseDto> {
             url(LIST_URL)
             method = HttpMethod.Get
-        }.updateLastRequestData()
+        }
     }
 
     suspend fun add(item: TodoItemDto): ApiResponse<TodoItemResponseDto> {
         return client.safeRequest<TodoItemResponseDto> {
             url(LIST_URL)
-            method = HttpMethod.Put
+            method = HttpMethod.Post
             headers {
                 append(REVISION_HEADER, lastRevision.toString())
             }
@@ -147,7 +149,7 @@ class ApiClient(
                 append(REVISION_HEADER, lastRevision.toString())
             }
             setBody(Json.encodeToString(TodoItemRequestDto(element = item)))
-        }.updateLastRequestData()
+        }
     }
 
     suspend fun delete(itemId: String): ApiResponse<TodoItemResponseDto> {
@@ -157,7 +159,7 @@ class ApiClient(
             headers {
                 append(REVISION_HEADER, lastRevision.toString())
             }
-        }.updateLastRequestData()
+        }
     }
 
     suspend fun refreshAll(items: List<TodoItemDto>): ApiResponse<TodoListResponseDto> {
@@ -168,38 +170,41 @@ class ApiClient(
                 append(REVISION_HEADER, lastRevision.toString())
             }
             setBody(TodoListRequestDto(list = items))
-        }.updateLastRequestData()
+        }
     }
 
-    private suspend inline fun <reified T> HttpClient.safeRequest(
+    private suspend inline fun <reified T : ResponseDto> HttpClient.safeRequest(
         crossinline block: HttpRequestBuilder.() -> Unit,
     ): ApiResponse<T> = withContext(coroutineContext) {
-        return@withContext try {
-            val response = request { block() }
-            ApiResponse.Success(response.body())
-        } catch (e: ClientRequestException) {
-            if (e.response.status.value == 400 && e.response.body<String>() == "unsynchronized data")
-                ApiResponse.Error.WrongRevisionError
-            else
+        runBlocking {
+            val res = try {
+                val response = request { block() }
+                ApiResponse.Success(response.body<T>())
+            } catch (e: ClientRequestException) {
+                if (e.response.status.value == 400 && e.response.body<String>() == "unsynchronized data")
+                    ApiResponse.Error.WrongRevisionError
+                else
+                    ApiResponse.Error.HttpError(e.response.status.value, e.response.body())
+            } catch (e: ServerResponseException) {
                 ApiResponse.Error.HttpError(e.response.status.value, e.response.body())
-        } catch (e: ServerResponseException) {
-            ApiResponse.Error.HttpError(e.response.status.value, e.response.body())
-        } catch (e: IOException) {
-            ApiResponse.Error.NetworkError
-        } catch (e: SerializationException) {
-            ApiResponse.Error.SerializationError
-        } catch (e: NoTransformationFoundException) {
-            ApiResponse.Error.SerializationError
+            } catch (e: IOException) {
+                ApiResponse.Error.NetworkError
+            } catch (e: SerializationException) {
+                ApiResponse.Error.SerializationError
+            } catch (e: NoTransformationFoundException) {
+                ApiResponse.Error.SerializationError
+            }
+
+            return@runBlocking res.updateLastRequestData()
         }
     }
 
 
-    private inline fun <reified T : ResponseDto> ApiResponse<T>.updateLastRequestData() =
+    private inline fun <reified T : ResponseDto> ApiResponse<T>.updateLastRequestData(): ApiResponse<T> =
         also {
             if (it is ApiResponse.Success) {
                 lastRevision = it.body.revision
-                if (it.body is TodoListResponseDto)
-                    lastUpdateTime = LocalDateTime.now(ZoneId.of("UTC"))
+                lastUpdateTime = LocalDateTime.now(ZoneId.of("UTC"))
             }
         }
 }

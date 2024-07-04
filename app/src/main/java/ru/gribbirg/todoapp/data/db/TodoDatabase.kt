@@ -9,7 +9,7 @@ import ru.gribbirg.todoapp.data.constants.DB_NAME
 
 @Database(
     entities = [TodoDbEntity::class],
-    version = 2,
+    version = 8,
     exportSchema = false,
 )
 @TypeConverters(Converters::class)

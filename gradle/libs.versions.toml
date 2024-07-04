@@ -27,6 +27,7 @@ navigationCompose = "2.7.7"
 roomRuntime = "2.6.1"
 toolbarCompose = "2.3.5"
 serialization = "1.6.3"
+workRuntimeKtx = "2.9.0"
 
 [libraries]
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
@@ -38,6 +39,7 @@ androidx-navigation-compose = { module = "androidx.navigation:navigation-compose
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
 authsdk = { module = "com.yandex.android:authsdk", version.ref = "authsdk" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

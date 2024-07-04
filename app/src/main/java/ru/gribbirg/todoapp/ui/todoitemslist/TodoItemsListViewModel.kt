@@ -1,6 +1,5 @@
 package ru.gribbirg.todoapp.ui.todoitemslist
 
-import android.icu.util.Calendar
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -21,6 +20,9 @@ import ru.gribbirg.todoapp.TodoApplication
 import ru.gribbirg.todoapp.data.data.TodoItem
 import ru.gribbirg.todoapp.data.repositories.TodoItemRepository
 import ru.gribbirg.todoapp.network.NetworkState
+import ru.gribbirg.todoapp.utils.toTimestamp
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 class TodoItemsListViewModel(
     private val todoItemRepository: TodoItemRepository
@@ -32,6 +34,9 @@ class TodoItemsListViewModel(
 
     private val _uiEventsFlow = MutableStateFlow<TodoItemsListUiEvent?>(null)
     val uiEventsFlow: StateFlow<TodoItemsListUiEvent?> = _uiEventsFlow.asStateFlow()
+
+    private val _networkStateFlow = MutableStateFlow(false)
+    val networkStateFlow: StateFlow<Boolean> = _networkStateFlow.asStateFlow()
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
         _uiState.update { TodoItemsListUiState.Error(exception) }
@@ -67,24 +72,18 @@ class TodoItemsListViewModel(
                 .getNetworkStateFlow()
                 .stateIn(viewModelScope, SharingStarted.Eagerly, NetworkState.Updating)
                 .collect { networkState ->
-                    val state = uiState.value
                     when (networkState) {
                         is NetworkState.Success ->
-                            if (state is TodoItemsListUiState.Loaded)
-                                _uiState.update { state.copy(isUpdating = false) }
+                            _networkStateFlow.update { false }
 
                         is NetworkState.Updating ->
-                            if (state is TodoItemsListUiState.Loaded)
-                                _uiState.update {
-                                    state.copy(
-                                        isUpdating = true
-                                    )
-                                }
+                            _networkStateFlow.update { true }
 
                         is NetworkState.Error -> {
+                            _networkStateFlow.update { false }
                             _uiEventsFlow.update {
                                 TodoItemsListUiEvent.NetworkError(
-                                    Calendar.getInstance().timeInMillis,
+                                    LocalDateTime.now(ZoneId.of("UTC")).toTimestamp(),
                                     networkState.messageId
                                 )
                             }
@@ -99,7 +98,8 @@ class TodoItemsListViewModel(
     fun onChecked(item: TodoItem, checked: Boolean) {
         viewModelScope.launch(coroutineExceptionHandler) {
             if (uiState.value is TodoItemsListUiState.Loaded) {
-                val newItem = item.copy(completed = checked)
+                val newItem =
+                    item.copy(completed = checked, editDate = LocalDateTime.now(ZoneId.of("UTC")))
                 todoItemRepository.saveItem(newItem)
             }
         }
@@ -120,6 +120,12 @@ class TodoItemsListViewModel(
     fun onUpdate() {
         viewModelScope.launch(coroutineExceptionHandler) {
             todoItemRepository.updateItems()
+        }
+    }
+
+    fun onResetEvent() {
+        viewModelScope.launch(coroutineExceptionHandler) {
+            _uiEventsFlow.update { null }
         }
     }
 

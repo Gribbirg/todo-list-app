@@ -17,6 +17,9 @@ import ru.gribbirg.todoapp.TodoApplication
 import ru.gribbirg.todoapp.data.data.TodoItem
 import ru.gribbirg.todoapp.data.repositories.TodoItemRepository
 import ru.gribbirg.todoapp.ui.navigation.Screen
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.UUID
 
 class EditItemViewModel(
     savedStateHandle: SavedStateHandle,
@@ -55,14 +58,25 @@ class EditItemViewModel(
     fun save() {
         viewModelScope.launch(coroutineExceptionHandler) {
             val state = uiState.value
-            _uiState.update { EditItemUiState.Saving }
             if (state is EditItemUiState.Loaded) {
                 when (state.itemState) {
-                    EditItemUiState.ItemState.EDIT -> todoItemRepository.saveItem(item = state.item)
-                    EditItemUiState.ItemState.NEW -> todoItemRepository.addItem(item = state.item)
+                    EditItemUiState.ItemState.EDIT ->
+                        todoItemRepository.saveItem(
+                            item = state.item.copy(
+                                editDate = LocalDateTime.now(ZoneId.of("UTC"))
+                            )
+                        )
+
+                    EditItemUiState.ItemState.NEW ->
+                        todoItemRepository.addItem(
+                            item = state.item.copy(
+                                id = UUID.randomUUID().toString(),
+                                creationDate = LocalDateTime.now(ZoneId.of("UTC")),
+                                editDate = LocalDateTime.now(ZoneId.of("UTC"))
+                            )
+                        )
                 }
             }
-            _uiState.update { EditItemUiState.Finish }
         }
     }
 

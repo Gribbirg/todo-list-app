@@ -34,7 +34,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -128,6 +127,7 @@ private fun EditItemScreenContent(
                             onClick = {
                                 focusManager.clearFocus()
                                 onSave()
+                                onClose()
                             },
                             enabled = uiState is EditItemUiState.Loaded,
                             colors = ButtonDefaults.textButtonColors(
@@ -247,31 +247,6 @@ private fun EditItemScreenContent(
                         .padding(paddingValue)
                 )
             }
-
-            EditItemUiState.Saving -> {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValue),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    LoadingComponent()
-                    Spacer(modifier = Modifier.height(AppTheme.dimensions.paddingLarge))
-                    Text(
-                        text = stringResource(R.string.saving),
-                        style = AppTheme.typography.body,
-                        color = AppTheme.colors.blue,
-                        textAlign = TextAlign.Center
-                    )
-                }
-            }
-
-            EditItemUiState.Finish -> {
-                LaunchedEffect(Unit) {
-                    onClose()
-                }
-            }
         }
     }
 }
@@ -318,7 +293,6 @@ private fun EditItemScreenPreview(
 private class EditItemUiStatePreviewProvider : PreviewParameterProvider<EditItemUiState> {
     override val values: Sequence<EditItemUiState> = sequenceOf(
         EditItemUiState.Loading,
-        EditItemUiState.Saving,
         EditItemUiState.Error(Exception()),
         EditItemUiState.Loaded(TodoItem(), EditItemUiState.ItemState.EDIT),
         EditItemUiState.Loaded(

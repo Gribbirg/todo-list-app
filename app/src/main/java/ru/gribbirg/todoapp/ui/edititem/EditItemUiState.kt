@@ -16,8 +16,4 @@ sealed class EditItemUiState {
         NEW,
         EDIT
     }
-
-    data object Saving : EditItemUiState()
-
-    data object Finish: EditItemUiState()
 }
