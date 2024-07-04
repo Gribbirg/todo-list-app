@@ -7,6 +7,8 @@ import ru.gribbirg.todoapp.data.constants.DB_NAME
 import ru.gribbirg.todoapp.data.data.TodoImportance
 import ru.gribbirg.todoapp.data.data.TodoItem
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 @Entity(
     tableName = DB_NAME,
@@ -17,8 +19,10 @@ data class TodoDbEntity(
     val importance: TodoImportance = TodoImportance.NO,
     val deadline: LocalDate? = null,
     val completed: Boolean = false,
-    @ColumnInfo(name = "creation_date") val creationDate: LocalDate = LocalDate.now(),
-    @ColumnInfo(name = "edit_date") val editDate: LocalDate? = null
+    @ColumnInfo(name = "creation_date")
+    val creationDate: LocalDateTime = LocalDateTime.now(ZoneId.of("UTC")),
+    @ColumnInfo(name = "edit_date")
+    val editDate: LocalDateTime = creationDate,
 ) {
     fun toTodoItem(): TodoItem =
         TodoItem(

@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TodoItemResponseDto(
-    val status: String,
+    override val status: String,
     val element: TodoItemDto,
-    val revision: Int,
-)
+    override val revision: Int,
+) : ResponseDto()

@@ -1,6 +1,6 @@
 package ru.gribbirg.todoapp.ui.todoitemslist
 
-import android.util.Log
+import android.icu.util.Calendar
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -30,6 +30,9 @@ class TodoItemsListViewModel(
     private val _uiState = MutableStateFlow<TodoItemsListUiState>(TodoItemsListUiState.Loading)
     val uiState: StateFlow<TodoItemsListUiState> = _uiState.asStateFlow()
 
+    private val _uiEventsFlow = MutableStateFlow<TodoItemsListUiEvent?>(null)
+    val uiEventsFlow: StateFlow<TodoItemsListUiEvent?> = _uiEventsFlow.asStateFlow()
+
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
         _uiState.update { TodoItemsListUiState.Error(exception) }
     }
@@ -44,7 +47,7 @@ class TodoItemsListViewModel(
                         TodoItemsListUiState
                         >(filterFlow) { list, filter ->
                     TodoItemsListUiState.Loaded(
-                        items = list.filter(filter.filter),
+                        items = list.filter(filter.filter).sortedWith(TodoItem.COMPARATOR_FOR_UI),
                         filterState = filter,
                         doneCount = list.count { it.completed }
                     )
@@ -54,26 +57,40 @@ class TodoItemsListViewModel(
                 }
                 .stateIn(viewModelScope, SharingStarted.Eagerly, TodoItemsListUiState.Loading)
                 .collect { state ->
-                    _uiState.update { state }
+                    _uiState.update {
+                        state
+                    }
                 }
         }
         viewModelScope.launch(coroutineExceptionHandler) {
             todoItemRepository
                 .getNetworkStateFlow()
-                .stateIn(viewModelScope, SharingStarted.Eagerly, NetworkState.Loading)
+                .stateIn(viewModelScope, SharingStarted.Eagerly, NetworkState.Updating)
                 .collect { networkState ->
-                    _uiState.update { state ->
-                        when (networkState) {
-                            is NetworkState.Success -> if (state is TodoItemsListUiState.Loaded) state.copy(
-                                isUpdating = false
-                            ) else state
+                    val state = uiState.value
+                    when (networkState) {
+                        is NetworkState.Success ->
+                            if (state is TodoItemsListUiState.Loaded)
+                                _uiState.update { state.copy(isUpdating = false) }
 
-                            is NetworkState.Updating -> if (state is TodoItemsListUiState.Loaded) state.copy(
-                                isUpdating = true
-                            ) else state
+                        is NetworkState.Updating ->
+                            if (state is TodoItemsListUiState.Loaded)
+                                _uiState.update {
+                                    state.copy(
+                                        isUpdating = true
+                                    )
+                                }
 
-                            else -> state
+                        is NetworkState.Error -> {
+                            _uiEventsFlow.update {
+                                TodoItemsListUiEvent.NetworkError(
+                                    Calendar.getInstance().timeInMillis,
+                                    networkState.messageId
+                                )
+                            }
                         }
+
+                        else -> {}
                     }
                 }
         }
@@ -96,13 +113,12 @@ class TodoItemsListViewModel(
 
     fun onFilterChange(filterState: TodoItemsListUiState.FilterState) {
         viewModelScope.launch(coroutineExceptionHandler) {
-            filterFlow.emit(filterState)
+            filterFlow.update { filterState }
         }
     }
 
     fun onUpdate() {
         viewModelScope.launch(coroutineExceptionHandler) {
-            Log.i("test", "onUpdate: ")
             todoItemRepository.updateItems()
         }
     }

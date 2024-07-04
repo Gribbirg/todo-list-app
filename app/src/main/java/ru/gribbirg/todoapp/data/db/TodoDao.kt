@@ -3,12 +3,16 @@ package ru.gribbirg.todoapp.data.db
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import ru.gribbirg.todoapp.data.constants.DB_NAME
 
 @Dao
 interface TodoDao {
+    @Query("SELECT * FROM $DB_NAME")
+    fun getAll(): List<TodoDbEntity>
+
     @Query("SELECT * FROM $DB_NAME")
     fun getItemsFlow(): Flow<List<TodoDbEntity>>
 
@@ -29,4 +33,10 @@ interface TodoDao {
 
     @Query("DELETE FROM $DB_NAME")
     suspend fun deleteAll()
+
+    @Transaction
+    suspend fun refreshItems(items: List<TodoDbEntity>) {
+        deleteAll()
+        addAll(items)
+    }
 }

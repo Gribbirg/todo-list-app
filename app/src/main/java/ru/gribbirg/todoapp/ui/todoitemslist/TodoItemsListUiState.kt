@@ -1,8 +1,9 @@
 package ru.gribbirg.todoapp.ui.todoitemslist
 
+import androidx.annotation.StringRes
 import ru.gribbirg.todoapp.data.data.TodoItem
 
-sealed class TodoItemsListUiState() {
+sealed class TodoItemsListUiState {
     data object Loading : TodoItemsListUiState()
 
     data class Error(val exception: Throwable) : TodoItemsListUiState()
@@ -18,4 +19,10 @@ sealed class TodoItemsListUiState() {
         ALL({ true }),
         NOT_COMPLETED({ !it.completed })
     }
+}
+
+sealed class TodoItemsListUiEvent {
+    data class NetworkError(override val time: Long, @StringRes val textId: Int) : TodoItemsListUiEvent()
+
+    abstract val time: Long
 }

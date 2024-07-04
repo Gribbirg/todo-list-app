@@ -63,6 +63,9 @@ android {
 
 dependencies {
 
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
+
     // Ktor
     implementation(libs.ktor.client.okhttp)
     implementation(libs.ktor.client.logging.jvm)
@@ -71,7 +74,6 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.client.auth)
     implementation(libs.ktor.client.websockets)
-    //implementation(libs.ktor.client.auth.oauth)
     runtimeOnly(libs.ktor.client.auth)
     implementation(libs.ktor.client.android)
     implementation(libs.kotlin.stdlib.jdk8)

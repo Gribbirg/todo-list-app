@@ -20,4 +20,6 @@
     <string name="error_occurred">Произошла ошибка:</string>
     <string name="unknown_error">Неизвестная ошибка</string>
     <string name="saving">Сохранение…</string>
+    <string name="network_error">Нет интернета. Попробуйте позже.</string>
+    <string name="network_unknown_error">Произошла ошибка. Попробуйте снова.</string>
 </resources>

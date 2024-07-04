@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 import ru.gribbirg.todoapp.data.data.TodoImportance
 import ru.gribbirg.todoapp.data.data.TodoItem
 import ru.gribbirg.todoapp.utils.toLocalDate
+import ru.gribbirg.todoapp.utils.toLocalDateTime
 import ru.gribbirg.todoapp.utils.toTimestamp
 
 @Serializable
@@ -26,8 +27,8 @@ data class TodoItemDto(
             importance = importance.dtoToImportance()!!,
             deadline = deadline?.toLocalDate(),
             completed = done,
-            creationDate = createdAt.toLocalDate()!!,
-            editDate = changedAt.toLocalDate()!!
+            creationDate = createdAt.toLocalDateTime()!!,
+            editDate = changedAt.toLocalDateTime()!!,
         )
 }
 
@@ -39,9 +40,9 @@ fun TodoItem.toNetworkDto(deviceId: String) =
         deadline = deadline?.toTimestamp(),
         done = completed,
         color = null,
-        createdAt = creationDate.toTimestamp()!!,
-        changedAt = editDate?.toTimestamp() ?: creationDate.toTimestamp()!!,
-        updateBy = deviceId
+        createdAt = creationDate.toTimestamp(),
+        changedAt = editDate.toTimestamp(),
+        updateBy = deviceId,
     )
 
 

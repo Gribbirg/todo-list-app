@@ -9,7 +9,7 @@ import ru.gribbirg.todoapp.data.constants.DB_NAME
 
 @Database(
     entities = [TodoDbEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false,
 )
 @TypeConverters(Converters::class)
@@ -28,6 +28,7 @@ abstract class TodoDatabase : RoomDatabase() {
         private fun buildDatabase(context: Context): TodoDatabase =
             Room
                 .databaseBuilder(context, TodoDatabase::class.java, DB_NAME)
+                .fallbackToDestructiveMigration()
                 .build()
     }
 }

@@ -4,6 +4,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import ru.gribbirg.todoapp.data.data.TodoImportance
 import ru.gribbirg.todoapp.data.data.TodoItem
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 class TextPreviewParameterProvider : PreviewParameterProvider<String> {
     override val values: Sequence<String>
@@ -44,10 +45,8 @@ class TodoItemPreviewParameterProvider : PreviewParameterProvider<TodoItem> {
                             null
                         else LocalDate.now().plusDays((-100L..100L).random()),
                         completed = it % 4 == 0,
-                        creationDate = LocalDate.now().minusDays((-0L..100L).random()),
-                        editDate = if (it % 5 == 0)
-                            null
-                        else LocalDate.now(),
+                        creationDate = LocalDateTime.now().minusDays((-0L..100L).random()),
+                        editDate = LocalDateTime.now().minusDays((-0L..100L).random()),
                     )
                 }
             )

@@ -3,6 +3,7 @@ package ru.gribbirg.todoapp.data.constants
 import ru.gribbirg.todoapp.data.data.TodoImportance
 import ru.gribbirg.todoapp.data.data.TodoItem
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 const val DB_NAME = "todo_list_database"
 
@@ -17,10 +18,8 @@ val defaultTodoItems: List<TodoItem>
                     null
                 else LocalDate.now().plusDays((-100L..100L).random()),
                 completed = false,
-                creationDate = LocalDate.now().minusDays((-0L..100L).random()),
-                editDate = if (it % 5 == 0)
-                    null
-                else LocalDate.now(),
+                creationDate = LocalDateTime.now().minusDays((-0L..100L).random()),
+                editDate = LocalDateTime.now().minusDays((-0L..100L).random()),
             )
         }
     }

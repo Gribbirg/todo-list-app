@@ -21,14 +21,19 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -57,8 +62,11 @@ fun TodoListItemScreen(
     toEditItemScreen: (itemId: String?) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val uiEvent by viewModel.uiEventsFlow.collectAsState()
+
     TodoItemsListScreenContent(
         uiState = uiState,
+        uiEvent = uiEvent,
         toEditItemScreen = toEditItemScreen,
         onFilterChange = viewModel::onFilterChange,
         onChecked = viewModel::onChecked,
@@ -70,6 +78,7 @@ fun TodoListItemScreen(
 @Composable
 private fun TodoItemsListScreenContent(
     uiState: TodoItemsListUiState,
+    uiEvent: TodoItemsListUiEvent?,
     toEditItemScreen: (itemId: String?) -> Unit,
     onFilterChange: (TodoItemsListUiState.FilterState) -> Unit,
     onChecked: (TodoItem, Boolean) -> Unit,
@@ -77,8 +86,23 @@ private fun TodoItemsListScreenContent(
     onRefresh: () -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
+
+    LaunchedEffect(uiEvent) {
+        when (uiEvent) {
+            is TodoItemsListUiEvent.NetworkError -> {
+                snackbarHostState.showSnackbar(context.getString(uiEvent.textId))
+            }
+
+            null -> {}
+        }
+    }
 
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
         containerColor = AppTheme.colors.primaryBack,
         floatingActionButton = {
             if (uiState is TodoItemsListUiState.Loaded)
@@ -94,7 +118,8 @@ private fun TodoItemsListScreenContent(
     ) { paddingValue ->
         TodoItemsListPullToRefreshBox(
             isRefreshing = (uiState as? TodoItemsListUiState.Loaded)?.isUpdating ?: false,
-            onRefresh = onRefresh
+            onRefresh = onRefresh,
+            modifier = Modifier.fillMaxSize()
         ) {
             TodoItemListCollapsingToolbar(
                 topPadding = paddingValue.calculateTopPadding(),
@@ -269,6 +294,7 @@ private fun TodoListItemScreenPreview(
     ScreenPreviewTemplate {
         TodoItemsListScreenContent(
             uiState = state,
+            uiEvent = null,
             toEditItemScreen = {},
             onFilterChange = {},
             onChecked = { _, _ -> },
