@@ -7,26 +7,30 @@ import android.net.NetworkRequest
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import ru.gribbirg.todoapp.data.datestore.DataStoreUtil
 import ru.gribbirg.todoapp.data.db.TodoDao
 import ru.gribbirg.todoapp.data.db.TodoDatabase
-import ru.gribbirg.todoapp.data.repositories.LoginRepository
-import ru.gribbirg.todoapp.data.repositories.LoginRepositoryImpl
-import ru.gribbirg.todoapp.data.repositories.TodoItemRepository
-import ru.gribbirg.todoapp.data.repositories.TodoItemRepositoryImpl
-import ru.gribbirg.todoapp.network.ApiClient
+import ru.gribbirg.todoapp.data.keyvaluesaver.DataStoreSaver
+import ru.gribbirg.todoapp.data.logic.listMergerImpl
+import ru.gribbirg.todoapp.data.network.ItemsApiClientImpl
+import ru.gribbirg.todoapp.data.repositories.items.TodoItemRepository
+import ru.gribbirg.todoapp.data.repositories.items.TodoItemRepositoryImpl
+import ru.gribbirg.todoapp.data.repositories.login.LoginRepository
+import ru.gribbirg.todoapp.data.repositories.login.LoginRepositoryImpl
 import ru.gribbirg.todoapp.utils.TodoListUpdateNetworkCallback
 import ru.gribbirg.todoapp.utils.TodoListUpdateWorkManager
 import java.util.concurrent.TimeUnit
 
+/**
+ * Application class, handle main dependencies
+ */
 class TodoApplication : Application() {
 
     private val internetDataStore by lazy {
-        DataStoreUtil(applicationContext, "internet_data")
+        DataStoreSaver(applicationContext, "internet_data")
     }
 
-    private val apiClient: ApiClient by lazy {
-        ApiClient(dataStore = internetDataStore)
+    private val apiClientImpl: ItemsApiClientImpl by lazy {
+        ItemsApiClientImpl(dataStore = internetDataStore)
     }
     private val itemsDbDao: TodoDao by lazy {
         TodoDatabase.getInstance(
@@ -37,9 +41,10 @@ class TodoApplication : Application() {
     val todoItemRepository: TodoItemRepository by lazy {
         TodoItemRepositoryImpl(
             todoDao = itemsDbDao,
-            apiClient = apiClient,
+            apiClientImpl = apiClientImpl,
             context = applicationContext,
             internetDataStore = internetDataStore,
+            listsMerger = listMergerImpl,
         )
     }
 

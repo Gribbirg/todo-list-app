@@ -6,6 +6,9 @@ import ru.gribbirg.todoapp.data.data.TodoItem
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+/**
+ * Parameters providers for previews
+ */
 class TextPreviewParameterProvider : PreviewParameterProvider<String> {
     override val values: Sequence<String>
         get() = sequenceOf(
@@ -51,4 +54,9 @@ class TodoItemPreviewParameterProvider : PreviewParameterProvider<TodoItem> {
                 }
             )
         }
+}
+
+class BooleanPreviewParameterProvider : PreviewParameterProvider<Boolean> {
+    override val values: Sequence<Boolean>
+        get() = sequenceOf(true, false)
 }

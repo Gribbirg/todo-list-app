@@ -3,7 +3,6 @@ package ru.gribbirg.todoapp.data.db
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ru.gribbirg.todoapp.data.constants.DB_NAME
 import ru.gribbirg.todoapp.data.data.TodoImportance
 import ru.gribbirg.todoapp.data.data.TodoItem
 import java.time.LocalDate
@@ -16,7 +15,7 @@ import java.time.ZoneId
 data class TodoDbEntity(
     @PrimaryKey val id: String = "",
     val text: String = "",
-    val importance: TodoImportance = TodoImportance.NO,
+    val importance: TodoImportance = TodoImportance.No,
     val deadline: LocalDate? = null,
     val completed: Boolean = false,
     @ColumnInfo(name = "creation_date")

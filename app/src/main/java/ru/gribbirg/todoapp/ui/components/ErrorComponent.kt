@@ -15,6 +15,9 @@ import ru.gribbirg.todoapp.ui.previews.LanguagePreviews
 import ru.gribbirg.todoapp.ui.previews.ThemePreviews
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 
+/**
+ * Base error component
+ */
 @Composable
 fun ErrorComponent(exception: Throwable, modifier: Modifier = Modifier) {
     Column(

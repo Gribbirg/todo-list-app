@@ -12,6 +12,9 @@ import ru.gribbirg.todoapp.ui.previews.ItemPreviewTemplate
 import ru.gribbirg.todoapp.ui.previews.ThemePreviews
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 
+/**
+ * Base loading component
+ */
 @Composable
 fun LoadingComponent(modifier: Modifier = Modifier) {
     Box(

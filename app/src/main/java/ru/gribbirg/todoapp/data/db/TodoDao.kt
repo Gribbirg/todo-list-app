@@ -6,8 +6,12 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
-import ru.gribbirg.todoapp.data.constants.DB_NAME
 
+/**
+ * Dao for database
+ *
+ * @see TodoDatabase
+ */
 @Dao
 interface TodoDao {
     @Query("SELECT * FROM $DB_NAME")

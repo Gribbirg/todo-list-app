@@ -5,14 +5,22 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import ru.gribbirg.todoapp.data.constants.DB_NAME
 
+const val DB_NAME = "todo_list_database"
+
+/**
+ * Database to handle local items
+ *
+ * @see TodoDbEntity
+ * @see TodoDao
+ * @see DatabaseConverters
+ */
 @Database(
     entities = [TodoDbEntity::class],
-    version = 8,
+    version = 9,
     exportSchema = false,
 )
-@TypeConverters(Converters::class)
+@TypeConverters(DatabaseConverters::class)
 abstract class TodoDatabase : RoomDatabase() {
     abstract fun getTodoDao(): TodoDao
 

@@ -18,6 +18,9 @@ import androidx.compose.ui.unit.sp
 import ru.gribbirg.todoapp.R
 import ru.gribbirg.todoapp.ui.previews.DefaultPreview
 
+/**
+ * App typography
+ */
 data class AppTypography(
     val titleLarge: TextStyle = TextStyle(
         fontFamily = robotoFontFamily,

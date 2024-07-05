@@ -6,6 +6,13 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 
+/**
+ * Main app theme
+ *
+ * @see AppColors
+ * @see AppTheme
+ * @see AppDimensions
+ */
 object AppTheme {
     val colors: AppColors
         @Composable

@@ -5,8 +5,11 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import kotlinx.coroutines.flow.first
 import ru.gribbirg.todoapp.TodoApplication
-import ru.gribbirg.todoapp.network.NetworkState
+import ru.gribbirg.todoapp.data.repositories.items.NetworkState
 
+/**
+ * Work manager for regular background data sync
+ */
 class TodoListUpdateWorkManager(
     context: Context,
     workerParameters: WorkerParameters,
