@@ -52,6 +52,12 @@ class TodoItemsListViewModel(
     }
 
     init {
+        checkLogin()
+        collectItemsStateFlow()
+        collectNetworkStateFlow()
+    }
+
+    private fun checkLogin() {
         viewModelScope.launch(coroutineExceptionHandler) {
             val isLogin = loginRepository.isLogin()
             _uiState.update { state ->
@@ -63,6 +69,9 @@ class TodoItemsListViewModel(
                 )
             }
         }
+    }
+
+    private fun collectItemsStateFlow() {
         viewModelScope.launch(coroutineExceptionHandler) {
             todoItemRepository
                 .getItemsFlow()
@@ -91,6 +100,9 @@ class TodoItemsListViewModel(
                     }
                 }
         }
+    }
+
+    private fun collectNetworkStateFlow() {
         viewModelScope.launch(coroutineExceptionHandler) {
             todoItemRepository
                 .getNetworkStateFlow()
@@ -169,6 +181,7 @@ class TodoItemsListViewModel(
                             loginState = TodoItemsListUiState.LoginState.Auth
                         )
                     }
+                    todoItemRepository.updateItems()
                 }
 
                 is YandexAuthResult.Failure -> {
