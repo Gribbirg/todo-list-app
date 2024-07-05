@@ -1,32 +1,29 @@
 package ru.gribbirg.todoapp.utils
 
 import android.content.Context
-import androidx.work.Worker
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.first
 import ru.gribbirg.todoapp.TodoApplication
-import kotlin.coroutines.CoroutineContext
+import ru.gribbirg.todoapp.network.NetworkState
 
 class TodoListUpdateWorkManager(
     context: Context,
     workerParameters: WorkerParameters,
-) : Worker(context, workerParameters) {
+) : CoroutineWorker(context, workerParameters) {
 
-    //private val repository: TodoItemRepository = TodoItemRepositoryImpl(
-    //    todoDao = TodoDatabase.getInstance(context).getTodoDao(),
-    //    apiClient = ApiClient(DataStoreUtil(context, "internet_data")),
-    //    context = context
-    //)
-
-    private val coroutineContext: CoroutineContext = Dispatchers.IO
-
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
         val repository = (applicationContext as TodoApplication).todoItemRepository
-        CoroutineScope(coroutineContext).launch {
-            repository.updateItems()
+        repository.updateItems()
+        return when (repository.getNetworkStateFlow().first()) {
+            is NetworkState.Success -> Result.success()
+            is NetworkState.Error.NetworkError -> Result.retry()
+            is NetworkState.Error -> Result.failure()
+            else -> Result.success()
         }
-        return Result.success()
+    }
+
+    companion object {
+        const val WORK_NAME = "update_list"
     }
 }

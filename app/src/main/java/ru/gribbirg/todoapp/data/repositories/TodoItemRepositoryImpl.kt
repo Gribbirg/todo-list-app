@@ -2,7 +2,6 @@ package ru.gribbirg.todoapp.data.repositories
 
 import android.content.Context
 import android.provider.Settings
-import android.util.Log
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -147,7 +146,6 @@ class TodoItemRepositoryImpl(
         internetMap.forEach { (key, internetValue) ->
             if (key !in cacheMap.keys && internetValue.editDate >= lastUpdateTime) {
                 res.add(internetValue)
-                Log.i("test", "mergeLists: ${internetValue.editDate} >= $lastUpdateTime")
             }
         }
 

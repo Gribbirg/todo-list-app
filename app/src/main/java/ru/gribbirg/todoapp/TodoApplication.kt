@@ -4,6 +4,7 @@ import android.app.Application
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import ru.gribbirg.todoapp.data.datestore.DataStoreUtil
@@ -45,7 +46,11 @@ class TodoApplication : Application() {
             PeriodicWorkRequestBuilder<TodoListUpdateWorkManager>(15, TimeUnit.MINUTES)
                 .build()
 
-        WorkManager.getInstance(this).enqueue(updateDataWorkRequest)
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            TodoListUpdateWorkManager.WORK_NAME,
+            ExistingPeriodicWorkPolicy.UPDATE,
+            updateDataWorkRequest,
+        )
     }
 
     private fun registerConnectivityManager() {
