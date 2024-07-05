@@ -133,29 +133,35 @@ class ItemsApiClientImpl @OptIn(ExperimentalCoroutinesApi::class) constructor(
                     }
                 }
                 ApiResponse.Success(response.body<T>())
-            } catch (e: ClientRequestException) {
-                handleClientRequestError(e)
-            } catch (e: ServerResponseException) {
-                ApiResponse.Error.HttpError(e.response.status.value, e.response.body())
-            } catch (e: IOException) {
+            } catch (clientRequestException: ClientRequestException) {
+                handleClientRequestError(clientRequestException)
+            } catch (serverResponseException: ServerResponseException) {
+                ApiResponse.Error.HttpError(
+                    serverResponseException.response.status.value,
+                    serverResponseException.response.body()
+                )
+            } catch (ioException: IOException) {
                 ApiResponse.Error.NetworkError
-            } catch (e: SerializationException) {
+            } catch (serializationException: SerializationException) {
                 ApiResponse.Error.SerializationError
-            } catch (e: NoTransformationFoundException) {
+            } catch (noTransformationFoundException: NoTransformationFoundException) {
                 ApiResponse.Error.SerializationError
             }.updateLastRequestData()
         }
     }
 
-    private suspend fun handleClientRequestError(e: ClientRequestException) =
+    private suspend fun handleClientRequestError(exception: ClientRequestException) =
         when {
-            e.response.status.value == 400 && e.response.body<String>() == NetworkConstants.UNSIGNED_DATA_ERROR ->
+            exception.response.status.value == 400 && exception.response.body<String>() == NetworkConstants.UNSIGNED_DATA_ERROR ->
                 ApiResponse.Error.WrongRevision
 
-            e.response.status.value == 401 -> ApiResponse.Error.Unauthorized
-            e.response.status.value == 404 -> ApiResponse.Error.NotFound
+            exception.response.status.value == 401 -> ApiResponse.Error.Unauthorized
+            exception.response.status.value == 404 -> ApiResponse.Error.NotFound
 
-            else -> ApiResponse.Error.HttpError(e.response.status.value, e.response.body())
+            else -> ApiResponse.Error.HttpError(
+                exception.response.status.value,
+                exception.response.body()
+            )
         }
 
 

@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     id("com.google.devtools.ksp")
     id("kotlinx-serialization")
+    id("io.gitlab.arturbosch.detekt").version("1.22.0")
 }
 
 android {
@@ -59,6 +60,13 @@ android {
         properties.load(project.rootProject.file("local.properties").inputStream())
         manifestPlaceholders["YANDEX_CLIENT_ID"] = properties.getProperty("YANDEX_CLIENT_ID")
     }
+}
+
+detekt {
+    toolVersion = "1.23.6"
+    config = files("config/detekt/detekt.yml")
+    buildUponDefaultConfig = true
+
 }
 
 dependencies {
