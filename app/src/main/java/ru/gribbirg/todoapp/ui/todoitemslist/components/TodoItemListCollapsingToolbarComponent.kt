@@ -2,6 +2,7 @@ package ru.gribbirg.todoapp.ui.todoitemslist.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.yandex.authsdk.YandexAuthResult
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
@@ -48,8 +50,11 @@ import ru.gribbirg.todoapp.ui.todoitemslist.TodoItemsListUiState
 internal fun TodoItemListCollapsingToolbar(
     topPadding: Dp,
     doneCount: Int?,
-    filterState: TodoItemsListUiState.FilterState?,
-    onFilterChange: (TodoItemsListUiState.FilterState) -> Unit,
+    filterState: TodoItemsListUiState.ListUiState.FilterState?,
+    isInAccount: Boolean?,
+    onFilterChange: (TodoItemsListUiState.ListUiState.FilterState) -> Unit,
+    onLogin: (YandexAuthResult) -> Unit,
+    onExit: () -> Unit,
     content: @Composable () -> Unit
 ) {
     val topBarState = rememberCollapsingToolbarScaffoldState()
@@ -142,16 +147,7 @@ internal fun TodoItemListCollapsingToolbar(
                     style = AppTheme.typography.body
                 )
 
-            IconButton(
-                onClick = {
-                    onFilterChange(
-                        if (filterState == TodoItemsListUiState.FilterState.ALL) {
-                            TodoItemsListUiState.FilterState.NOT_COMPLETED
-                        } else {
-                            TodoItemsListUiState.FilterState.ALL
-                        }
-                    )
-                },
+            Row(
                 modifier = Modifier
                     .road(
                         whenExpanded = Alignment.BottomEnd,
@@ -163,12 +159,29 @@ internal fun TodoItemListCollapsingToolbar(
                         end = 16.dp,
                         bottom = 20.dp
                     ),
-                colors = IconButtonDefaults.iconButtonColors(
-                    contentColor = AppTheme.colors.blue
-                ),
-                enabled = filterState != null
             ) {
-                FilterIcon(filterState = filterState)
+                TodoItemListLoginButtonComponent(
+                    isLogin = isInAccount,
+                    onLogin = onLogin,
+                    onExit = onExit,
+                )
+                IconButton(
+                    onClick = {
+                        onFilterChange(
+                            if (filterState == TodoItemsListUiState.ListUiState.FilterState.ALL) {
+                                TodoItemsListUiState.ListUiState.FilterState.NOT_COMPLETED
+                            } else {
+                                TodoItemsListUiState.ListUiState.FilterState.ALL
+                            }
+                        )
+                    },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = AppTheme.colors.blue
+                    ),
+                    enabled = filterState != null
+                ) {
+                    FilterIcon(filterState = filterState)
+                }
             }
         }
     ) {
@@ -177,8 +190,8 @@ internal fun TodoItemListCollapsingToolbar(
 }
 
 @Composable
-private fun FilterIcon(filterState: TodoItemsListUiState.FilterState?) {
-    if (filterState != null && filterState == TodoItemsListUiState.FilterState.ALL) {
+private fun FilterIcon(filterState: TodoItemsListUiState.ListUiState.FilterState?) {
+    if (filterState != null && filterState == TodoItemsListUiState.ListUiState.FilterState.ALL) {
         Icon(
             painter = painterResource(id = R.drawable.baseline_visibility_24),
             contentDescription = stringResource(id = R.string.show)
@@ -236,19 +249,22 @@ private fun getToolbarValue(startValue: Color, endValue: Color, progress: Float)
 private fun TodoItemListCollapsingToolbarPreview() {
     ScreenPreviewTemplate {
         var filterState by remember {
-            mutableStateOf(TodoItemsListUiState.FilterState.ALL)
+            mutableStateOf(TodoItemsListUiState.ListUiState.FilterState.ALL)
         }
         TodoItemListCollapsingToolbar(
             topPadding = it.calculateTopPadding(),
             doneCount = 8,
             filterState = filterState,
+            isInAccount = false,
             onFilterChange = {
                 filterState =
-                    if (filterState == TodoItemsListUiState.FilterState.ALL)
-                        TodoItemsListUiState.FilterState.NOT_COMPLETED
+                    if (filterState == TodoItemsListUiState.ListUiState.FilterState.ALL)
+                        TodoItemsListUiState.ListUiState.FilterState.NOT_COMPLETED
                     else
-                        TodoItemsListUiState.FilterState.ALL
-            }
+                        TodoItemsListUiState.ListUiState.FilterState.ALL
+            },
+            onLogin = {},
+            onExit = {},
         ) {
             Text(
                 text = TextPreviewParameterProvider().values.last(),

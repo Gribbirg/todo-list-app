@@ -34,7 +34,6 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import ru.gribbirg.todoapp.BuildConfig
 import ru.gribbirg.todoapp.data.datestore.DataStoreUtil
 import ru.gribbirg.todoapp.network.dto.ResponseDto
 import ru.gribbirg.todoapp.network.dto.TodoItemDto
@@ -94,9 +93,6 @@ class ApiClient @OptIn(ExperimentalCoroutinesApi::class) constructor(
 
         install(DefaultRequest) {
             contentType(ContentType.Application.Json)
-            headers {
-                append(HttpHeaders.Authorization, "OAuth ${BuildConfig.API_KEY}")
-            }
         }
     }
 
@@ -177,12 +173,21 @@ class ApiClient @OptIn(ExperimentalCoroutinesApi::class) constructor(
         crossinline block: HttpRequestBuilder.() -> Unit,
     ): ApiResponse<T> = withContext(coroutineContext) {
         runBlocking {
+            val key = dataStore.getItem("user_api_key")
+
             val res = try {
-                val response = request { block() }
+                val response = request {
+                    block()
+                    headers {
+                        append(HttpHeaders.Authorization, "OAuth $key")
+                    }
+                }
                 ApiResponse.Success(response.body<T>())
             } catch (e: ClientRequestException) {
                 if (e.response.status.value == 400 && e.response.body<String>() == "unsynchronized data")
-                    ApiResponse.Error.WrongRevisionError
+                    ApiResponse.Error.WrongRevision
+                else if (e.response.status.value == 401)
+                    ApiResponse.Error.Unauthorized
                 else
                     ApiResponse.Error.HttpError(e.response.status.value, e.response.body())
             } catch (e: ServerResponseException) {

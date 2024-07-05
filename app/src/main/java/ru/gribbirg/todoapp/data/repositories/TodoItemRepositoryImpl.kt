@@ -4,15 +4,18 @@ import android.content.Context
 import android.provider.Settings
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import ru.gribbirg.todoapp.data.data.TodoItem
+import ru.gribbirg.todoapp.data.datestore.DataStoreUtil
 import ru.gribbirg.todoapp.data.db.TodoDao
 import ru.gribbirg.todoapp.data.db.toLocalDbItem
 import ru.gribbirg.todoapp.network.ApiClient
@@ -20,18 +23,18 @@ import ru.gribbirg.todoapp.network.ApiResponse
 import ru.gribbirg.todoapp.network.NetworkState
 import ru.gribbirg.todoapp.network.dto.toNetworkDto
 import java.time.LocalDateTime
-import java.util.concurrent.Executors
 
-class TodoItemRepositoryImpl(
+class TodoItemRepositoryImpl @OptIn(ExperimentalCoroutinesApi::class) constructor(
     private val todoDao: TodoDao,
     private val apiClient: ApiClient,
     private val context: Context,
+    private val internetDataStore: DataStoreUtil,
     private val dispatcher: CoroutineDispatcher =
-        Executors.newSingleThreadExecutor().asCoroutineDispatcher(),
+        Dispatchers.IO.limitedParallelism(1),
 ) : TodoItemRepository {
 
     private val _networkStateFlow: MutableStateFlow<NetworkState> =
-        MutableStateFlow(NetworkState.Updating)
+        MutableStateFlow(NetworkState.Success)
 
     override fun getItemsFlow(): Flow<List<TodoItem>> {
         CoroutineScope(dispatcher).launch {
@@ -69,6 +72,9 @@ class TodoItemRepositoryImpl(
     }
 
     override suspend fun updateItems(): Unit = withContext(dispatcher) {
+        if (!isLogin())
+            return@withContext
+
         _networkStateFlow.update { NetworkState.Updating }
         val lastUpdateTime = apiClient.lastUpdateTime
         val response = makeRequest { apiClient.getAll() } ?: return@withContext
@@ -86,29 +92,37 @@ class TodoItemRepositoryImpl(
     }
 
 
-    private suspend fun <T> makeRequest(request: suspend () -> ApiResponse<T>): T? {
-        when (val response = request()) {
-            is ApiResponse.Success -> {
-                _networkStateFlow.update { NetworkState.Success }
-                return response.body
-            }
+    private suspend fun <T> makeRequest(request: suspend () -> ApiResponse<T>): T? =
+        withContext(dispatcher) {
+            runBlocking {
+                if (!isLogin()) {
+                    return@runBlocking null
+                }
+                when (val response = request()) {
+                    is ApiResponse.Success -> {
+                        _networkStateFlow.update { NetworkState.Success }
+                        return@runBlocking response.body
+                    }
 
-            is ApiResponse.Error.WrongRevisionError -> {
-                updateItems()
-                return makeRequest(request)
-            }
+                    is ApiResponse.Error.WrongRevision -> {
+                        updateItems()
+                        return@runBlocking makeRequest(request)
+                    }
 
-            is ApiResponse.Error.NetworkError -> {
-                _networkStateFlow.update { NetworkState.Error.NetworkError }
-                return null
-            }
+                    is ApiResponse.Error.NetworkError -> {
+                        _networkStateFlow.update { NetworkState.Error.NetworkError }
+                        return@runBlocking null
+                    }
 
-            is ApiResponse.Error -> {
-                _networkStateFlow.update { NetworkState.Error.UnknownError }
-                return null
+                    is ApiResponse.Error -> {
+                        _networkStateFlow.update { NetworkState.Error.UnknownError }
+                        return@runBlocking null
+                    }
+                }
             }
         }
-    }
+
+    private suspend fun isLogin() = internetDataStore.getItem("user_api_key") != null
 
     private fun getDeviceId() = Settings.Secure.getString(
         context.contentResolver,

@@ -10,6 +10,8 @@ import androidx.work.WorkManager
 import ru.gribbirg.todoapp.data.datestore.DataStoreUtil
 import ru.gribbirg.todoapp.data.db.TodoDao
 import ru.gribbirg.todoapp.data.db.TodoDatabase
+import ru.gribbirg.todoapp.data.repositories.LoginRepository
+import ru.gribbirg.todoapp.data.repositories.LoginRepositoryImpl
 import ru.gribbirg.todoapp.data.repositories.TodoItemRepository
 import ru.gribbirg.todoapp.data.repositories.TodoItemRepositoryImpl
 import ru.gribbirg.todoapp.network.ApiClient
@@ -18,8 +20,13 @@ import ru.gribbirg.todoapp.utils.TodoListUpdateWorkManager
 import java.util.concurrent.TimeUnit
 
 class TodoApplication : Application() {
+
+    private val internetDataStore by lazy {
+        DataStoreUtil(applicationContext, "internet_data")
+    }
+
     private val apiClient: ApiClient by lazy {
-        ApiClient(dataStore = DataStoreUtil(applicationContext, "internet_data"))
+        ApiClient(dataStore = internetDataStore)
     }
     private val itemsDbDao: TodoDao by lazy {
         TodoDatabase.getInstance(
@@ -32,6 +39,13 @@ class TodoApplication : Application() {
             todoDao = itemsDbDao,
             apiClient = apiClient,
             context = applicationContext,
+            internetDataStore = internetDataStore,
+        )
+    }
+
+    val loginRepository: LoginRepository by lazy {
+        LoginRepositoryImpl(
+            internetDataStore = internetDataStore,
         )
     }
 
@@ -43,7 +57,7 @@ class TodoApplication : Application() {
 
     private fun scheduleDatabaseUpdate() {
         val updateDataWorkRequest =
-            PeriodicWorkRequestBuilder<TodoListUpdateWorkManager>(15, TimeUnit.MINUTES)
+            PeriodicWorkRequestBuilder<TodoListUpdateWorkManager>(8, TimeUnit.HOURS)
                 .build()
 
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(

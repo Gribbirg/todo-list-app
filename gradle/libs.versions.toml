@@ -11,14 +11,7 @@ junit = "4.13.2"
 junitVersion = "1.2.0"
 espressoCore = "3.6.0"
 kotlinStdlibJdk8 = "1.9.20"
-ktorClientAuthOauth = "2.3.12"
-ktorClientContentNegotiation = "2.3.12"
-ktorClientLoggingJvm = "2.3.12"
-ktorClientOkhttp = "2.3.12"
-ktorClientSerialization = "2.3.12"
-ktorClienOauth = "2.3.12"
-ktorClientWebsockets = "2.3.12"
-ktorSerializationKotlinxJson = "2.3.12"
+ktorVersion = "2.3.12"
 lifecycleRuntimeKtx = "2.8.2"
 activityCompose = "1.9.0"
 composeBom = "2024.06.00"
@@ -31,7 +24,6 @@ workRuntimeKtx = "2.9.0"
 
 [libraries]
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
-androidx-compose-bom-v20240201 = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
@@ -55,15 +47,15 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlinStdlibJdk8" }
-ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientAuthOauth" }
-ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktorClientContentNegotiation" }
-ktor-client-auth-oauth = { module = "io.ktor:ktor-client-auth-oauth", version.ref = "ktorClienOauth" }
-ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorClientContentNegotiation" }
-ktor-client-logging-jvm = { module = "io.ktor:ktor-client-logging-jvm", version.ref = "ktorClientLoggingJvm" }
-ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorClientOkhttp" }
-ktor-client-serialization = { module = "io.ktor:ktor-client-serialization", version.ref = "ktorClientSerialization" }
-ktor-client-websockets = { module = "io.ktor:ktor-client-websockets", version.ref = "ktorClientWebsockets" }
-ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorSerializationKotlinxJson" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktorVersion" }
+ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktorVersion" }
+ktor-client-auth-oauth = { module = "io.ktor:ktor-client-auth-oauth", version.ref = "ktorVersion" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorVersion" }
+ktor-client-logging-jvm = { module = "io.ktor:ktor-client-logging-jvm", version.ref = "ktorVersion" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorVersion" }
+ktor-client-serialization = { module = "io.ktor:ktor-client-serialization", version.ref = "ktorVersion" }
+ktor-client-websockets = { module = "io.ktor:ktor-client-websockets", version.ref = "ktorVersion" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorVersion" }
 material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
 toolbar-compose = { module = "me.onebone:toolbar-compose", version.ref = "toolbarCompose" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization"}

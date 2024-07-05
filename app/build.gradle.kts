@@ -57,11 +57,14 @@ android {
     defaultConfig {
         val properties = Properties()
         properties.load(project.rootProject.file("local.properties").inputStream())
-        buildConfigField("String", "API_KEY", properties.getProperty("API_KEY"))
+        manifestPlaceholders["YANDEX_CLIENT_ID"] = properties.getProperty("YANDEX_CLIENT_ID")
     }
 }
 
 dependencies {
+
+    // Yandex login sdk
+    implementation(libs.authsdk)
 
     // Work manager
     implementation(libs.androidx.work.runtime.ktx)

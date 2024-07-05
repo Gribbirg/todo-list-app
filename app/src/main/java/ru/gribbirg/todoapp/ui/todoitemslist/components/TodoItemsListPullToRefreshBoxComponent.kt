@@ -1,5 +1,6 @@
 package ru.gribbirg.todoapp.ui.todoitemslist.components
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,29 +30,35 @@ import ru.gribbirg.todoapp.ui.theme.AppTheme
 fun TodoItemsListPullToRefreshBox(
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
+    enabled: Boolean,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     val state = rememberPullToRefreshState()
-    PullToRefreshBox(
-        isRefreshing = isRefreshing,
-        onRefresh = onRefresh,
-        modifier = modifier,
-        state = state,
-        indicator = {
-            Indicator(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = AppTheme.dimensions.paddingMedium),
-                isRefreshing = isRefreshing,
-                state = state,
-                containerColor = AppTheme.colors.elevated,
-                color = AppTheme.colors.blue
-            )
+    if (enabled)
+        PullToRefreshBox(
+            isRefreshing = isRefreshing,
+            onRefresh = onRefresh,
+            modifier = modifier,
+            state = state,
+            indicator = {
+                Indicator(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .padding(top = AppTheme.dimensions.paddingMedium),
+                    isRefreshing = isRefreshing,
+                    state = state,
+                    containerColor = AppTheme.colors.elevated,
+                    color = AppTheme.colors.blue,
+                )
+            }
+        ) {
+            content()
         }
-    ) {
-        content()
-    }
+    else
+        Box(modifier = modifier) {
+            content()
+        }
 }
 
 @DefaultPreview
@@ -75,6 +82,7 @@ private fun TodoItemsListPullToRefreshBoxPreview(
         TodoItemsListPullToRefreshBox(
             isRefreshing = isRefreshing,
             onRefresh = { isRefreshing = true },
+            enabled = true,
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize()

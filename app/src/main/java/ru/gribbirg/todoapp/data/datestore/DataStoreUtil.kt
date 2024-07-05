@@ -32,4 +32,11 @@ class DataStoreUtil(
         val prefKey = stringPreferencesKey(key)
         return context.dataStore.data.map { it[prefKey] }.firstOrNull()
     }
+
+    suspend fun removeItem(key: String) {
+        val prefKey = stringPreferencesKey(key)
+        context.dataStore.edit { pref ->
+            pref.remove(prefKey)
+        }
+    }
 }

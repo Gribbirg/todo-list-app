@@ -37,6 +37,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import com.yandex.authsdk.YandexAuthResult
 import ru.gribbirg.todoapp.R
 import ru.gribbirg.todoapp.data.data.TodoItem
 import ru.gribbirg.todoapp.ui.components.ErrorComponent
@@ -62,42 +63,40 @@ fun TodoListItemScreen(
     toEditItemScreen: (itemId: String?) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val uiEvent by viewModel.uiEventsFlow.collectAsState()
-    val isUpdating by viewModel.networkStateFlow.collectAsState()
 
     TodoItemsListScreenContent(
         uiState = uiState,
-        uiEvent = uiEvent,
-        isUpdating = isUpdating,
         toEditItemScreen = toEditItemScreen,
         onFilterChange = viewModel::onFilterChange,
         onChecked = viewModel::onChecked,
         onDelete = viewModel::delete,
         onRefresh = viewModel::onUpdate,
-        onResetEvent = viewModel::onResetEvent
+        onLogin = viewModel::onLogin,
+        onExit = viewModel::onExit,
+        onResetEvent = viewModel::onResetEvent,
     )
 }
 
 @Composable
 private fun TodoItemsListScreenContent(
     uiState: TodoItemsListUiState,
-    uiEvent: TodoItemsListUiEvent?,
-    isUpdating: Boolean,
     toEditItemScreen: (itemId: String?) -> Unit,
-    onFilterChange: (TodoItemsListUiState.FilterState) -> Unit,
+    onFilterChange: (TodoItemsListUiState.ListUiState.FilterState) -> Unit,
     onChecked: (TodoItem, Boolean) -> Unit,
     onDelete: (TodoItem) -> Unit,
     onRefresh: () -> Unit,
+    onLogin: (YandexAuthResult) -> Unit,
+    onExit: () -> Unit,
     onResetEvent: () -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
 
-    LaunchedEffect(uiEvent) {
-        when (uiEvent) {
-            is TodoItemsListUiEvent.NetworkError -> {
-                snackbarHostState.showSnackbar(context.getString(uiEvent.textId))
+    LaunchedEffect(uiState.eventState?.time) {
+        when (uiState.eventState) {
+            is TodoItemsListUiState.UiEvent.ShowSnackBar -> {
+                snackbarHostState.showSnackbar(context.getString(uiState.eventState.textId))
             }
 
             null -> {}
@@ -111,7 +110,7 @@ private fun TodoItemsListScreenContent(
         },
         containerColor = AppTheme.colors.primaryBack,
         floatingActionButton = {
-            if (uiState is TodoItemsListUiState.Loaded)
+            if (uiState.listState is TodoItemsListUiState.ListUiState.Loaded)
                 FloatingActionButton(
                     onClick = { toEditItemScreen(null) },
                     shape = CircleShape,
@@ -123,18 +122,22 @@ private fun TodoItemsListScreenContent(
         }
     ) { paddingValue ->
         TodoItemsListPullToRefreshBox(
-            isRefreshing = isUpdating,
+            isRefreshing = uiState.networkState is TodoItemsListUiState.NetworkState.Updating,
             onRefresh = onRefresh,
+            enabled = uiState.loginState is TodoItemsListUiState.LoginState.Auth,
             modifier = Modifier.fillMaxSize()
         ) {
             TodoItemListCollapsingToolbar(
                 topPadding = paddingValue.calculateTopPadding(),
-                doneCount = (uiState as? TodoItemsListUiState.Loaded)?.doneCount,
-                filterState = (uiState as? TodoItemsListUiState.Loaded)?.filterState,
-                onFilterChange = onFilterChange
+                doneCount = (uiState.listState as? TodoItemsListUiState.ListUiState.Loaded)?.doneCount,
+                filterState = (uiState.listState as? TodoItemsListUiState.ListUiState.Loaded)?.filterState,
+                isInAccount = uiState.loginState is TodoItemsListUiState.LoginState.Auth,
+                onFilterChange = onFilterChange,
+                onLogin = onLogin,
+                onExit = onExit,
             ) {
-                when (uiState) {
-                    is TodoItemsListUiState.Loaded -> {
+                when (uiState.listState) {
+                    is TodoItemsListUiState.ListUiState.Loaded -> {
                         LazyColumn(
                             modifier = Modifier
                                 .animateContentSize()
@@ -167,14 +170,16 @@ private fun TodoItemsListScreenContent(
                                     )
                                 }
                             }
-                            items(uiState.items.size, key = { i -> uiState.items[i].id }) {
-                                val item = uiState.items[it]
+                            items(
+                                uiState.listState.items.size,
+                                key = { i -> uiState.listState.items[i].id }) {
+                                val item = uiState.listState.items[it]
                                 TodoItemRow(
                                     item = item,
                                     onChecked = { value -> onChecked(item, value) },
                                     onDeleted = { onDelete(item) },
                                     onInfoClicked = { toEditItemScreen(item.id) },
-                                    dismissOnCheck = uiState.filterState == TodoItemsListUiState.FilterState.NOT_COMPLETED,
+                                    dismissOnCheck = uiState.listState.filterState == TodoItemsListUiState.ListUiState.FilterState.NOT_COMPLETED,
                                     modifier = Modifier.animateItem(
                                         fadeOutSpec = tween(
                                             durationMillis = AppTheme.dimensions.animationDuration,
@@ -265,16 +270,16 @@ private fun TodoItemsListScreenContent(
                         }
                     }
 
-                    is TodoItemsListUiState.Error -> {
+                    is TodoItemsListUiState.ListUiState.Error -> {
                         ErrorComponent(
-                            exception = uiState.exception,
+                            exception = uiState.listState.exception,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(paddingValue)
                         )
                     }
 
-                    TodoItemsListUiState.Loading -> {
+                    TodoItemsListUiState.ListUiState.Loading -> {
                         LoadingComponent(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -300,14 +305,14 @@ private fun TodoListItemScreenPreview(
     ScreenPreviewTemplate {
         TodoItemsListScreenContent(
             uiState = state,
-            uiEvent = null,
-            isUpdating = false,
             toEditItemScreen = {},
             onFilterChange = {},
             onChecked = { _, _ -> },
             onDelete = {},
             onRefresh = {},
             onResetEvent = {},
+            onLogin = {},
+            onExit = {},
         )
     }
 }
@@ -316,12 +321,18 @@ private class TodoItemsListUiStatePreviewParameterProvider :
     PreviewParameterProvider<TodoItemsListUiState> {
     override val values: Sequence<TodoItemsListUiState>
         get() = sequenceOf(
-            TodoItemsListUiState.Loading,
-            TodoItemsListUiState.Error(Exception()),
-            TodoItemsListUiState.Loaded(
-                items = TodoItemPreviewParameterProvider().values.toList(),
-                filterState = TodoItemsListUiState.FilterState.ALL,
-                doneCount = 0
+            TodoItemsListUiState(
+                listState = TodoItemsListUiState.ListUiState.Loading,
+            ),
+            TodoItemsListUiState(
+                listState = TodoItemsListUiState.ListUiState.Error(Exception())
+            ),
+            TodoItemsListUiState(
+                listState = TodoItemsListUiState.ListUiState.Loaded(
+                    items = TodoItemPreviewParameterProvider().values.toList(),
+                    filterState = TodoItemsListUiState.ListUiState.FilterState.ALL,
+                    doneCount = 0,
+                )
             ),
         )
 }
