@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: set up JDK 17
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
@@ -33,7 +33,7 @@ jobs:
         shell: bash
         run: chmod +x gradlew
       - name: Setup secrets
-        run: echo -e "YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID}\nTELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}\nTELEGRAM_BOT_API=${TELEGRAM_BOT_API}\nKEY_STORE_PATH=${KEY_STORE_PATH}\nKEY_STORE_PASSWORD=${KEY_STORE_PASSWORD}\nKEY_PASSWORD=${KEY_PASSWORD}\nKEY_ALIAS=${KEY_ALIAS}\nKEY_STORE_PATH=${{ github.workspace }}/${KEY_STORE_PATH}" > secrets.properties
+        run: echo -e "YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID}\nTELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}\nTELEGRAM_BOT_API=${TELEGRAM_BOT_API}\nKEY_STORE_PASSWORD=${KEY_STORE_PASSWORD}\nKEY_PASSWORD=${KEY_PASSWORD}\nKEY_ALIAS=${KEY_ALIAS}\nKEY_STORE_PATH=${{ github.workspace }}/${KEY_STORE_PATH}" > secrets.properties
       - name: Setup keystore
         run: echo $KEY_STORE_CONTENT | base64 --decode > ${{ github.workspace }}/${KEY_STORE_PATH}
       - name: Debug
