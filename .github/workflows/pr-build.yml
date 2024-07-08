@@ -4,6 +4,7 @@ on:
   pull_request:
     paths-ignore:
       - '**.md'
+  push:
 
 env:
   gradleFlags: --parallel --stacktrace --no-configuration-cache --no-daemon
