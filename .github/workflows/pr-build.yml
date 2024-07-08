@@ -37,7 +37,7 @@ jobs:
       - name: Setup keystore
         run: echo $KEY_STORE_CONTENT | base64 --decode > ${{ github.workspace }}/${KEY_STORE_PATH}
       - name: Debug
-        run: ls
+        run: cat secrets.properties
       - name: Build with Gradle
         run: ./gradlew :app:reportTelegramApkForReleaseSigned $gradleFlags
       - name: Upload apk
