@@ -1,7 +1,6 @@
 import org.gradle.api.JavaVersion
 
 object AndroidConst {
-
     const val NAMESPACE = "ru.gribbirg.todoapp"
     const val COMPILE_SKD = 34
     const val MIN_SKD = 26

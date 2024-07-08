@@ -1,4 +1,6 @@
 import com.android.build.gradle.BaseExtension
+import java.io.File
+import java.util.Properties
 
 fun BaseExtension.baseAndroidConfig() {
     namespace = AndroidConst.NAMESPACE
@@ -10,10 +12,26 @@ fun BaseExtension.baseAndroidConfig() {
             useSupportLibrary = true
         }
     }
+    signingConfigs {
+        create("releaseSigned") {
+            val properties = Properties()
+            properties.load(File("secrets.properties").inputStream())
+
+            storeFile = File(properties.getProperty("KEY_STORE_PATH"))
+            storePassword = properties.getProperty("KEY_STORE_PASSWORD")
+            keyAlias = properties.getProperty("KEY_ALIAS")
+            keyPassword = properties.getProperty("KEY_PASSWORD")
+        }
+    }
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+        create("releaseSigned") {
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("releaseSigned")
         }
     }
     compileOptions {

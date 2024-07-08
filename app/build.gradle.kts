@@ -1,6 +1,16 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.compose.compiler)
     id("android-app-convention")
+    id("telegram-reporter")
+}
+
+tgReporter {
+    val properties = Properties()
+    properties.load(project.rootProject.file("secrets.properties").inputStream())
+    token = properties.getProperty("TELEGRAM_BOT_API")
+    chatId = properties.getProperty("TELEGRAM_CHAT_ID")
 }
 
 android {
