@@ -1,11 +1,8 @@
-rootProject.name = "TodoApp"
+plugins {
+    `kotlin-dsl`
+}
 
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-
-include(":app")
-
-pluginManagement {
-    includeBuild("build-logic")
+repositories {
     repositories {
         google {
             content {
@@ -18,10 +15,9 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-dependencyResolutionManagement {
-    repositories {
-        google()
-        mavenCentral()
-    }
+
+dependencies {
+    implementation(libs.agp)
+    implementation(libs.kotlin.gradle.plugin)
+    implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }
- 

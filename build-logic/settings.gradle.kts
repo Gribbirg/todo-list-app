@@ -1,11 +1,4 @@
-rootProject.name = "TodoApp"
-
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-
-include(":app")
-
 pluginManagement {
-    includeBuild("build-logic")
     repositories {
         google {
             content {
@@ -23,5 +16,11 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
     }
+    versionCatalogs {
+        create("libs") {
+            from(files("../gradle/libs.versions.toml"))
+        }
+    }
 }
- 
+
+
