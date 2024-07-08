@@ -12,7 +12,7 @@ env:
   TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
   TELEGRAM_BOT_API: ${{ secrets.TELEGRAM_BOT_API }}
   KEY_STORE_PATH: ${{ secrets.KEY_STORE_PATH }}
-  KEY_STORE_FULL_PATH: ${{ github.workspace }}/$KEY_STORE_PATH
+  KEY_STORE_FULL_PATH: "${{ github.workspace }}/$KEY_STORE_PATH"
   KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
   KEY_STORE_CONTENT: ${{ secrets.KEY_STORE_CONTENT }}
   KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
