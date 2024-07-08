@@ -12,7 +12,7 @@ env:
   TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
   TELEGRAM_BOT_API: ${{ secrets.TELEGRAM_BOT_API }}
   KEY_STORE_PATH: ${{ secrets.KEY_STORE_PATH }}
-  KEY_STORE_FULL_PATH: "${{ github.workspace }}/$KEY_STORE_PATH"
+  KEY_STORE_FULL_PATH: "${{ github.workspace }}/${KEY_STORE_PATH}"
   KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
   KEY_STORE_CONTENT: ${{ secrets.KEY_STORE_CONTENT }}
   KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
@@ -34,7 +34,7 @@ jobs:
         shell: bash
         run: chmod +x gradlew
       - name: Setup secrets
-        run: echo "YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID}\nTELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}\nTELEGRAM_BOT_API=${TELEGRAM_BOT_API}\nKEY_STORE_PATH=${KEY_STORE_PATH}\nKEY_STORE_PASSWORD=${KEY_STORE_PASSWORD}\nKEY_PASSWORD=${KEY_PASSWORD}\nKEY_ALIAS=${KEY_ALIAS}" > secrets.properties
+        run: echo "YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID}\nTELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}\nTELEGRAM_BOT_API=${TELEGRAM_BOT_API}\nKEY_STORE_PATH=${KEY_STORE_PATH}\nKEY_STORE_PASSWORD=${KEY_STORE_PASSWORD}\nKEY_PASSWORD=${KEY_PASSWORD}\nKEY_ALIAS=${KEY_ALIAS}\nKEY_STORE_PATH=${KEY_STORE_FULL_PATH}" > secrets.properties
       - name: Setup keystore
         run: echo $KEY_STORE_CONTENT | base64 --decode > $KEY_STORE_FULL_PATH
       - name: Debug
