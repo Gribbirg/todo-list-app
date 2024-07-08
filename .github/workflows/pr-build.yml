@@ -38,8 +38,8 @@ jobs:
         id: decode_keystore
         uses: timheuer/base64-to-file@v1
         with:
-          fileName: ${{ github.workspace }}/${KEY_STORE_PATH}
-          encodedString: ${KEY_STORE_CONTENT}
+          fileName: ${{ secrets.KEY_STORE_PATH }}
+          encodedString: ${{ secrets.KEY_PASSWORD }}
       - name: Debug
         run: ls
       - name: Build with Gradle
