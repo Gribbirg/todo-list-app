@@ -35,9 +35,7 @@ jobs:
       - name: Setup secrets
         run: echo -e "YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID}\nTELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}\nTELEGRAM_BOT_API=${TELEGRAM_BOT_API}\nKEY_STORE_PASSWORD=${KEY_STORE_PASSWORD}\nKEY_PASSWORD=${KEY_PASSWORD}\nKEY_ALIAS=${KEY_ALIAS}\nKEY_STORE_PATH=${{ github.workspace }}/${KEY_STORE_PATH}" > secrets.properties
       - name: Setup keystore
-        run: echo $KEY_STORE_CONTENT | base64 --decode > ${{ github.workspace }}/${KEY_STORE_PATH}
-      - name: Debug
-        run: cat secrets.properties
+        run: echo "${KEY_STORE_CONTENT}" | base64 --decode > "${{ github.workspace }}/${KEY_STORE_PATH}"
       - name: Build with Gradle
         run: ./gradlew :app:reportTelegramApkForReleaseSigned $gradleFlags
       - name: Upload apk
