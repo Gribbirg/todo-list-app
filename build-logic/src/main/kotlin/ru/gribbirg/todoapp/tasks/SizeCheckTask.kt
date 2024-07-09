@@ -49,7 +49,8 @@ abstract class SizeCheckTask @Inject constructor(
 
         val size = file.length() / 1024
         if (size > maxSizeKb) {
-            val text = "Apk is too large!\nName: ${file.name}\nSize: ${size}kb"
+            val text =
+                "Apk is too large!\nName: ${file.name}\nSize: ${size}kb\nMax size: ${maxSizeKb}kb"
             runBlocking {
                 telegramApi.sendMessage(
                     text,

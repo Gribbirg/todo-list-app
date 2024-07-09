@@ -2,6 +2,7 @@ package ru.gribbirg.todoapp.tasks
 
 import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.runBlocking
+import okio.FileNotFoundException
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
@@ -34,25 +35,22 @@ abstract class TelegramReporterTask @Inject constructor(
         val token = token.get()
         val chatId = chatId.get()
         apkDir.get().asFile.listFiles()
-            ?.filter { it.name.endsWith(".apk") }
-            ?.forEach {
-                runBlocking {
-                    telegramApi.sendMessage("Build finished", token, chatId).apply {
-                        println(bodyAsText())
-                    }
-                }
+            ?.firstOrNull { it.name.endsWith(".apk") }
+            ?.let {
                 runBlocking {
                     telegramApi.sendMessage(
-                        "Apk size: ${apkSizeFile.get().asFile.readText()}kb",
+                        "Build finished!\nApk size: ${apkSizeFile.get().asFile.readText()}kb",
                         token,
-                        chatId,
-                    )
+                        chatId
+                    ).apply {
+                        println(bodyAsText())
+                    }
                 }
                 runBlocking {
                     telegramApi.upload(it, token, chatId).apply {
                         println(bodyAsText())
                     }
                 }
-            }
+            } ?: throw FileNotFoundException("Apk not found")
     }
 }

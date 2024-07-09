@@ -45,7 +45,7 @@ jobs:
         run: ./gradlew :app:reportTelegramApkForReleaseSigned $gradleFlags
       - name: Get apk file name
         run: |
-          APK_FILE = $(find ${{ github.workspace }}/app/build/outputs/apk/release-signed/baselineProfiles/ f -name *.apk | head -n 1)
+          APK_FILE = $(find ${{ github.workspace }}/app/build/outputs/apk/release-signed/baselineProfiles/ -type f -name "*.apk" | head -n 1)
           echo "APK_FILE=$APK_FILE" >> $GITHUB_ENV
       - name: Upload apk
         uses: actions/upload-artifact@v4
