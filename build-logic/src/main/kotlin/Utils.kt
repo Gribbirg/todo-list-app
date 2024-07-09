@@ -13,7 +13,7 @@ fun BaseExtension.baseAndroidConfig() {
         }
     }
     signingConfigs {
-        create("releaseSigned") {
+        create("release-signed") {
             val properties = Properties()
             properties.load(File("secrets.properties").inputStream())
 
@@ -28,10 +28,10 @@ fun BaseExtension.baseAndroidConfig() {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
-        create("releaseSigned") {
+        create("release-signed") {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            signingConfig = signingConfigs.getByName("releaseSigned")
+            signingConfig = signingConfigs.getByName("release-signed")
         }
     }
     applicationVariants.all {

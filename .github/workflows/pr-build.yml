@@ -43,8 +43,12 @@ jobs:
           base64 -d keystore_base64.txt > $DECODED_KEYSTORE_PATH
       - name: Build with Gradle
         run: ./gradlew :app:reportTelegramApkForReleaseSigned $gradleFlags
+      - name: Get apk file name
+        run: |
+          APK_FILE = ${find app/build/outputs/apk/release-signed/baselineProfiles f -name *.apk | head -n 1}
+          echo "APK_FILE=$APK_FILE" >> $GITHUB_ENV
       - name: Upload apk
         uses: actions/upload-artifact@v4
         with:
-          name: app-release.apk
-          path: app/build/outputs/apk/paid/release/app-paid-releaseSigned.apk
+          name: ${{ env.APK_FILE }}
+          path: app/build/outputs/apk/release-signed/baselineProfiles/*.apk

@@ -26,11 +26,16 @@ class TelegramReporterPlugin : Plugin<Project> {
             val artifacts = variant.artifacts.get(SingleArtifact.APK)
             project.tasks.register(
                 "reportTelegramApkFor${
-                    variant.name.replaceFirstChar {
-                        if (it.isLowerCase()) it.titlecase(
-                            Locale.getDefault()
-                        ) else it.toString()
-                    }
+                    variant
+                        .name
+                        .split("-")
+                        .joinToString("") { word ->
+                            word.replaceFirstChar { char ->
+                                if (char.isLowerCase())
+                                    char.titlecase(Locale.getDefault())
+                                else word
+                            }
+                        }
                 }",
                 TelegramReporterTask::class.java,
                 telegramApi
