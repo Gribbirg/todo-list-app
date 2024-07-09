@@ -41,12 +41,10 @@ jobs:
         run: |
           echo $ENCODED_KEYSTORE > keystore_base64.txt
           base64 -d keystore_base64.txt > $DECODED_KEYSTORE_PATH
-      - name: Debug
-        run: ls
       - name: Build with Gradle
         run: ./gradlew :app:reportTelegramApkForReleaseSigned $gradleFlags
       - name: Upload apk
         uses: actions/upload-artifact@v4
         with:
           name: app-release.apk
-          path: app/build/outputs/apk/paid/release/app-paid-release-unsigned.apk
+          path: app/build/outputs/apk/paid/release/app-paid-releaseSigned.apk
