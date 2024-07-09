@@ -1,4 +1,4 @@
-package ru.gribbirg.todoapp.plugins.report
+package ru.gribbirg.todoapp.api
 
 import io.ktor.client.HttpClient
 import io.ktor.client.request.forms.MultiPartFormDataContent
@@ -25,7 +25,10 @@ class TelegramApi(
                 MultiPartFormDataContent(
                     formData {
                         append("document", file.readBytes(), Headers.build {
-                            append(HttpHeaders.ContentDisposition, "filename=${file.name.escapeIfNeeded()}")
+                            append(
+                                HttpHeaders.ContentDisposition,
+                                "filename=${file.name.escapeIfNeeded()}"
+                            )
                         })
                     }
                 )

@@ -17,7 +17,7 @@ repositories {
 gradlePlugin {
     plugins.register("telegram-reporter") {
         id = "telegram-reporter"
-        implementationClass = "ru.gribbirg.todoapp.plugins.report.TelegramReporterPlugin"
+        implementationClass = "ru.gribbirg.todoapp.plugins.TelegramReporterPlugin"
     }
 }
 

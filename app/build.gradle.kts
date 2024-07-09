@@ -13,8 +13,10 @@ plugins {
 tgReporter {
     val properties = Properties()
     properties.load(project.rootProject.file("secrets.properties").inputStream())
+
     token = properties.getProperty("TELEGRAM_BOT_API")
     chatId = properties.getProperty("TELEGRAM_CHAT_ID")
+    maxFileSizeKb = 8000
 }
 
 android {

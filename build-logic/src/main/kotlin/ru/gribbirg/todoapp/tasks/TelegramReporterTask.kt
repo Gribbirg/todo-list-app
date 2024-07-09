@@ -1,13 +1,16 @@
-package ru.gribbirg.todoapp.plugins.report
+package ru.gribbirg.todoapp.tasks
 
 import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.runBlocking
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.TaskAction
+import ru.gribbirg.todoapp.api.TelegramApi
 import javax.inject.Inject
 
 abstract class TelegramReporterTask @Inject constructor(
@@ -16,6 +19,9 @@ abstract class TelegramReporterTask @Inject constructor(
 
     @get:InputDirectory
     abstract val apkDir: DirectoryProperty
+
+    @get:InputFile
+    abstract val apkSizeFile: RegularFileProperty
 
     @get:Input
     abstract val token: Property<String>
@@ -34,6 +40,13 @@ abstract class TelegramReporterTask @Inject constructor(
                     telegramApi.sendMessage("Build finished", token, chatId).apply {
                         println(bodyAsText())
                     }
+                }
+                runBlocking {
+                    telegramApi.sendMessage(
+                        "Apk size: ${apkSizeFile.get().asFile.readText()}kb",
+                        token,
+                        chatId,
+                    )
                 }
                 runBlocking {
                     telegramApi.upload(it, token, chatId).apply {
