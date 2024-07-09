@@ -3,8 +3,6 @@ import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    //id("com.google.devtools.ksp")
-    //id("org.jetbrains.kotlin.plugin.compose")
 }
 
 configure<BaseAppModuleExtension> {
