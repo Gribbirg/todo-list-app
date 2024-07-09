@@ -1,28 +1,23 @@
 package ru.gribbirg.todoapp.tasks
 
-import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.runBlocking
+import net.lingala.zip4j.ZipFile
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
-import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
-import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import ru.gribbirg.todoapp.api.TelegramApi
 import ru.gribbirg.todoapp.utils.findApk
+import ru.gribbirg.todoapp.utils.roundTo
 import javax.inject.Inject
 
-abstract class TelegramReporterTask @Inject constructor(
+abstract class ApkFileDetailsTask @Inject constructor(
     private val telegramApi: TelegramApi
 ) : DefaultTask() {
-
     @get:InputDirectory
     abstract val apkDir: DirectoryProperty
-
-    @get:OutputFile
-    abstract val apkSizeFile: RegularFileProperty
 
     @get:Input
     abstract val token: Property<String>
@@ -30,25 +25,29 @@ abstract class TelegramReporterTask @Inject constructor(
     @get:Input
     abstract val chatId: Property<String>
 
+    @get:Input
+    abstract val enabledTask: Property<Boolean>
+
     @TaskAction
-    fun report() {
-        val token = token.get()
-        val chatId = chatId.get()
+    fun sendDetails() {
+        if (!enabledTask.get()) return
+
         val file = apkDir.get().findApk()
+
+        val text = ZipFile(file)
+            .fileHeaders
+            .groupBy { it.fileName.split("/").first() }
+            .map { it.key to it.value.sumOf { header -> header.uncompressedSize } / 1024.0 }
+            .joinToString("\n") {
+                "${it.first} - ${it.second.roundTo(2)} KB"
+            }
 
         runBlocking {
             telegramApi.sendMessage(
-                "Build finished!\nApk size: ${apkSizeFile.get().asFile.readText()} KB",
-                token,
-                chatId
-            ).apply {
-                println(bodyAsText())
-            }
-        }
-        runBlocking {
-            telegramApi.upload(file, token, chatId).apply {
-                println(bodyAsText())
-            }
+                "Apk details:\n\n$text",
+                token.get(),
+                chatId.get()
+            )
         }
     }
 }

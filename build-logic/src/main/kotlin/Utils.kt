@@ -29,19 +29,27 @@ fun BaseExtension.baseAndroidConfig() {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
         create("release-signed") {
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
             signingConfig = signingConfigs.getByName("release-signed")
         }
     }
 
     applicationVariants.all {
-        buildOutputs.all {
-            val variantOutputImpl = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
-            variantOutputImpl.outputFileName =  "todoapp-${buildType.name}-${defaultConfig.versionCode}.apk"
+        outputs.all {
+            val variantOutputImpl =
+                this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            variantOutputImpl.outputFileName =
+                "todoapp-${buildType.name}-${defaultConfig.versionName}.apk"
         }
     }
 

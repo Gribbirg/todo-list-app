@@ -24,8 +24,13 @@ gradlePlugin {
 dependencies {
     implementation(libs.agp)
     implementation(libs.kotlin.gradle.plugin)
+
     implementation(libs.kotlin.coroutines.core)
+
     implementation(libs.ktor.client)
     implementation(libs.ktor.client.okhttp)
+
+    implementation(libs.zip.file)
+
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }

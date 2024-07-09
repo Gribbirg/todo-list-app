@@ -42,7 +42,7 @@ jobs:
           echo $ENCODED_KEYSTORE > keystore_base64.txt
           base64 -d keystore_base64.txt > $DECODED_KEYSTORE_PATH
       - name: Build with Gradle
-        run: ./gradlew :app:reportTelegramApkForReleaseSigned $gradleFlags
+        run: ./gradlew :app:reportWithApkDetailsForReleaseSigned $gradleFlags
       - name: Get apk file name
         run: |
           APK_FILE=$(find ${{ github.workspace }}/app/build/outputs/apk/release-signed/baselineProfiles/ -type f -name "*.apk" | head -n 1)

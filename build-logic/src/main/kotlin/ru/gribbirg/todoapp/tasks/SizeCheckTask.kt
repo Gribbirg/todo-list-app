@@ -1,7 +1,7 @@
 package ru.gribbirg.todoapp.tasks
 
+import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.runBlocking
-import okio.FileNotFoundException
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
@@ -11,6 +11,7 @@ import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import ru.gribbirg.todoapp.api.TelegramApi
+import ru.gribbirg.todoapp.utils.findApk
 import javax.inject.Inject
 
 abstract class SizeCheckTask @Inject constructor(
@@ -26,37 +27,31 @@ abstract class SizeCheckTask @Inject constructor(
     abstract val chatId: Property<String>
 
     @get:Input
-    abstract val maxSizeKb: Property<Int?>
+    abstract val maxSizeKb: Property<Int>
 
     @get:OutputFile
     abstract val outputFile: RegularFileProperty
 
     @TaskAction
     fun check() {
-        val maxSizeKb = maxSizeKb.get() ?: return
+        val maxSizeKb = maxSizeKb.get()
         val token = token.get()
         val chatId = chatId.get()
 
-        val file = apkDir
-            .get()
-            .asFile
-            .listFiles()
-            ?.firstOrNull { it.name.endsWith(".apk") }
-
-        if (file == null) {
-            throw FileNotFoundException("Apk not found")
-        }
+        val file = apkDir.get().findApk()
 
         val size = file.length() / 1024
         if (size > maxSizeKb) {
             val text =
-                "Apk is too large!\nName: ${file.name}\nSize: ${size}kb\nMax size: ${maxSizeKb}kb"
+                "Apk is too large!\nName: ${file.name}\nSize: $size KB\nMax size: $maxSizeKb KB"
             runBlocking {
                 telegramApi.sendMessage(
                     text,
                     token,
                     chatId,
-                )
+                ).apply {
+                    println(bodyAsText())
+                }
             }
             throw Exception(text)
         } else {

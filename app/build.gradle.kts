@@ -16,7 +16,8 @@ tgReporter {
 
     token = properties.getProperty("TELEGRAM_BOT_API")
     chatId = properties.getProperty("TELEGRAM_CHAT_ID")
-    maxFileSizeKb = 8000
+    maxFileSizeKb = 12000
+    enableDetails = true
 }
 
 android {
