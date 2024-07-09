@@ -34,12 +34,23 @@ fun BaseExtension.baseAndroidConfig() {
             signingConfig = signingConfigs.getByName("releaseSigned")
         }
     }
+    applicationVariants.all {
+        buildOutputs.all {
+            val variantOutputImpl = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            variantOutputImpl.outputFileName =  "todoapp-${buildType.name}-${defaultConfig.versionCode}.apk"
+        }
+    }
     compileOptions {
         sourceCompatibility = AndroidConst.COMPILE_JDK_VERSION
         targetCompatibility = AndroidConst.COMPILE_JDK_VERSION
     }
     kotlinOptions {
         jvmTarget = AndroidConst.KOTLIN_JVM_TARGET
+    }
+    defaultConfig {
+        val properties = Properties()
+        properties.load(File("secrets.properties").inputStream())
+        manifestPlaceholders["YANDEX_CLIENT_ID"] = properties.getProperty("YANDEX_CLIENT_ID")
     }
 }
 
