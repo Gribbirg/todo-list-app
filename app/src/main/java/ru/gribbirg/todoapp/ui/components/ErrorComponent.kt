@@ -15,6 +15,9 @@ import ru.gribbirg.todoapp.ui.previews.LanguagePreviews
 import ru.gribbirg.todoapp.ui.previews.ThemePreviews
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 
+/**
+ * Base error component
+ */
 @Composable
 fun ErrorComponent(exception: Throwable, modifier: Modifier = Modifier) {
     Column(
@@ -23,6 +26,12 @@ fun ErrorComponent(exception: Throwable, modifier: Modifier = Modifier) {
     ) {
         Text(
             text = stringResource(id = R.string.error_occurred),
+            modifier = Modifier.padding(4.dp),
+            color = AppTheme.colors.red,
+            style = AppTheme.typography.body,
+        )
+        Text(
+            text = "${exception::class.simpleName}:",
             modifier = Modifier.padding(4.dp),
             color = AppTheme.colors.red,
             style = AppTheme.typography.body,

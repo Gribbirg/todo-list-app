@@ -24,6 +24,11 @@ import androidx.core.graphics.toColorInt
 import ru.gribbirg.todoapp.ui.previews.DefaultPreview
 import ru.gribbirg.todoapp.ui.previews.ThemePreviews
 
+/**
+ * App colors
+ *
+ * @see AppTheme
+ */
 class AppColors(
     primary: Color,
     secondary: Color,

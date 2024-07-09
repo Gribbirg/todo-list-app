@@ -10,11 +10,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import ru.gribbirg.todoapp.ui.edititem.EditItemScreen
+import ru.gribbirg.todoapp.ui.screens.edititem.EditItemScreen
+import ru.gribbirg.todoapp.ui.screens.todoitemslist.TodoItemsListViewModel
+import ru.gribbirg.todoapp.ui.screens.todoitemslist.TodoListItemScreen
 import ru.gribbirg.todoapp.ui.theme.AppTheme
-import ru.gribbirg.todoapp.ui.todoitemslist.TodoItemsListViewModel
-import ru.gribbirg.todoapp.ui.todoitemslist.TodoListItemScreen
 
+/**
+ * Navigation graph
+ */
 @Composable
 fun NavGraph(
     navController: NavHostController,

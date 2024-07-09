@@ -9,6 +9,9 @@ import androidx.navigation.compose.rememberNavController
 import ru.gribbirg.todoapp.ui.navigation.NavGraph
 import ru.gribbirg.todoapp.ui.theme.TodoAppTheme
 
+/**
+ * Main and single app activity
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

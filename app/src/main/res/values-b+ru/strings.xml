@@ -20,4 +20,9 @@
     <string name="error_occurred">Произошла ошибка:</string>
     <string name="unknown_error">Неизвестная ошибка</string>
     <string name="saving">Сохранение…</string>
+    <string name="network_error">Нет интернета. Попробуйте позже.</string>
+    <string name="network_unknown_error">Произошла ошибка. Попробуйте снова.</string>
+    <string name="auth_error">Произошла ошибка. Повторите авторизацию позже.</string>
+    <string name="exit_from_acc">Выйти из аккаунта</string>
+    <string name="login">Войти в аккаунт</string>
 </resources>

@@ -11,6 +11,9 @@ import androidx.compose.ui.unit.dp
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 import ru.gribbirg.todoapp.ui.theme.TodoAppTheme
 
+/**
+ * Templates for previews
+ */
 @Composable
 fun ItemPreviewTemplate(content: @Composable () -> Unit) {
     TodoAppTheme {

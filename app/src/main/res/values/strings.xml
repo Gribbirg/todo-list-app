@@ -20,4 +20,9 @@
     <string name="error_occurred">An error has occurred:</string>
     <string name="unknown_error">Unknown error</string>
     <string name="saving">Saving…</string>
+    <string name="network_error">No internet connection. Try again later.</string>
+    <string name="network_unknown_error">Unknown error. Try again.</string>
+    <string name="auth_error">Authorization failed. Try again later.</string>
+    <string name="exit_from_acc">Exit from account</string>
+    <string name="login">Login</string>
 </resources>
