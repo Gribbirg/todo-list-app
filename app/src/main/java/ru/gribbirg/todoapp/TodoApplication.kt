@@ -43,7 +43,12 @@ class TodoApplication : Application() {
         ).getTodoDao()
     }
     private val systemDataProvider: SystemDataProvider by lazy {
-        SystemDataProviderImpl(applicationContext)
+        SystemDataProviderImpl(
+            DataStoreSaver(
+                applicationContext,
+                SystemDataProviderImpl.SAVER_NAME
+            )
+        )
     }
 
     val todoItemRepository: TodoItemRepository by lazy {
