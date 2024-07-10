@@ -1,30 +1,39 @@
 package ru.gribbirg.todoapp.data.keyvaluesaver
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
+import ru.gribbirg.todoapp.di.BackgroundDispatcher
 
 /**
  * Implementation using data store
  *
  * @see KeyValueDataSaver
  */
-class DataStoreSaver(
+class DataStoreSaver @AssistedInject constructor(
     private val context: Context,
-    name: String,
-    coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
+    @Assisted name: String,
+    @BackgroundDispatcher coroutineDispatcher: CoroutineDispatcher
 ) : KeyValueDataSaver {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
         name = name,
-        scope = coroutineScope,
+        scope = CoroutineScope(coroutineDispatcher),
     )
+
+    init {
+        Log.i("test", "created: $name")
+    }
 
     override suspend fun save(key: String, value: String) {
         val prefKey = stringPreferencesKey(key)
@@ -43,5 +52,10 @@ class DataStoreSaver(
         context.dataStore.edit { pref ->
             pref.remove(prefKey)
         }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(name: String): DataStoreSaver
     }
 }

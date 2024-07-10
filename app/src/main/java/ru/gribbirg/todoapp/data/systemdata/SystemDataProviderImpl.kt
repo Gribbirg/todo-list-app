@@ -1,10 +1,12 @@
 package ru.gribbirg.todoapp.data.systemdata
 
 import ru.gribbirg.todoapp.data.keyvaluesaver.KeyValueDataSaver
+import ru.gribbirg.todoapp.di.SystemDataKeyValueSaver
 import java.util.UUID
+import javax.inject.Inject
 
-class SystemDataProviderImpl(
-    private val keyValueDataSaver: KeyValueDataSaver,
+class SystemDataProviderImpl @Inject constructor(
+    @SystemDataKeyValueSaver private val keyValueDataSaver: KeyValueDataSaver,
 ) : SystemDataProvider {
 
     override suspend fun getDeviceId(): String =

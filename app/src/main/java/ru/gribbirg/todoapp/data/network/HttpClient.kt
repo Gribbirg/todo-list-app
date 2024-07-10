@@ -16,7 +16,7 @@ import kotlinx.serialization.json.Json
  *
  * @see ItemsApiClientImpl
  */
-val httpClient = HttpClient(Android) {
+val mainHttpClient get() = HttpClient(Android) {
     expectSuccess = true
     followRedirects = false
 

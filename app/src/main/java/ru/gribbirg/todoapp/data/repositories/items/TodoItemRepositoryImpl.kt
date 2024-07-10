@@ -2,8 +2,6 @@ package ru.gribbirg.todoapp.data.repositories.items
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,6 +18,8 @@ import ru.gribbirg.todoapp.data.network.ItemsApiClient
 import ru.gribbirg.todoapp.data.network.dto.toNetworkDto
 import ru.gribbirg.todoapp.data.repositories.login.LoginRepository
 import ru.gribbirg.todoapp.data.systemdata.SystemDataProvider
+import ru.gribbirg.todoapp.di.BackgroundOneThreadDispatcher
+import javax.inject.Inject
 
 /**
  * Implementation with sync local and internet values
@@ -27,14 +27,13 @@ import ru.gribbirg.todoapp.data.systemdata.SystemDataProvider
  * @see TodoItemRepository
  * @see NetworkState
  */
-class TodoItemRepositoryImpl @OptIn(ExperimentalCoroutinesApi::class) constructor(
+class TodoItemRepositoryImpl @Inject constructor(
     private val localClient: ItemsLocalClient,
     private val apiClient: ItemsApiClient,
     private val systemDataProvider: SystemDataProvider,
     private val loginRepository: LoginRepository,
     private val listsMerger: ItemsListsMerger,
-    private val dispatcher: CoroutineDispatcher =
-        Dispatchers.IO.limitedParallelism(1),
+    @BackgroundOneThreadDispatcher private val dispatcher: CoroutineDispatcher,
 ) : TodoItemRepository {
 
     private val _networkStateFlow: MutableStateFlow<NetworkState> =

@@ -6,6 +6,8 @@ plugins {
     id("com.google.devtools.ksp")
     id("kotlinx-serialization")
     id("io.gitlab.arturbosch.detekt").version("1.22.0")
+    //id("kotlin-kapt")
+
     id("android-app-convention")
     id("telegram-reporter")
 }
@@ -36,6 +38,11 @@ detekt {
 }
 
 dependencies {
+
+    // Dagger 2
+    implementation(libs.dagger)
+    ksp(libs.dagger.compiler)
+
     // Room
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)

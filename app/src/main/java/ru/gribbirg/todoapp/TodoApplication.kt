@@ -7,68 +7,33 @@ import android.net.NetworkRequest
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import ru.gribbirg.todoapp.data.db.ItemsLocalClient
-import ru.gribbirg.todoapp.data.db.TodoDatabase
-import ru.gribbirg.todoapp.data.keyvaluesaver.DataStoreSaver
-import ru.gribbirg.todoapp.data.keyvaluesaver.KeyValueDataSaver
-import ru.gribbirg.todoapp.data.logic.listMergerImpl
-import ru.gribbirg.todoapp.data.network.ItemsApiClient
-import ru.gribbirg.todoapp.data.network.ItemsApiClientImpl
-import ru.gribbirg.todoapp.data.network.NetworkConstants
 import ru.gribbirg.todoapp.data.repositories.items.TodoItemRepository
-import ru.gribbirg.todoapp.data.repositories.items.TodoItemRepositoryImpl
 import ru.gribbirg.todoapp.data.repositories.login.LoginRepository
-import ru.gribbirg.todoapp.data.repositories.login.LoginRepositoryImpl
-import ru.gribbirg.todoapp.data.systemdata.SystemDataProvider
-import ru.gribbirg.todoapp.data.systemdata.SystemDataProviderImpl
+import ru.gribbirg.todoapp.di.DaggerAppComponent
 import ru.gribbirg.todoapp.utils.TodoListUpdateNetworkCallback
 import ru.gribbirg.todoapp.utils.TodoListUpdateWorkManager
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 /**
  * Application class, handle main dependencies
  */
 class TodoApplication : Application() {
 
-    private val internetDataStore: KeyValueDataSaver by lazy {
-        DataStoreSaver(applicationContext, NetworkConstants.KEY_VALUE_SAVER_NAME)
-    }
+    @Inject
+    lateinit var todoItemRepository: TodoItemRepository
 
-    private val apiClient: ItemsApiClient by lazy {
-        ItemsApiClientImpl(dataStore = internetDataStore)
-    }
-    private val localClient: ItemsLocalClient by lazy {
-        TodoDatabase.getInstance(
-            applicationContext
-        ).getTodoDao()
-    }
-    private val systemDataProvider: SystemDataProvider by lazy {
-        SystemDataProviderImpl(
-            DataStoreSaver(
-                applicationContext,
-                SystemDataProviderImpl.SAVER_NAME
-            )
-        )
-    }
-
-    val todoItemRepository: TodoItemRepository by lazy {
-        TodoItemRepositoryImpl(
-            localClient = localClient,
-            apiClient = apiClient,
-            systemDataProvider = systemDataProvider,
-            loginRepository = loginRepository,
-            listsMerger = listMergerImpl,
-        )
-    }
-
-    val loginRepository: LoginRepository by lazy {
-        LoginRepositoryImpl(
-            internetDataStore = internetDataStore,
-        )
-    }
+    @Inject
+    lateinit var loginRepository: LoginRepository
 
     override fun onCreate() {
         super.onCreate()
+
+        DaggerAppComponent
+            .factory()
+            .create(applicationContext)
+            .inject(this)
+
         scheduleDatabaseUpdate()
         registerConnectivityManager()
     }

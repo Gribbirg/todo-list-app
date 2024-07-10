@@ -12,9 +12,8 @@ import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -28,33 +27,36 @@ import ru.gribbirg.todoapp.data.network.dto.TodoItemRequestDto
 import ru.gribbirg.todoapp.data.network.dto.TodoItemResponseDto
 import ru.gribbirg.todoapp.data.network.dto.TodoListRequestDto
 import ru.gribbirg.todoapp.data.network.dto.TodoListResponseDto
+import ru.gribbirg.todoapp.di.ApiClientKeyValueSaverQualifier
+import ru.gribbirg.todoapp.di.ApiClientScope
+import ru.gribbirg.todoapp.di.BackgroundOneThreadDispatcher
 import ru.gribbirg.todoapp.utils.toLocalDateTime
 import ru.gribbirg.todoapp.utils.toTimestamp
 import java.io.IOException
 import java.time.LocalDateTime
 import java.time.ZoneId
-import kotlin.coroutines.CoroutineContext
+import javax.inject.Inject
 
 /**
  * Implementation with ktor
  */
-class ItemsApiClientImpl @OptIn(ExperimentalCoroutinesApi::class) constructor(
-    private val dataStore: KeyValueDataSaver,
-    private val coroutineContext: CoroutineContext =
-        Dispatchers.IO.limitedParallelism(1),
-    private val client: HttpClient = httpClient,
+@ApiClientScope
+class ItemsApiClientImpl @Inject constructor(
+    @ApiClientKeyValueSaverQualifier private val dataStore: KeyValueDataSaver,
+    @BackgroundOneThreadDispatcher private val coroutineDispatcher: CoroutineDispatcher,
+    private val client: HttpClient = mainHttpClient,
 ) : ItemsApiClient {
 
     private var lastRevision = -1
         private set(value) {
-            CoroutineScope(coroutineContext).launch {
+            CoroutineScope(coroutineDispatcher).launch {
                 dataStore.save(NetworkConstants.LAST_REVISION, value.toString())
             }
             field = value
         }
     override var lastUpdateTime: LocalDateTime = (0L).toLocalDateTime()!!
         private set(value) {
-            CoroutineScope(coroutineContext).launch {
+            CoroutineScope(coroutineDispatcher).launch {
                 dataStore.save(NetworkConstants.LAST_UPDATE_TIME, value.toTimestamp().toString())
             }
             field = value
