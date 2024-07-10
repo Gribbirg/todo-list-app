@@ -9,8 +9,8 @@ import kotlinx.coroutines.withContext
 import ru.gribbirg.todoapp.data.data.UserData
 import ru.gribbirg.todoapp.data.keyvaluesaver.KeyValueDataSaver
 import ru.gribbirg.todoapp.data.network.NetworkConstants
-import ru.gribbirg.todoapp.di.ApiClientKeyValueSaverQualifier
-import ru.gribbirg.todoapp.di.BackgroundDispatcher
+import ru.gribbirg.todoapp.di.modules.ApiClientKeyValueSaverQualifier
+import ru.gribbirg.todoapp.di.modules.BackgroundDispatcher
 import javax.inject.Inject
 
 /**

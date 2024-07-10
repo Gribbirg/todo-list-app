@@ -1,4 +1,4 @@
-package ru.gribbirg.todoapp.di
+package ru.gribbirg.todoapp.di.modules
 
 import android.content.Context
 import androidx.room.Room

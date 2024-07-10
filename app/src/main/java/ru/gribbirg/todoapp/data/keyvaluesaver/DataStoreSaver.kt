@@ -1,7 +1,6 @@
 package ru.gribbirg.todoapp.data.keyvaluesaver
 
 import android.content.Context
-import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -14,7 +13,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
-import ru.gribbirg.todoapp.di.BackgroundDispatcher
+import ru.gribbirg.todoapp.di.modules.BackgroundDispatcher
 
 /**
  * Implementation using data store
@@ -30,10 +29,6 @@ class DataStoreSaver @AssistedInject constructor(
         name = name,
         scope = CoroutineScope(coroutineDispatcher),
     )
-
-    init {
-        Log.i("test", "created: $name")
-    }
 
     override suspend fun save(key: String, value: String) {
         val prefKey = stringPreferencesKey(key)

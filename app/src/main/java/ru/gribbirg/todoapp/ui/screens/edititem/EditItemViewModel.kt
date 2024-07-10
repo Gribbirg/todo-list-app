@@ -1,22 +1,17 @@
 package ru.gribbirg.todoapp.ui.screens.edititem
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.gribbirg.todoapp.TodoApplication
 import ru.gribbirg.todoapp.data.data.TodoItem
 import ru.gribbirg.todoapp.data.repositories.items.TodoItemRepository
-import ru.gribbirg.todoapp.ui.navigation.Screen
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.UUID
@@ -27,8 +22,8 @@ import java.util.UUID
  * @see EditItemScreen
  * @see EditItemUiState
  */
-class EditItemViewModel(
-    savedStateHandle: SavedStateHandle,
+class EditItemViewModel @AssistedInject constructor(
+    @Assisted itemId: String?,
     private val todoItemRepository: TodoItemRepository,
 ) : ViewModel() {
 
@@ -40,7 +35,7 @@ class EditItemViewModel(
     }
 
     init {
-        setItem(savedStateHandle[Screen.Edit.arguments.first().name])
+        setItem(itemId)
     }
 
     private fun setItem(itemId: String?) {
@@ -109,17 +104,8 @@ class EditItemViewModel(
         }
     }
 
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val todoItemRepository =
-                    (this[APPLICATION_KEY] as TodoApplication).todoItemRepository
-                val savedStateHandle = createSavedStateHandle()
-                EditItemViewModel(
-                    todoItemRepository = todoItemRepository,
-                    savedStateHandle = savedStateHandle
-                )
-            }
-        }
+    @AssistedFactory
+    interface Factory {
+        fun create(itemId: String?): EditItemViewModel
     }
 }

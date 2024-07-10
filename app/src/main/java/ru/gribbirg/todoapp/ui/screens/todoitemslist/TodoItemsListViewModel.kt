@@ -1,11 +1,7 @@
 package ru.gribbirg.todoapp.ui.screens.todoitemslist
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.yandex.authsdk.YandexAuthResult
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,14 +14,15 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.gribbirg.todoapp.R
-import ru.gribbirg.todoapp.TodoApplication
 import ru.gribbirg.todoapp.data.data.TodoItem
 import ru.gribbirg.todoapp.data.repositories.items.NetworkState
 import ru.gribbirg.todoapp.data.repositories.items.TodoItemRepository
 import ru.gribbirg.todoapp.data.repositories.login.LoginRepository
+import ru.gribbirg.todoapp.di.ListScreenScope
 import ru.gribbirg.todoapp.utils.toTimestamp
 import java.time.LocalDateTime
 import java.time.ZoneId
+import javax.inject.Inject
 
 /**
  * View model for list screen
@@ -33,7 +30,8 @@ import java.time.ZoneId
  * @see TodoListItemScreen
  * @see TodoItemsListUiState
  */
-class TodoItemsListViewModel(
+@ListScreenScope
+class TodoItemsListViewModel @Inject constructor(
     private val todoItemRepository: TodoItemRepository,
     private val loginRepository: LoginRepository,
 ) : ViewModel() {
@@ -206,20 +204,6 @@ class TodoItemsListViewModel(
             _uiState.update { state ->
                 state.copy(
                     loginState = TodoItemsListUiState.LoginState.Unauthorized
-                )
-            }
-        }
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val app = this[APPLICATION_KEY] as TodoApplication
-                val todoItemRepository = app.todoItemRepository
-                val loginRepository = app.loginRepository
-                TodoItemsListViewModel(
-                    todoItemRepository = todoItemRepository,
-                    loginRepository = loginRepository,
                 )
             }
         }

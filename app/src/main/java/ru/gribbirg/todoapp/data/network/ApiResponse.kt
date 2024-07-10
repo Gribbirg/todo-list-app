@@ -12,5 +12,6 @@ sealed class ApiResponse<out T> {
         data object SerializationError : Error()
         data object Unauthorized : Error()
         data object NotFound : Error()
+        data object UnknownError : Error()
     }
 }

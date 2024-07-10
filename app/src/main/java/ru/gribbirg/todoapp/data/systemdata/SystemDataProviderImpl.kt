@@ -1,10 +1,12 @@
 package ru.gribbirg.todoapp.data.systemdata
 
 import ru.gribbirg.todoapp.data.keyvaluesaver.KeyValueDataSaver
-import ru.gribbirg.todoapp.di.SystemDataKeyValueSaver
+import ru.gribbirg.todoapp.di.modules.SystemDataKeyValueSaver
+import ru.gribbirg.todoapp.di.modules.SystemDataScope
 import java.util.UUID
 import javax.inject.Inject
 
+@SystemDataScope
 class SystemDataProviderImpl @Inject constructor(
     @SystemDataKeyValueSaver private val keyValueDataSaver: KeyValueDataSaver,
 ) : SystemDataProvider {

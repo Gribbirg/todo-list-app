@@ -6,12 +6,12 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import ru.gribbirg.todoapp.di.AppComponent
 import ru.gribbirg.todoapp.ui.screens.edititem.EditItemScreen
-import ru.gribbirg.todoapp.ui.screens.todoitemslist.TodoItemsListViewModel
 import ru.gribbirg.todoapp.ui.screens.todoitemslist.TodoListItemScreen
 import ru.gribbirg.todoapp.ui.theme.AppTheme
 
@@ -21,9 +21,14 @@ import ru.gribbirg.todoapp.ui.theme.AppTheme
 @Composable
 fun NavGraph(
     navController: NavHostController,
+    appComponent: AppComponent,
 ) {
-    val listViewModel: TodoItemsListViewModel = viewModel(factory = TodoItemsListViewModel.Factory)
     val animationDuration = AppTheme.dimensions.animationDurationNavigationTransition
+
+    val listViewModel = remember {
+        appComponent.listScreenComponent().viewModel()
+    }
+
     NavHost(
         navController = navController,
         startDestination = Screen.TodoList.route,
@@ -50,7 +55,7 @@ fun NavGraph(
                     navController.navigate(Screen.Edit.getRoute(itemId = id)) {
                         launchSingleTop = true
                     }
-                }
+                },
             )
         }
         composable(
@@ -74,11 +79,18 @@ fun NavGraph(
                     )
                 )
             },
-        ) {
+        ) { backStackEntry ->
+            val viewModel = remember {
+                appComponent
+                    .editScreenComponent()
+                    .viewModelFactory()
+                    .create(backStackEntry.arguments?.getString(Screen.Edit.arguments.first().name))
+            }
             EditItemScreen(
+                viewModel = viewModel,
                 onClose = {
                     navController.popBackStack(Screen.TodoList.route, false)
-                }
+                },
             )
         }
     }

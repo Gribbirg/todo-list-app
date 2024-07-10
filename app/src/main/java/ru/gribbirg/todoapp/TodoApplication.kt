@@ -26,13 +26,16 @@ class TodoApplication : Application() {
     @Inject
     lateinit var loginRepository: LoginRepository
 
-    override fun onCreate() {
-        super.onCreate()
-
+    val appComponent by lazy {
         DaggerAppComponent
             .factory()
             .create(applicationContext)
-            .inject(this)
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+
+        appComponent.inject(this)
 
         scheduleDatabaseUpdate()
         registerConnectivityManager()

@@ -26,7 +26,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.gribbirg.todoapp.data.data.TodoItem
 import ru.gribbirg.todoapp.ui.components.ErrorComponent
 import ru.gribbirg.todoapp.ui.components.LoadingComponent
@@ -52,7 +51,7 @@ import ru.gribbirg.todoapp.ui.theme.AppTheme
  */
 @Composable
 fun EditItemScreen(
-    viewModel: EditItemViewModel = viewModel(factory = EditItemViewModel.Factory),
+    viewModel: EditItemViewModel,
     onClose: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()

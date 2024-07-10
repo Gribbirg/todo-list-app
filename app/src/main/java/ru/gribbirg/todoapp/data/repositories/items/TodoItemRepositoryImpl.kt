@@ -18,7 +18,7 @@ import ru.gribbirg.todoapp.data.network.ItemsApiClient
 import ru.gribbirg.todoapp.data.network.dto.toNetworkDto
 import ru.gribbirg.todoapp.data.repositories.login.LoginRepository
 import ru.gribbirg.todoapp.data.systemdata.SystemDataProvider
-import ru.gribbirg.todoapp.di.BackgroundOneThreadDispatcher
+import ru.gribbirg.todoapp.di.modules.BackgroundOneThreadDispatcher
 import javax.inject.Inject
 
 /**

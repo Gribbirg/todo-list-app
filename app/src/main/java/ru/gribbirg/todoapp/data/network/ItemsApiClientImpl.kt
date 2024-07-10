@@ -27,9 +27,9 @@ import ru.gribbirg.todoapp.data.network.dto.TodoItemRequestDto
 import ru.gribbirg.todoapp.data.network.dto.TodoItemResponseDto
 import ru.gribbirg.todoapp.data.network.dto.TodoListRequestDto
 import ru.gribbirg.todoapp.data.network.dto.TodoListResponseDto
-import ru.gribbirg.todoapp.di.ApiClientKeyValueSaverQualifier
-import ru.gribbirg.todoapp.di.ApiClientScope
-import ru.gribbirg.todoapp.di.BackgroundOneThreadDispatcher
+import ru.gribbirg.todoapp.di.modules.ApiClientKeyValueSaverQualifier
+import ru.gribbirg.todoapp.di.modules.ApiClientScope
+import ru.gribbirg.todoapp.di.modules.BackgroundOneThreadDispatcher
 import ru.gribbirg.todoapp.utils.toLocalDateTime
 import ru.gribbirg.todoapp.utils.toTimestamp
 import java.io.IOException
@@ -148,6 +148,8 @@ class ItemsApiClientImpl @Inject constructor(
                 ApiResponse.Error.SerializationError
             } catch (noTransformationFoundException: NoTransformationFoundException) {
                 ApiResponse.Error.SerializationError
+            }catch (e: Exception) {
+                ApiResponse.Error.UnknownError
             }.updateLastRequestData()
         }
     }
