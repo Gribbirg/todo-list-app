@@ -26,12 +26,12 @@ class LoginRepositoryImpl(
     override fun getLoginFlow(): Flow<UserData?> = _loginFlow.asStateFlow()
 
     override suspend fun registerUser(key: String) = withContext(coroutineContext) {
-        internetDataStore.save(USER_API_KEY, key)
+        internetDataStore.save(NetworkConstants.USER_API_KEY, key)
         _loginFlow.update { UserData() }
     }
 
     override suspend fun removeLogin() = withContext(coroutineContext) {
-        internetDataStore.remove(USER_API_KEY)
+        internetDataStore.remove(NetworkConstants.USER_API_KEY)
         internetDataStore.remove(NetworkConstants.LAST_REVISION)
         internetDataStore.remove(NetworkConstants.LAST_UPDATE_TIME)
         _loginFlow.update { null }
@@ -39,10 +39,6 @@ class LoginRepositoryImpl(
 
 
     override suspend fun isLogin(): Boolean = withContext(coroutineContext) {
-        return@withContext internetDataStore.get(USER_API_KEY) != null
-    }
-
-    companion object {
-        const val USER_API_KEY = "user_api_key"
+        return@withContext internetDataStore.get(NetworkConstants.USER_API_KEY) != null
     }
 }

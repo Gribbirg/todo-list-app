@@ -13,33 +13,33 @@ import kotlinx.coroutines.flow.Flow
  * @see TodoDatabase
  */
 @Dao
-interface TodoDao {
+interface TodoDao : ItemsLocalClient {
     @Query("SELECT * FROM $DB_NAME")
-    fun getAll(): List<TodoDbEntity>
+    override fun getAll(): List<TodoDbEntity>
 
     @Query("SELECT * FROM $DB_NAME")
-    fun getItemsFlow(): Flow<List<TodoDbEntity>>
+    override fun getItemsFlow(): Flow<List<TodoDbEntity>>
 
     @Query("SELECT * FROM $DB_NAME WHERE id = :id LIMIT 1")
-    suspend fun getItem(id: String): TodoDbEntity?
+    override suspend fun getItem(id: String): TodoDbEntity?
 
     @Update
-    suspend fun updateItem(item: TodoDbEntity)
+    override suspend fun updateItem(item: TodoDbEntity)
 
     @Insert
-    suspend fun addItem(item: TodoDbEntity)
+    override suspend fun addItem(item: TodoDbEntity)
 
     @Query("DELETE FROM $DB_NAME WHERE id = :id")
-    suspend fun deleteItemById(id: String)
+    override suspend fun deleteItemById(id: String)
 
     @Insert
-    suspend fun addAll(items: List<TodoDbEntity>)
+    override suspend fun addAll(items: List<TodoDbEntity>)
 
     @Query("DELETE FROM $DB_NAME")
-    suspend fun deleteAll()
+    override suspend fun deleteAll()
 
     @Transaction
-    suspend fun refreshItems(items: List<TodoDbEntity>) {
+    override suspend fun refreshItems(items: List<TodoDbEntity>) {
         deleteAll()
         addAll(items)
     }

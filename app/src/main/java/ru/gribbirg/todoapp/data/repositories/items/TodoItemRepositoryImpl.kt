@@ -1,7 +1,5 @@
 package ru.gribbirg.todoapp.data.repositories.items
 
-import android.content.Context
-import android.provider.Settings
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -14,13 +12,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.gribbirg.todoapp.data.data.TodoItem
-import ru.gribbirg.todoapp.data.db.TodoDao
+import ru.gribbirg.todoapp.data.db.ItemsLocalClient
 import ru.gribbirg.todoapp.data.db.toLocalDbItem
-import ru.gribbirg.todoapp.data.keyvaluesaver.DataStoreSaver
 import ru.gribbirg.todoapp.data.logic.ItemsListsMerger
 import ru.gribbirg.todoapp.data.network.ApiResponse
-import ru.gribbirg.todoapp.data.network.ItemsApiClientImpl
+import ru.gribbirg.todoapp.data.network.ItemsApiClient
 import ru.gribbirg.todoapp.data.network.dto.toNetworkDto
+import ru.gribbirg.todoapp.data.repositories.login.LoginRepository
+import ru.gribbirg.todoapp.data.systemdata.SystemDataProvider
 
 /**
  * Implementation with sync local and internet values
@@ -29,10 +28,10 @@ import ru.gribbirg.todoapp.data.network.dto.toNetworkDto
  * @see NetworkState
  */
 class TodoItemRepositoryImpl @OptIn(ExperimentalCoroutinesApi::class) constructor(
-    private val todoDao: TodoDao,
-    private val apiClientImpl: ItemsApiClientImpl,
-    private val context: Context,
-    private val internetDataStore: DataStoreSaver,
+    private val localClient: ItemsLocalClient,
+    private val apiClient: ItemsApiClient,
+    private val systemDataProvider: SystemDataProvider,
+    private val loginRepository: LoginRepository,
     private val listsMerger: ItemsListsMerger,
     private val dispatcher: CoroutineDispatcher =
         Dispatchers.IO.limitedParallelism(1),
@@ -45,35 +44,35 @@ class TodoItemRepositoryImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
         CoroutineScope(dispatcher).launch {
             updateItems()
         }
-        return todoDao.getItemsFlow().map { list -> list.map { it.toTodoItem() } }
+        return localClient.getItemsFlow().map { list -> list.map { it.toTodoItem() } }
     }
 
     override fun getNetworkStateFlow(): Flow<NetworkState> =
         _networkStateFlow.asStateFlow()
 
     override suspend fun getItem(id: String): TodoItem? = withContext(dispatcher) {
-        return@withContext todoDao.getItem(id)?.toTodoItem()
+        return@withContext localClient.getItem(id)?.toTodoItem()
     }
 
     override suspend fun addItem(item: TodoItem): Unit = withContext(dispatcher) {
-        todoDao.addItem(item.toLocalDbItem())
+        localClient.addItem(item.toLocalDbItem())
         makeRequest {
-            apiClientImpl.add(
+            apiClient.add(
                 item.toNetworkDto(
-                    getDeviceId()
+                    systemDataProvider.getDeviceId()
                 )
             )
         }
     }
 
     override suspend fun saveItem(item: TodoItem): Unit = withContext(dispatcher) {
-        todoDao.updateItem(item.toLocalDbItem())
-        makeRequest { apiClientImpl.update(item.toNetworkDto(getDeviceId())) }
+        localClient.updateItem(item.toLocalDbItem())
+        makeRequest { apiClient.update(item.toNetworkDto(systemDataProvider.getDeviceId())) }
     }
 
     override suspend fun deleteItem(itemId: String): Unit = withContext(dispatcher) {
-        todoDao.deleteItemById(itemId)
-        makeRequest { apiClientImpl.delete(itemId) }
+        localClient.deleteItemById(itemId)
+        makeRequest { apiClient.delete(itemId) }
     }
 
     override suspend fun updateItems(): Unit = withContext(dispatcher) {
@@ -81,19 +80,19 @@ class TodoItemRepositoryImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
             return@withContext
 
         _networkStateFlow.update { NetworkState.Updating }
-        val lastUpdateTime = apiClientImpl.lastUpdateTime
-        val response = makeRequest { apiClientImpl.getAll() } ?: return@withContext
+        val lastUpdateTime = apiClient.lastUpdateTime
+        val response = makeRequest { apiClient.getAll() } ?: return@withContext
 
         val internetData = response.list.map { it.toTodoItem() }
-        val cacheData = todoDao.getAll().map { it.toTodoItem() }
+        val cacheData = localClient.getAll().map { it.toTodoItem() }
         val resList = listsMerger.mergeLists(
             internet = internetData,
             local = cacheData,
             lastUpdateTime = lastUpdateTime
         )
 
-        todoDao.refreshItems(resList.map { it.toLocalDbItem() })
-        makeRequest { apiClientImpl.refreshAll(resList.map { it.toNetworkDto(getDeviceId()) }) }
+        localClient.refreshItems(resList.map { it.toLocalDbItem() })
+        makeRequest { apiClient.refreshAll(resList.map { it.toNetworkDto(systemDataProvider.getDeviceId()) }) }
     }
 
 
@@ -130,10 +129,5 @@ class TodoItemRepositoryImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
             }
         }
 
-    private suspend fun isLogin() = internetDataStore.get("user_api_key") != null
-
-    private fun getDeviceId() = Settings.Secure.getString(
-        context.contentResolver,
-        Settings.Secure.ANDROID_ID
-    )
+    private suspend fun isLogin() = loginRepository.isLogin()
 }

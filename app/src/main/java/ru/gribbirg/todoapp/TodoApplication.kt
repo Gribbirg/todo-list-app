@@ -7,15 +7,20 @@ import android.net.NetworkRequest
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import ru.gribbirg.todoapp.data.db.TodoDao
+import ru.gribbirg.todoapp.data.db.ItemsLocalClient
 import ru.gribbirg.todoapp.data.db.TodoDatabase
 import ru.gribbirg.todoapp.data.keyvaluesaver.DataStoreSaver
+import ru.gribbirg.todoapp.data.keyvaluesaver.KeyValueDataSaver
 import ru.gribbirg.todoapp.data.logic.listMergerImpl
+import ru.gribbirg.todoapp.data.network.ItemsApiClient
 import ru.gribbirg.todoapp.data.network.ItemsApiClientImpl
+import ru.gribbirg.todoapp.data.network.NetworkConstants
 import ru.gribbirg.todoapp.data.repositories.items.TodoItemRepository
 import ru.gribbirg.todoapp.data.repositories.items.TodoItemRepositoryImpl
 import ru.gribbirg.todoapp.data.repositories.login.LoginRepository
 import ru.gribbirg.todoapp.data.repositories.login.LoginRepositoryImpl
+import ru.gribbirg.todoapp.data.systemdata.SystemDataProvider
+import ru.gribbirg.todoapp.data.systemdata.SystemDataProviderImpl
 import ru.gribbirg.todoapp.utils.TodoListUpdateNetworkCallback
 import ru.gribbirg.todoapp.utils.TodoListUpdateWorkManager
 import java.util.concurrent.TimeUnit
@@ -25,25 +30,28 @@ import java.util.concurrent.TimeUnit
  */
 class TodoApplication : Application() {
 
-    private val internetDataStore by lazy {
-        DataStoreSaver(applicationContext, "internet_data")
+    private val internetDataStore: KeyValueDataSaver by lazy {
+        DataStoreSaver(applicationContext, NetworkConstants.KEY_VALUE_SAVER_NAME)
     }
 
-    private val apiClientImpl: ItemsApiClientImpl by lazy {
+    private val apiClient: ItemsApiClient by lazy {
         ItemsApiClientImpl(dataStore = internetDataStore)
     }
-    private val itemsDbDao: TodoDao by lazy {
+    private val localClient: ItemsLocalClient by lazy {
         TodoDatabase.getInstance(
             applicationContext
         ).getTodoDao()
     }
+    private val systemDataProvider: SystemDataProvider by lazy {
+        SystemDataProviderImpl(applicationContext)
+    }
 
     val todoItemRepository: TodoItemRepository by lazy {
         TodoItemRepositoryImpl(
-            todoDao = itemsDbDao,
-            apiClientImpl = apiClientImpl,
-            context = applicationContext,
-            internetDataStore = internetDataStore,
+            localClient = localClient,
+            apiClient = apiClient,
+            systemDataProvider = systemDataProvider,
+            loginRepository = loginRepository,
             listsMerger = listMergerImpl,
         )
     }

@@ -13,8 +13,10 @@ object NetworkConstants {
     const val LAST_UPDATE_TIME = "last_update_time"
     const val LAST_REVISION = "last_revision"
 
-    const val USER_API = "user_api_key"
+    const val USER_API_KEY = "user_api_key"
     fun getAuthHeader(key: String) = "OAuth $key"
 
     const val UNSIGNED_DATA_ERROR = "unsynchronized data"
+
+    const val KEY_VALUE_SAVER_NAME = "internet_data"
 }

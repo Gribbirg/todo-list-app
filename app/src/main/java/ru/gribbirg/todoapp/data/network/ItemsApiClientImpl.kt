@@ -21,7 +21,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import ru.gribbirg.todoapp.data.keyvaluesaver.DataStoreSaver
+import ru.gribbirg.todoapp.data.keyvaluesaver.KeyValueDataSaver
 import ru.gribbirg.todoapp.data.network.dto.ResponseDto
 import ru.gribbirg.todoapp.data.network.dto.TodoItemDto
 import ru.gribbirg.todoapp.data.network.dto.TodoItemRequestDto
@@ -39,7 +39,7 @@ import kotlin.coroutines.CoroutineContext
  * Implementation with ktor
  */
 class ItemsApiClientImpl @OptIn(ExperimentalCoroutinesApi::class) constructor(
-    private val dataStore: DataStoreSaver,
+    private val dataStore: KeyValueDataSaver,
     private val coroutineContext: CoroutineContext =
         Dispatchers.IO.limitedParallelism(1),
     private val client: HttpClient = httpClient,
@@ -123,7 +123,7 @@ class ItemsApiClientImpl @OptIn(ExperimentalCoroutinesApi::class) constructor(
         crossinline block: HttpRequestBuilder.() -> Unit,
     ): ApiResponse<T> = withContext(coroutineContext) {
         runBlocking {
-            val key = dataStore.get(NetworkConstants.USER_API) ?: ""
+            val key = dataStore.get(NetworkConstants.USER_API_KEY) ?: ""
 
             return@runBlocking try {
                 val response = request {
