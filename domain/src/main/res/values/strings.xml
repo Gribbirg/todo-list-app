@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="importance_low">Low</string>
+    <string name="importence_no">No</string>
+    <string name="importance_high">High</string>
+    <string name="network_error">No internet connection. Try again later.</string>
+    <string name="network_unknown_error">Unknown error. Try again.</string>
+</resources>

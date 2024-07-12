@@ -2,8 +2,6 @@ rootProject.name = "TodoApp"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-include(":app")
-
 pluginManagement {
     includeBuild("build-logic")
     repositories {
@@ -24,4 +22,13 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
- 
+
+include(":app")
+include(":feature:list")
+include(":feature:edit")
+include(":domain")
+include(":core:data")
+include(":core:utils")
+include(":core:network")
+include(":core:db")
+include(":core:ui")

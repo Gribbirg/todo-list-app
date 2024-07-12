@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="exit_from_acc">Выйти из аккаунта</string>
+    <string name="login">Войти в аккаунт</string>
+    <string name="add">Добавить</string>
+    <string name="show">Показать</string>
+    <string name="hide">Скрыть</string>
+    <string name="todo_items_list">Мои дела</string>
+    <string name="done_count">Выполнено — %1d</string>
+    <string name="new_item">Новое</string>
+    <string name="auth_error">Произошла ошибка. Повторите авторизацию позже.</string>
+</resources>

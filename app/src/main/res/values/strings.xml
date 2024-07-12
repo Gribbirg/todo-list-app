@@ -1,28 +1,3 @@
 <resources>
     <string name="app_name">Todo App</string>
-    <string name="todo_items_list">Todo list</string>
-    <string name="done_count">Done — %1$d</string>
-    <string name="new_item">New</string>
-    <string name="save">SAVE</string>
-    <string name="type_text">What to do…</string>
-    <string name="importance">Importance</string>
-    <string name="importance_low">Low</string>
-    <string name="importence_no">No</string>
-    <string name="importance_high">High</string>
-    <string name="deadline">Deadline</string>
-    <string name="ready">SAVE</string>
-    <string name="cancel">CANCEL</string>
-    <string name="delelte">Delete</string>
-    <string name="add">Add</string>
-    <string name="show">Show</string>
-    <string name="hide">Hide</string>
-    <string name="close">Close</string>
-    <string name="error_occurred">An error has occurred:</string>
-    <string name="unknown_error">Unknown error</string>
-    <string name="saving">Saving…</string>
-    <string name="network_error">No internet connection. Try again later.</string>
-    <string name="network_unknown_error">Unknown error. Try again.</string>
-    <string name="auth_error">Authorization failed. Try again later.</string>
-    <string name="exit_from_acc">Exit from account</string>
-    <string name="login">Login</string>
 </resources>

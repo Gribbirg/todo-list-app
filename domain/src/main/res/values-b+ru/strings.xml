@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="importance_low">Низкая</string>
+    <string name="importence_no">Нет</string>
+    <string name="importance_high">Высокая</string>
+    <string name="network_error">Нет интернета. Попробуйте позже.</string>
+    <string name="network_unknown_error">Произошла ошибка. Попробуйте снова.</string>
+</resources>

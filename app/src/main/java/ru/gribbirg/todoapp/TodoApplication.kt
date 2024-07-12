@@ -4,27 +4,26 @@ import android.app.Application
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import androidx.work.Configuration
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import ru.gribbirg.todoapp.data.repositories.items.TodoItemRepository
-import ru.gribbirg.todoapp.data.repositories.login.LoginRepository
+import androidx.work.WorkerFactory
+import ru.gribbirg.data.background.TodoListUpdateWorkManager
 import ru.gribbirg.todoapp.di.DaggerAppComponent
-import ru.gribbirg.todoapp.utils.TodoListUpdateNetworkCallback
-import ru.gribbirg.todoapp.utils.TodoListUpdateWorkManager
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
  * Application class, handle main dependencies
  */
-class TodoApplication : Application() {
+class TodoApplication : Application(), Configuration.Provider {
 
     @Inject
-    lateinit var todoItemRepository: TodoItemRepository
+    lateinit var workerFactory: WorkerFactory
 
     @Inject
-    lateinit var loginRepository: LoginRepository
+    lateinit var networkCallback: ConnectivityManager.NetworkCallback
 
     val appComponent by lazy {
         DaggerAppComponent
@@ -32,11 +31,13 @@ class TodoApplication : Application() {
             .create(applicationContext)
     }
 
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder().setWorkerFactory(workerFactory).build()
+
     override fun onCreate() {
         super.onCreate()
 
         appComponent.inject(this)
-
         scheduleDatabaseUpdate()
         registerConnectivityManager()
     }
@@ -59,7 +60,6 @@ class TodoApplication : Application() {
             .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
             .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
             .build()
-        val networkCallback = TodoListUpdateNetworkCallback(todoItemRepository)
         val connectivityManager =
             getSystemService(ConnectivityManager::class.java) as ConnectivityManager
         connectivityManager.requestNetwork(networkRequest, networkCallback)

@@ -1,28 +1,3 @@
 <resources>
     <string name="app_name">Список дел</string>
-    <string name="todo_items_list">Мои дела</string>
-    <string name="done_count">Выполнено — %1d</string>
-    <string name="new_item">Новое</string>
-    <string name="save">СОХРАНИТЬ</string>
-    <string name="type_text">Что надо сделать…</string>
-    <string name="importance">Важность</string>
-    <string name="importance_low">Низкая</string>
-    <string name="importence_no">Нет</string>
-    <string name="importance_high">Высокая</string>
-    <string name="deadline">Сделать до</string>
-    <string name="ready">ГОТОВО</string>
-    <string name="cancel">ОТМЕНА</string>
-    <string name="delelte">Удалить</string>
-    <string name="add">Добавить</string>
-    <string name="show">Показать</string>
-    <string name="hide">Скрыть</string>
-    <string name="close">Закрыть</string>
-    <string name="error_occurred">Произошла ошибка:</string>
-    <string name="unknown_error">Неизвестная ошибка</string>
-    <string name="saving">Сохранение…</string>
-    <string name="network_error">Нет интернета. Попробуйте позже.</string>
-    <string name="network_unknown_error">Произошла ошибка. Попробуйте снова.</string>
-    <string name="auth_error">Произошла ошибка. Повторите авторизацию позже.</string>
-    <string name="exit_from_acc">Выйти из аккаунта</string>
-    <string name="login">Войти в аккаунт</string>
 </resources>

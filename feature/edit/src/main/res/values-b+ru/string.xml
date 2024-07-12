@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="save">СОХРАНИТЬ</string>
+    <string name="type_text">Что надо сделать…</string>
+    <string name="importance">Важность</string>
+    <string name="deadline">Сделать до</string>
+    <string name="ready">ГОТОВО</string>
+    <string name="cancel">ОТМЕНА</string>
+    <string name="delelte">Удалить</string>
+    <string name="close">Закрыть</string>
+</resources>

@@ -3,10 +3,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.compose.compiler)
-    id("com.google.devtools.ksp")
     id("kotlinx-serialization")
-    id("io.gitlab.arturbosch.detekt").version("1.22.0")
-    //id("kotlin-kapt")
 
     id("android-app-convention")
     id("telegram-reporter")
@@ -23,6 +20,7 @@ tgReporter {
 }
 
 android {
+    namespace = "ru.gribbirg.todoapp"
     defaultConfig {
         applicationId = "ru.gribbirg.todoapp"
         versionCode = 1
@@ -30,23 +28,9 @@ android {
     }
 }
 
-detekt {
-    toolVersion = "1.23.6"
-    config = files("config/detekt/detekt.yml")
-    buildUponDefaultConfig = true
-
-}
-
 dependencies {
-
-    // Dagger 2
-    implementation(libs.dagger)
-    ksp(libs.dagger.compiler)
-
-    // Room
-    implementation(libs.androidx.room.runtime)
-    annotationProcessor(libs.androidx.room.compiler)
-    ksp(libs.androidx.room.compiler)
+    api(project(":feature:list"))
+    api(project(":feature:edit"))
 
     implementation(libs.androidx.room.ktx)
     testImplementation(libs.junit)

@@ -1,17 +1,6 @@
 plugins {
     `kotlin-dsl`
-}
-
-repositories {
-    google {
-        content {
-            includeGroupByRegex("com\\.android.*")
-            includeGroupByRegex("com\\.google.*")
-            includeGroupByRegex("androidx.*")
-        }
-    }
-    mavenCentral()
-    gradlePluginPortal()
+    id("java-gradle-plugin")
 }
 
 gradlePlugin {
@@ -24,6 +13,7 @@ gradlePlugin {
 dependencies {
     implementation(libs.agp)
     implementation(libs.kotlin.gradle.plugin)
+    implementation(libs.kotlin.ksp.gradle)
 
     implementation(libs.kotlin.coroutines.core)
 

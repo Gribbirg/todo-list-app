@@ -3,7 +3,6 @@ import java.io.File
 import java.util.Properties
 
 fun BaseExtension.baseAndroidConfig() {
-    namespace = AndroidConst.NAMESPACE
     setCompileSdkVersion(AndroidConst.COMPILE_SKD)
 
     defaultConfig {
@@ -44,15 +43,6 @@ fun BaseExtension.baseAndroidConfig() {
         }
     }
 
-    applicationVariants.all {
-        outputs.all {
-            val variantOutputImpl =
-                this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
-            variantOutputImpl.outputFileName =
-                "todoapp-${buildType.name}-${defaultConfig.versionName}.apk"
-        }
-    }
-
     compileOptions {
         sourceCompatibility = AndroidConst.COMPILE_JDK_VERSION
         targetCompatibility = AndroidConst.COMPILE_JDK_VERSION
@@ -60,12 +50,6 @@ fun BaseExtension.baseAndroidConfig() {
 
     kotlinOptions {
         jvmTarget = AndroidConst.KOTLIN_JVM_TARGET
-    }
-
-    defaultConfig {
-        val properties = Properties()
-        properties.load(File("secrets.properties").inputStream())
-        manifestPlaceholders["YANDEX_CLIENT_ID"] = properties.getProperty("YANDEX_CLIENT_ID")
     }
 }
 

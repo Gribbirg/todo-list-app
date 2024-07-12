@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="todo_items_list">Todo list</string>
+    <string name="done_count">Done — %1$d</string>
+    <string name="show">Show</string>
+    <string name="hide">Hide</string>
+    <string name="add">Add</string>
+    <string name="new_item">New</string>
+    <string name="exit_from_acc">Exit from account</string>
+    <string name="login">Login</string>
+    <string name="auth_error">Authorization failed. Try again later.</string>
+</resources>

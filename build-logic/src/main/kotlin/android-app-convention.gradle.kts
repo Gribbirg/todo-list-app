@@ -1,8 +1,10 @@
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
+import java.util.Properties
 
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
 }
 
 configure<BaseAppModuleExtension> {
@@ -11,13 +13,32 @@ configure<BaseAppModuleExtension> {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = AndroidConst.COMPOSE_COMPILER_VERSION
+    }
+    applicationVariants.all {
+        outputs.all {
+            val variantOutputImpl =
+                this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            variantOutputImpl.outputFileName =
+                "todoapp-${buildType.name}-${defaultConfig.versionName}.apk"
+        }
+    }
+    defaultConfig {
+        val properties = Properties()
+        properties.load(File("secrets.properties").inputStream())
+        manifestPlaceholders["YANDEX_CLIENT_ID"] = properties.getProperty("YANDEX_CLIENT_ID")
     }
 }
 
 dependencies {
-    // Yandex login sdk
-    implementation(libs.authsdk)
+    // Dagger 2
+    implementation(libs.dagger)
+    ksp(libs.dagger.compiler)
+
+    // Room
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
 
     // Work manager
     implementation(libs.androidx.work.runtime.ktx)
