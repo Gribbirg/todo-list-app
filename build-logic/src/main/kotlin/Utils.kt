@@ -34,7 +34,7 @@ fun BaseExtension.baseAndroidConfig() {
             )
         }
         create("release-signed") {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
