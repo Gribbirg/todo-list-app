@@ -1,5 +1,5 @@
 plugins {
-    id("android-core-data-convention")
+    id("android-domain-convention")
     alias(libs.plugins.compose.compiler)
 }
 

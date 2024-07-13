@@ -1,3 +1,6 @@
+import gradle.kotlin.dsl.accessors._8e8a6dd48b2094ffcd3758431423791d.implementation
+import java.util.Properties
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -12,42 +15,20 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = AndroidConst.COMPOSE_COMPILER_VERSION
     }
+    defaultConfig {
+        val properties = Properties()
+        properties.load(File("secrets.properties").inputStream())
+        manifestPlaceholders["YANDEX_CLIENT_ID"] = properties.getProperty("YANDEX_CLIENT_ID")
+    }
 }
 
 dependencies {
+    // Yandex login sdk
+    implementation(libs.authsdk)
+
     // Dagger 2
     implementation(libs.dagger)
     ksp(libs.dagger.compiler)
-
-    // Room
-    implementation(libs.androidx.room.runtime)
-    annotationProcessor(libs.androidx.room.compiler)
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.ktx)
-
-    // Work manager
-    implementation(libs.androidx.work.runtime.ktx)
-
-    // DataStore
-    implementation(libs.androidx.datastore.preferences)
-
-    // Ktor
-    implementation(libs.ktor.client.okhttp)
-    implementation(libs.ktor.client.logging.jvm)
-    implementation(libs.ktor.client.serialization)
-    implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.serialization.kotlinx.json)
-    implementation(libs.ktor.client.auth)
-    implementation(libs.ktor.client.websockets)
-    runtimeOnly(libs.ktor.client.auth)
-    implementation(libs.ktor.client.android)
-    implementation(libs.kotlin.stdlib.jdk8)
-
-    // Serialization
-    implementation(libs.kotlinx.serialization.json)
-
-    // Splash screen
-    implementation(libs.androidx.core.splashscreen)
 
     // Date picker
     implementation(libs.material3)

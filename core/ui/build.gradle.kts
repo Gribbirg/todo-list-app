@@ -1,5 +1,5 @@
 plugins {
-    id("android-core-data-convention")
+    id("android-core-convention")
     alias(libs.plugins.compose.compiler)
 }
 
@@ -8,6 +8,5 @@ android {
 }
 
 dependencies {
-    //implementation(project(":core:utils"))
     api(project(":domain"))
 }

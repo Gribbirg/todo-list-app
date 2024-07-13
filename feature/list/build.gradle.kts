@@ -1,5 +1,5 @@
 plugins {
-    id("android-feature-list-convention")
+    id("android-feature-convention")
     alias(libs.plugins.compose.compiler)
 }
 
