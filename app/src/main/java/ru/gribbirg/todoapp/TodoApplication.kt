@@ -25,7 +25,7 @@ class TodoApplication : Application(), Configuration.Provider {
     @Inject
     lateinit var networkCallback: ConnectivityManager.NetworkCallback
 
-    val appComponent by lazy {
+    internal val appComponent by lazy {
         DaggerAppComponent
             .factory()
             .create(applicationContext)

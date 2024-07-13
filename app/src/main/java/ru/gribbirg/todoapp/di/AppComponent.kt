@@ -6,8 +6,6 @@ import dagger.Component
 import ru.gribbirg.data.di.DataDependencies
 import ru.gribbirg.data.di.DataScope
 import ru.gribbirg.edit.di.EditFeatureDependencies
-import ru.gribbirg.edit.di.EditFeatureFactory
-import ru.gribbirg.list.TodoItemsListViewModel
 import ru.gribbirg.list.di.ListFeatureDependencies
 import ru.gribbirg.network.di.modules.ApiClientScope
 import ru.gribbirg.todoapp.TodoApplication
@@ -25,7 +23,8 @@ annotation class AppScope
 @DataScope
 @AppScope
 @ApiClientScope
-internal interface AppComponent : DataDependencies, ListFeatureDependencies, EditFeatureDependencies {
+internal interface AppComponent : DataDependencies, ListFeatureDependencies,
+    EditFeatureDependencies {
     @Component.Factory
     interface Factory {
         fun create(
@@ -35,7 +34,7 @@ internal interface AppComponent : DataDependencies, ListFeatureDependencies, Edi
 
     fun inject(application: TodoApplication)
 
-    fun listViewModel(): TodoItemsListViewModel
+    fun listFeatureComponent(): ListFeatureComponent
 
-    fun editFeatureFactory(): EditFeatureFactory
+    fun editFeatureComponent(): EditFeatureComponent
 }

@@ -10,7 +10,7 @@ import ru.gribbirg.utils.di.UtilsDependencies
     dependencies = [ListFeatureDependencies::class],
     modules = [RepositoryModule::class, UtilsModule::class]
 )
-interface ListFeatureComponent : UtilsDependencies {
+internal interface ListFeatureComponent : UtilsDependencies {
     @Component.Factory
     interface Factory {
         fun create(deps: ListFeatureDependencies): ListFeatureComponent

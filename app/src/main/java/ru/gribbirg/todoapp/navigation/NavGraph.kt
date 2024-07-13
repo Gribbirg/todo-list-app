@@ -24,11 +24,11 @@ internal fun NavGraph(
     val animationDuration = AppTheme.dimensions.animationDurationNavigationTransition
 
     val listViewModel = remember {
-        appComponent.listViewModel()
+        appComponent.listFeatureComponent().listViewModel()
     }
 
     val editViewModelFactory = remember {
-        appComponent.editFeatureFactory().createViewModelFactory()
+        appComponent.editFeatureComponent().editFeatureFactory().createViewModelFactory()
     }
 
     NavHost(

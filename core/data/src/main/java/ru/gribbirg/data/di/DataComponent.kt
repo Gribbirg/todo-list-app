@@ -11,6 +11,7 @@ import ru.gribbirg.data.di.modules.NetworkModule
 import ru.gribbirg.data.di.modules.RepositoriesModule
 import ru.gribbirg.data.di.modules.UtilsModule
 import ru.gribbirg.db.di.DatabaseDependencies
+import ru.gribbirg.db.di.DatabaseScope
 import ru.gribbirg.network.di.NetworkDependencies
 import ru.gribbirg.network.di.modules.ApiClientScope
 import ru.gribbirg.utils.di.UtilsDependencies
@@ -29,8 +30,9 @@ annotation class DataScope
         RepositoriesModule::class,
     ],
 )
-@ApiClientScope
 @DataScope
+@DatabaseScope
+@ApiClientScope
 internal interface DataComponent : NetworkDependencies, DatabaseDependencies, UtilsDependencies {
     @Component.Factory
     interface Factory {

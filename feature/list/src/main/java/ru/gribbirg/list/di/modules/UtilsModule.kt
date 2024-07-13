@@ -7,7 +7,7 @@ import ru.gribbirg.list.di.ListFeatureComponent
 import ru.gribbirg.utils.di.UtilsFactory
 
 @Module
-interface UtilsModule {
+internal interface UtilsModule {
     companion object {
         @Provides
         fun utilsFactory(depsImpl: ListFeatureComponent) = UtilsFactory(depsImpl)
