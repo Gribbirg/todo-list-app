@@ -15,7 +15,7 @@ import java.lang.reflect.Modifier
 
 @DefaultPreview
 @Composable
-private fun AppColorsPreview() {
+private fun AppTypographyPreview() {
     TodoAppTheme {
         Column(
             modifier = androidx.compose.ui.Modifier.width(500.dp),

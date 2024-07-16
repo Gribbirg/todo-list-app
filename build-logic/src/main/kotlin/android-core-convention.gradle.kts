@@ -1,3 +1,5 @@
+import gradle.kotlin.dsl.accessors._8e8a6dd48b2094ffcd3758431423791d.debugImplementation
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -54,4 +56,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.tooling.preview)
 }

@@ -30,7 +30,7 @@ import java.lang.reflect.Modifier
 private fun AppColorsPreview() {
     TodoAppTheme {
         Column(
-            modifier = androidx.compose.ui.Modifier.width(250.dp),
+            modifier = androidx.compose.ui.Modifier.width(250.dp).background(AppTheme.colors.primaryBack),
         ) {
             AppColors::class.java.declaredMethods.filter {
                 Modifier.isPublic(it.modifiers) &&
