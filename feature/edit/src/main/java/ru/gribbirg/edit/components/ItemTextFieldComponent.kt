@@ -42,7 +42,7 @@ internal fun ItemTextField(
         onValueChange = { onChanged(it) },
         modifier = modifier.shadow(AppTheme.dimensions.shadowElevationSmall, shape),
         minLines = 5,
-        placeholder = { Text(text = stringResource(id = R.string.type_text)) },
+        placeholder = { Text(text = stringResource(id = R.string.type_text), style = AppTheme.typography.body) },
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = indicatorColor,
             unfocusedIndicatorColor = indicatorColor,
