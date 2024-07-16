@@ -1,13 +1,16 @@
 package ru.gribbirg.data
 
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.gribbirg.data.di.DataScope
 import ru.gribbirg.data.di.modules.BackgroundDispatcher
+import ru.gribbirg.domain.model.user.UserData
 import ru.gribbirg.domain.repositories.LoginRepository
 import ru.gribbirg.domain.utils.KeyValueDataSaver
 import ru.gribbirg.network.NetworkConstants
@@ -24,14 +27,26 @@ class LoginRepositoryImpl @Inject constructor(
     @BackgroundDispatcher private val coroutineDispatcher: CoroutineDispatcher,
 ) : LoginRepository {
 
-    private val _loginFlow: MutableStateFlow<ru.gribbirg.domain.model.UserData?> =
+    private val _loginFlow: MutableStateFlow<UserData?> =
         MutableStateFlow(null)
 
-    override fun getLoginFlow(): Flow<ru.gribbirg.domain.model.UserData?> = _loginFlow.asStateFlow()
+    init {
+        CoroutineScope(coroutineDispatcher).launch {
+            _loginFlow.update {
+                internetDataStore
+                    .get(NetworkConstants.USER_API_KEY)
+                    ?.let {
+                        UserData()
+                    }
+            }
+        }
+    }
+
+    override fun getLoginFlow(): Flow<UserData?> = _loginFlow.asStateFlow()
 
     override suspend fun registerUser(key: String) = withContext(coroutineDispatcher) {
         internetDataStore.save(NetworkConstants.USER_API_KEY, key)
-        _loginFlow.update { ru.gribbirg.domain.model.UserData() }
+        _loginFlow.update { UserData() }
     }
 
     override suspend fun removeLogin() = withContext(coroutineDispatcher) {

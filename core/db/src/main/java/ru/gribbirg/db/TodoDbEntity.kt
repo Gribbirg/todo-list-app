@@ -3,8 +3,8 @@ package ru.gribbirg.db
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ru.gribbirg.domain.model.TodoImportance
-import ru.gribbirg.domain.model.TodoItem
+import ru.gribbirg.domain.model.todo.TodoImportance
+import ru.gribbirg.domain.model.todo.TodoItem
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId

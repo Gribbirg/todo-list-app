@@ -1,7 +1,7 @@
 package ru.gribbirg.list
 
 import androidx.annotation.StringRes
-import ru.gribbirg.domain.model.TodoItem
+import ru.gribbirg.domain.model.todo.TodoItem
 
 /**
  * Ui state of list screen

@@ -1,12 +1,13 @@
 package ru.gribbirg.domain.repositories
 
 import kotlinx.coroutines.flow.Flow
+import ru.gribbirg.domain.model.user.UserData
 
 /**
  * Repository for handle user data
  */
 interface LoginRepository {
-    fun getLoginFlow(): Flow<ru.gribbirg.domain.model.UserData?>
+    fun getLoginFlow(): Flow<UserData?>
 
     suspend fun registerUser(key: String)
 

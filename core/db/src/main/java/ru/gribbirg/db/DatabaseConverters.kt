@@ -1,7 +1,7 @@
 package ru.gribbirg.db
 
 import androidx.room.TypeConverter
-import ru.gribbirg.domain.model.TodoImportance
+import ru.gribbirg.domain.model.todo.TodoImportance
 import ru.gribbirg.utils.extensions.toLocalDate
 import ru.gribbirg.utils.extensions.toLocalDateTime
 import ru.gribbirg.utils.extensions.toTimestamp

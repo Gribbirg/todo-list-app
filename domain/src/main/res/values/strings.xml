@@ -5,4 +5,7 @@
     <string name="importance_high">High</string>
     <string name="network_error">No internet connection. Try again later.</string>
     <string name="network_unknown_error">Unknown error. Try again.</string>
+    <string name="light_theme">Light theme</string>
+    <string name="dark_theme">Dark theme</string>
+    <string name="like_system_theme">System theme</string>
 </resources>

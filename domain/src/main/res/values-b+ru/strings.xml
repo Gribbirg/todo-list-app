@@ -5,4 +5,7 @@
     <string name="importance_high">Высокая</string>
     <string name="network_error">Нет интернета. Попробуйте позже.</string>
     <string name="network_unknown_error">Произошла ошибка. Попробуйте снова.</string>
+    <string name="light_theme">Светлая тема</string>
+    <string name="dark_theme">Тёмная тема</string>
+    <string name="like_system_theme">Как в системе</string>
 </resources>

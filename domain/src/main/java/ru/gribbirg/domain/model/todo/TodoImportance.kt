@@ -1,4 +1,4 @@
-package ru.gribbirg.domain.model
+package ru.gribbirg.domain.model.todo
 
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes

@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
+import ru.gribbirg.domain.model.user.ThemeSettings
 
 /**
  * Main app theme
@@ -35,9 +36,15 @@ fun TodoAppTheme(
     colors: AppColors? = null,
     typography: AppTypography = AppTheme.typography,
     dimensions: AppDimensions = AppTheme.dimensions,
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    theme: ThemeSettings = ThemeSettings.LikeSystem,
     content: @Composable () -> Unit
 ) {
+    val darkTheme = when (theme) {
+        ThemeSettings.LikeSystem -> isSystemInDarkTheme()
+        ThemeSettings.Light -> false
+        ThemeSettings.Dark -> true
+    }
+
     val appColors =
         colors ?: if (darkTheme) AppColors.darkColors() else AppColors.lightColors()
     val rememberedColors = remember { appColors.copy() }.apply { updateColorsFrom(appColors) }

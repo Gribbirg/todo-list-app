@@ -10,11 +10,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.gribbirg.domain.model.NetworkState
-import ru.gribbirg.domain.model.TodoItem
+import ru.gribbirg.domain.model.todo.TodoItem
 import ru.gribbirg.domain.repositories.LoginRepository
 import ru.gribbirg.domain.repositories.TodoItemRepository
 import ru.gribbirg.todoapp.list.R
@@ -49,22 +50,40 @@ class TodoItemsListViewModel @Inject constructor(
     }
 
     init {
-        checkLogin()
+        collectLoginStateFlow()
         collectItemsStateFlow()
         collectNetworkStateFlow()
     }
 
-    private fun checkLogin() {
+    private fun collectLoginStateFlow() {
         viewModelScope.launch(coroutineExceptionHandler) {
-            val isLogin = loginRepository.isLogin()
-            _uiState.update { state ->
-                state.copy(
-                    loginState = if (isLogin)
+            loginRepository
+                .getLoginFlow()
+                .map { userData ->
+                    userData?.let {
                         TodoItemsListUiState.LoginState.Auth
-                    else
-                        TodoItemsListUiState.LoginState.Unauthorized
+                    } ?: TodoItemsListUiState.LoginState.Unauthorized
+                }
+                .catch { e ->
+                    _uiState.update { state ->
+                        state.copy(
+                            listState = TodoItemsListUiState.ListState.Error(e),
+                            loginState = TodoItemsListUiState.LoginState.Loading,
+                        )
+                    }
+                }
+                .stateIn(
+                    viewModelScope,
+                    SharingStarted.Eagerly,
+                    TodoItemsListUiState.LoginState.Loading
                 )
-            }
+                .collect { loginState ->
+                    _uiState.update { state ->
+                        state.copy(
+                            loginState = loginState
+                        )
+                    }
+                }
         }
     }
 

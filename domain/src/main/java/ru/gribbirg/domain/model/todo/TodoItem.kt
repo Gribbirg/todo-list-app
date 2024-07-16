@@ -1,4 +1,4 @@
-package ru.gribbirg.domain.model
+package ru.gribbirg.domain.model.todo
 
 import java.time.LocalDate
 import java.time.LocalDateTime

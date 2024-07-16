@@ -1,6 +1,7 @@
 plugins {
     id("android-core-convention")
     alias(libs.plugins.compose.compiler)
+    id("kotlinx-serialization") // TODO: libs
 }
 
 android {

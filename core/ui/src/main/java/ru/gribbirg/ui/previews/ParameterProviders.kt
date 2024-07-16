@@ -1,7 +1,8 @@
 package ru.gribbirg.ui.previews
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import ru.gribbirg.domain.model.TodoItem
+import ru.gribbirg.domain.model.todo.TodoImportance
+import ru.gribbirg.domain.model.todo.TodoItem
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -43,7 +44,7 @@ class TodoItemPreviewParameterProvider :
                     TodoItem(
                         id = it.toString(),
                         text = "Дело $it ".repeat(it * 5 + 1),
-                        importance = ru.gribbirg.domain.model.TodoImportance.entries[it % 3],
+                        importance = TodoImportance.entries[it % 3],
                         deadline = if (it % 3 == 0)
                             null
                         else LocalDate.now().plusDays((-100L..100L).random()),

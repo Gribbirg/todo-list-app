@@ -1,6 +1,6 @@
 package ru.gribbirg.utils
 
-import ru.gribbirg.domain.model.TodoItem
+import ru.gribbirg.domain.model.todo.TodoItem
 import ru.gribbirg.domain.utils.ItemsListsMerger
 
 /**

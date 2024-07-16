@@ -20,6 +20,8 @@ import ru.gribbirg.todoapp.list.R
 
 /**
  * Login button
+ *
+ * TODO: remove
  */
 @Composable
 internal fun TodoItemListLoginButtonComponent(

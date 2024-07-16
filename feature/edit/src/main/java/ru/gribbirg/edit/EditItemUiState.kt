@@ -1,6 +1,6 @@
 package ru.gribbirg.edit
 
-import ru.gribbirg.domain.model.TodoItem
+import ru.gribbirg.domain.model.todo.TodoItem
 
 /**
  * Ui states for edit screen

@@ -41,7 +41,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.yandex.authsdk.YandexAuthResult
-import ru.gribbirg.domain.model.TodoItem
+import ru.gribbirg.domain.model.todo.TodoItem
 import ru.gribbirg.list.components.BoxWithSidesForShadow
 import ru.gribbirg.list.components.Sides
 import ru.gribbirg.list.components.TodoItemListCollapsingToolbar
@@ -69,13 +69,15 @@ import ru.gribbirg.ui.previews.TodoItemPreviewParameterProvider
 @Composable
 fun TodoListItemScreen(
     viewModel: TodoItemsListViewModel,
-    toEditItemScreen: (itemId: String?) -> Unit
+    toEditItemScreen: (itemId: String?) -> Unit,
+    toSettingsScreen: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     TodoItemsListScreenContent(
         uiState = uiState,
         toEditItemScreen = toEditItemScreen,
+        toSettingsScreen = toSettingsScreen,
         onFilterChange = viewModel::onFilterChange,
         onChecked = viewModel::onChecked,
         onDelete = viewModel::delete,
@@ -90,6 +92,7 @@ fun TodoListItemScreen(
 private fun TodoItemsListScreenContent(
     uiState: TodoItemsListUiState,
     toEditItemScreen: (itemId: String?) -> Unit,
+    toSettingsScreen: () -> Unit,
     onFilterChange: (TodoItemsListUiState.ListState.FilterState) -> Unit,
     onChecked: (TodoItem, Boolean) -> Unit,
     onDelete: (TodoItem) -> Unit,
@@ -140,10 +143,8 @@ private fun TodoItemsListScreenContent(
                 topPadding = paddingValue.calculateTopPadding(),
                 doneCount = (uiState.listState as? TodoItemsListUiState.ListState.Loaded)?.doneCount,
                 filterState = (uiState.listState as? TodoItemsListUiState.ListState.Loaded)?.filterState,
-                isInAccount = uiState.loginState is TodoItemsListUiState.LoginState.Auth,
                 onFilterChange = onFilterChange,
-                onLogin = onLogin,
-                onExit = onExit,
+                toSettingsScreen = toSettingsScreen,
             ) {
                 when (uiState.listState) {
                     is TodoItemsListUiState.ListState.Loaded -> {
@@ -344,6 +345,7 @@ private fun TodoListItemScreenPreview(
             onResetEvent = {},
             onLogin = {},
             onExit = {},
+            toSettingsScreen = {},
         )
     }
 }

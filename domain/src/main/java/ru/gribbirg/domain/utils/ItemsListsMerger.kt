@@ -1,5 +1,6 @@
 package ru.gribbirg.domain.utils
 
+import ru.gribbirg.domain.model.todo.TodoItem
 import java.time.LocalDateTime
 
 /**
@@ -7,8 +8,8 @@ import java.time.LocalDateTime
  */
 fun interface ItemsListsMerger {
     fun mergeLists(
-        local: List<ru.gribbirg.domain.model.TodoItem>,
-        internet: List<ru.gribbirg.domain.model.TodoItem>,
+        local: List<TodoItem>,
+        internet: List<TodoItem>,
         lastUpdateTime: LocalDateTime
-    ): List<ru.gribbirg.domain.model.TodoItem>
+    ): List<TodoItem>
 }

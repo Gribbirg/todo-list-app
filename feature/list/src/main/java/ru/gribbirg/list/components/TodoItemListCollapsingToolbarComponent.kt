@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -31,7 +33,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.yandex.authsdk.YandexAuthResult
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
@@ -54,10 +55,8 @@ internal fun TodoItemListCollapsingToolbar(
     topPadding: Dp,
     doneCount: Int?,
     filterState: TodoItemsListUiState.ListState.FilterState?,
-    isInAccount: Boolean?,
     onFilterChange: (TodoItemsListUiState.ListState.FilterState) -> Unit,
-    onLogin: (YandexAuthResult) -> Unit,
-    onExit: () -> Unit,
+    toSettingsScreen: () -> Unit,
     content: @Composable () -> Unit
 ) {
     val topBarState = rememberCollapsingToolbarScaffoldState()
@@ -163,11 +162,13 @@ internal fun TodoItemListCollapsingToolbar(
                         bottom = 20.dp
                     ),
             ) {
-                TodoItemListLoginButtonComponent(
-                    isLogin = isInAccount,
-                    onLogin = onLogin,
-                    onExit = onExit,
-                )
+                IconButton(onClick = toSettingsScreen) {
+                    Icon(
+                        Icons.Default.Settings,
+                        contentDescription = null, // TODO
+                        tint = AppTheme.colors.blue,
+                    )
+                }
                 IconButton(
                     onClick = {
                         onFilterChange(
@@ -258,7 +259,6 @@ private fun TodoItemListCollapsingToolbarPreview() {
             topPadding = it.calculateTopPadding(),
             doneCount = 8,
             filterState = filterState,
-            isInAccount = false,
             onFilterChange = {
                 filterState =
                     if (filterState == TodoItemsListUiState.ListState.FilterState.ALL)
@@ -266,8 +266,7 @@ private fun TodoItemListCollapsingToolbarPreview() {
                     else
                         TodoItemsListUiState.ListState.FilterState.ALL
             },
-            onLogin = {},
-            onExit = {},
+            toSettingsScreen = {},
         ) {
             Text(
                 text = TextPreviewParameterProvider().values.last(),

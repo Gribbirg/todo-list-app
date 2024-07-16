@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.navigation.compose.rememberNavController
 import ru.gribbirg.theme.TodoAppTheme
 import ru.gribbirg.todoapp.navigation.NavGraph
@@ -17,9 +19,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            TodoAppTheme {
-                TodoComposeApp()
-            }
+            TodoComposeApp()
         }
     }
 
@@ -27,10 +27,15 @@ class MainActivity : ComponentActivity() {
     fun TodoComposeApp() {
         val navController = rememberNavController()
         val appComponent = (applicationContext as TodoApplication).appComponent
+        val settings by appComponent.settingsHandler().getSettings().collectAsState()
 
-        NavGraph(
-            navController = navController,
-            appComponent = appComponent,
-        )
+        TodoAppTheme(
+            theme = settings.theme,
+        ) {
+            NavGraph(
+                navController = navController,
+                appComponent = appComponent,
+            )
+        }
     }
 }

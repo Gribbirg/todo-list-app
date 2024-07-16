@@ -11,4 +11,5 @@ internal sealed class Screen(val route: String, val arguments: List<NamedNavArgu
     data object Edit : Screen("edit?id={id}", listOf(navArgument("id") { nullable = true })) {
         fun getRoute(itemId: String?) = itemId?.let { "edit?id=${itemId}" } ?: "edit"
     }
+    data object Settings : Screen("settings")
 }

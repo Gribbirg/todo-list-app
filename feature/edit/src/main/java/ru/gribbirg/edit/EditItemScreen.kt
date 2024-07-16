@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import ru.gribbirg.domain.model.TodoItem
+import ru.gribbirg.domain.model.todo.TodoItem
 import ru.gribbirg.edit.components.EditScreenAppBarComponent
 import ru.gribbirg.edit.components.ItemDeadline
 import ru.gribbirg.edit.components.ItemDelete

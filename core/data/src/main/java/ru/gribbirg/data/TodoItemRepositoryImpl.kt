@@ -14,7 +14,7 @@ import ru.gribbirg.data.di.modules.BackgroundOneThreadDispatcher
 import ru.gribbirg.db.ItemsLocalClient
 import ru.gribbirg.db.toLocalDbItem
 import ru.gribbirg.domain.model.NetworkState
-import ru.gribbirg.domain.model.TodoItem
+import ru.gribbirg.domain.model.todo.TodoItem
 import ru.gribbirg.domain.repositories.LoginRepository
 import ru.gribbirg.domain.utils.ItemsListsMerger
 import ru.gribbirg.domain.utils.SystemDataProvider

@@ -2,7 +2,8 @@ package ru.gribbirg.network.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import ru.gribbirg.domain.model.TodoImportance
+import ru.gribbirg.domain.model.todo.TodoImportance
+import ru.gribbirg.domain.model.todo.TodoItem
 import ru.gribbirg.utils.extensions.toLocalDate
 import ru.gribbirg.utils.extensions.toLocalDateTime
 import ru.gribbirg.utils.extensions.toTimestamp
@@ -23,7 +24,7 @@ data class TodoItemDto(
     @SerialName("last_updated_by") val updateBy: String,
 ) {
     fun toTodoItem() =
-        ru.gribbirg.domain.model.TodoItem(
+        TodoItem(
             id = id,
             text = text,
             importance = importance.dtoToImportance()!!,
@@ -34,7 +35,7 @@ data class TodoItemDto(
         )
 }
 
-fun ru.gribbirg.domain.model.TodoItem.toNetworkDto(deviceId: String) =
+fun TodoItem.toNetworkDto(deviceId: String) =
     TodoItemDto(
         id = id,
         text = text,

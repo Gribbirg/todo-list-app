@@ -2,7 +2,7 @@ package ru.gribbirg.list.di.modules
 
 import dagger.Module
 import dagger.Provides
-import ru.gribbirg.domain.model.TodoItem
+import ru.gribbirg.domain.model.todo.TodoItem
 import ru.gribbirg.list.di.ListFeatureComponent
 import ru.gribbirg.utils.di.UtilsFactory
 

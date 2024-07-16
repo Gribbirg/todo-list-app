@@ -10,6 +10,9 @@ import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import ru.gribbirg.edit.EditItemScreen
+import ru.gribbirg.list.TodoListItemScreen
+import ru.gribbirg.settings.SettingsScreen
 import ru.gribbirg.theme.AppTheme
 import ru.gribbirg.todoapp.di.AppComponent
 
@@ -51,13 +54,18 @@ internal fun NavGraph(
                 )
             },
         ) {
-            ru.gribbirg.list.TodoListItemScreen(
+            TodoListItemScreen(
                 viewModel = listViewModel,
                 toEditItemScreen = { id ->
                     navController.navigate(Screen.Edit.getRoute(itemId = id)) {
                         launchSingleTop = true
                     }
                 },
+                toSettingsScreen = {
+                    navController.navigate(Screen.Settings.route) {
+                        launchSingleTop = true
+                    }
+                }
             )
         }
         composable(
@@ -86,11 +94,40 @@ internal fun NavGraph(
                 editViewModelFactory
                     .create(backStackEntry.arguments?.getString(Screen.Edit.arguments.first().name))
             }
-            ru.gribbirg.edit.EditItemScreen(
+            EditItemScreen(
                 viewModel = viewModel,
                 onClose = {
                     navController.popBackStack(Screen.TodoList.route, false)
                 },
+            )
+        }
+        composable(
+            Screen.Settings.route,
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                    animationSpec = tween(
+                        animationDuration,
+                        easing = FastOutSlowInEasing
+                    )
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                    animationSpec = tween(
+                        animationDuration,
+                        easing = FastOutSlowInEasing
+                    )
+                )
+            },
+        ) {
+            val viewModel = remember {
+                appComponent.settingsFeatureComponent().settingsViewModel
+            }
+            SettingsScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack(Screen.TodoList.route, false) }
             )
         }
     }
