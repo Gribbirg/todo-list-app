@@ -9,4 +9,5 @@ android {
 
 dependencies {
     api(project(":domain"))
+    api(project(":core:theme"))
 }

@@ -47,6 +47,7 @@ import ru.gribbirg.list.components.Sides
 import ru.gribbirg.list.components.TodoItemListCollapsingToolbar
 import ru.gribbirg.list.components.TodoItemRow
 import ru.gribbirg.list.components.TodoItemsListPullToRefreshBox
+import ru.gribbirg.theme.AppTheme
 import ru.gribbirg.todoapp.list.R
 import ru.gribbirg.ui.components.ErrorComponent
 import ru.gribbirg.ui.components.LoadingComponent
@@ -58,7 +59,6 @@ import ru.gribbirg.ui.previews.OrientationPreviews
 import ru.gribbirg.ui.previews.ScreenPreviewTemplate
 import ru.gribbirg.ui.previews.ThemePreviews
 import ru.gribbirg.ui.previews.TodoItemPreviewParameterProvider
-import ru.gribbirg.ui.theme.AppTheme
 
 /**
  * Main app screen with list of items

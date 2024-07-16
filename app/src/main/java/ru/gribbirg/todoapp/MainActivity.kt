@@ -6,8 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
+import ru.gribbirg.theme.TodoAppTheme
 import ru.gribbirg.todoapp.navigation.NavGraph
-import ru.gribbirg.ui.theme.TodoAppTheme
 
 /**
  * Main and single app activity

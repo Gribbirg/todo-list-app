@@ -1,4 +1,4 @@
-package ru.gribbirg.ui.theme
+package ru.gribbirg.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
@@ -47,6 +47,10 @@ fun TodoAppTheme(
         LocalDimensions provides dimensions,
         LocalTypography provides typography
     ) {
-        content()
+        TodoAppMaterialTheme(
+            darkTheme = darkTheme,
+        ) {
+            content()
+        }
     }
 }

@@ -1,10 +1,5 @@
-package ru.gribbirg.ui.theme
+package ru.gribbirg.theme
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -12,11 +7,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ru.gribbirg.todoapp.ui.R
-import ru.gribbirg.ui.previews.DefaultPreview
-import java.lang.reflect.Modifier
+import ru.gribbirg.todoapp.theme.R
 
 /**
  * App typography
@@ -73,35 +65,3 @@ val robotoFontFamily = FontFamily(
 )
 
 internal val LocalTypography = staticCompositionLocalOf { AppTypography() }
-
-@DefaultPreview
-@Composable
-private fun AppColorsPreview() {
-    TodoAppTheme {
-        Column(
-            modifier = androidx.compose.ui.Modifier.width(500.dp),
-        ) {
-            AppTypography::class.java.declaredMethods.filter {
-                Modifier.isPublic(it.modifiers)
-                        && !Modifier.isStatic(it.modifiers)
-                        && it.returnType == TextStyle::class.java
-                        && "get" in it.name
-            }
-                .map { it to it.invoke(AppTheme.typography) as TextStyle }
-                .sortedByDescending { it.second.fontSize.value }
-                .forEach { (method, style) ->
-                    Text(
-                        text = "${
-                            method.name.replace(
-                                "get",
-                                ""
-                            )
-                        } — ${style.fontSize.value.toInt()} / ${style.lineHeight.value.toInt()}",
-                        modifier = androidx.compose.ui.Modifier.padding(AppTheme.dimensions.paddingLarge),
-                        style = style,
-                        color = AppTheme.colors.primary
-                    )
-                }
-        }
-    }
-}

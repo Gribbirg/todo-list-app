@@ -15,8 +15,8 @@ import com.yandex.authsdk.YandexAuthLoginOptions
 import com.yandex.authsdk.YandexAuthOptions
 import com.yandex.authsdk.YandexAuthResult
 import com.yandex.authsdk.YandexAuthSdk
+import ru.gribbirg.theme.AppTheme
 import ru.gribbirg.todoapp.list.R
-import ru.gribbirg.ui.theme.AppTheme
 
 /**
  * Login button

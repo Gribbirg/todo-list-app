@@ -32,6 +32,7 @@ import ru.gribbirg.edit.components.ItemDeadline
 import ru.gribbirg.edit.components.ItemDelete
 import ru.gribbirg.edit.components.ItemImportanceSelector
 import ru.gribbirg.edit.components.ItemTextField
+import ru.gribbirg.theme.AppTheme
 import ru.gribbirg.ui.components.ErrorComponent
 import ru.gribbirg.ui.components.LoadingComponent
 import ru.gribbirg.ui.previews.DefaultPreview
@@ -41,7 +42,6 @@ import ru.gribbirg.ui.previews.LayoutDirectionPreviews
 import ru.gribbirg.ui.previews.OrientationPreviews
 import ru.gribbirg.ui.previews.ScreenPreviewTemplate
 import ru.gribbirg.ui.previews.ThemePreviews
-import ru.gribbirg.ui.theme.AppTheme
 
 /**
  * Edit and create item screen

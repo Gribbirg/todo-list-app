@@ -11,4 +11,5 @@ dependencies {
     api(project(":domain"))
     api(project(":core:ui"))
     api(project(":core:data"))
+    api(project(":core:theme"))
 }

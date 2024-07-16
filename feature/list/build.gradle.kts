@@ -12,4 +12,5 @@ dependencies {
     api(project(":core:ui"))
     api(project(":core:data"))
     api(project(":core:utils"))
+    api(project(":core:theme"))
 }

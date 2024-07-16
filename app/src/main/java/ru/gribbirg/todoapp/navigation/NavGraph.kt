@@ -10,8 +10,8 @@ import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import ru.gribbirg.theme.AppTheme
 import ru.gribbirg.todoapp.di.AppComponent
-import ru.gribbirg.ui.theme.AppTheme
 
 /**
  * Navigation graph

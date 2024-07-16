@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import ru.gribbirg.ui.theme.AppTheme
+import ru.gribbirg.theme.AppTheme
 
 /**
  * Background for swipe to dismiss
