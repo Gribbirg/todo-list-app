@@ -3,8 +3,8 @@ package ru.gribbirg.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yandex.authsdk.YandexAuthResult
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -17,12 +17,14 @@ import kotlinx.coroutines.launch
 import ru.gribbirg.domain.model.user.UserSettings
 import ru.gribbirg.domain.repositories.LoginRepository
 import ru.gribbirg.domain.utils.SettingsHandler
+import ru.gribbirg.settings.di.modules.BackgroundDispatcher
 import javax.inject.Inject
 import javax.security.auth.login.LoginException
 
 class SettingsViewModel @Inject constructor(
     private val loginRepository: LoginRepository,
     private val settingsHandler: SettingsHandler,
+    @BackgroundDispatcher private val backgroundDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(
         SettingsUiState(
@@ -55,7 +57,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun collectSettings() {
-        viewModelScope.launch(Dispatchers.IO + coroutineSettingsExceptionHandler) { // TODO: Dispatchers
+        viewModelScope.launch(backgroundDispatcher + coroutineSettingsExceptionHandler) {
             settingsHandler
                 .getSettings()
                 .map { settings ->
@@ -82,7 +84,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun collectLogin() {
-        viewModelScope.launch(Dispatchers.IO + coroutineLoginExceptionHandler) { // TODO: Dispatchers
+        viewModelScope.launch(backgroundDispatcher + coroutineLoginExceptionHandler) {
             loginRepository
                 .getLoginFlow()
                 .map { userData ->

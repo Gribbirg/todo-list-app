@@ -8,10 +8,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Qualifier
 
 @Qualifier
-annotation class BackgroundOneThreadDispatcher
+internal annotation class BackgroundOneThreadDispatcher
 
 @Qualifier
-annotation class BackgroundDispatcher
+internal annotation class BackgroundDispatcher
 
 @Module
 internal interface CoroutinesModule {
