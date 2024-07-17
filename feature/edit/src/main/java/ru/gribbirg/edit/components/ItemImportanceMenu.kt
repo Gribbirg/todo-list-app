@@ -58,8 +58,9 @@ internal fun ItemImportanceMenu(
                 text = stringResource(id = R.string.importance),
                 style = AppTheme.typography.title,
                 modifier = Modifier.padding(
-                    horizontal = AppTheme.dimensions.paddingExtraLarge,
-                    vertical = AppTheme.dimensions.paddingMedium
+                    start = AppTheme.dimensions.paddingExtraLarge,
+                    end = AppTheme.dimensions.paddingExtraLarge,
+                    bottom = AppTheme.dimensions.paddingMedium,
                 ),
                 color = AppTheme.colors.primary,
             )
@@ -85,22 +86,24 @@ internal fun ItemImportanceMenu(
                             .weight(1f)
                             .clip(RoundedCornerShape(AppTheme.dimensions.cardCornersRadius))
                             .clickable {
+                                onChanged(importanceValue)
                                 coroutineScope.launch {
-                                    color.animateTo(
-                                        targetValue = animColor,
-                                        animationSpec = tween(
-                                            durationMillis = 200,
-                                            easing = EaseInOut
+                                    if (animColor != stockColor) {
+                                        color.animateTo(
+                                            targetValue = animColor,
+                                            animationSpec = tween(
+                                                durationMillis = 200,
+                                                easing = EaseInOut
+                                            )
                                         )
-                                    )
-                                    color.animateTo(
-                                        targetValue = stockColor,
-                                        animationSpec = tween(
-                                            durationMillis = 200,
-                                            easing = EaseInOut
+                                        color.animateTo(
+                                            targetValue = stockColor,
+                                            animationSpec = tween(
+                                                durationMillis = 200,
+                                                easing = EaseInOut
+                                            )
                                         )
-                                    )
-                                    onChanged(importanceValue)
+                                    }
                                     sheetState.hide()
                                     onClose()
                                 }
@@ -125,8 +128,8 @@ internal fun ItemImportanceMenu(
                                     .padding(AppTheme.dimensions.paddingMedium),
                                 tint = color.value,
                             )
-                        } ?: Spacer(modifier = Modifier)
-                        Spacer(modifier = Modifier.height(AppTheme.dimensions.paddingMedium))
+                            Spacer(modifier = Modifier.height(AppTheme.dimensions.paddingMedium))
+                        }
                         Text(
                             text = stringResource(id = importanceValue.nameId),
                             style = AppTheme.typography.body

@@ -19,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
@@ -162,6 +163,9 @@ private fun EditScreenLoadedContent(
                 onEdit(uiState.item.copy(importance = importance))
             },
             onClick = focusManager::clearFocus,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(AppTheme.dimensions.cardCornersRadius))
         )
         EdiItemSeparator(
             modifier = Modifier.padding(

@@ -1,16 +1,17 @@
 package ru.gribbirg.edit.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,8 +43,19 @@ internal fun ItemImportanceSelector(
 ) {
     var menuOpened by remember { mutableStateOf(false) }
 
+    val contentColor = importance.colorId?.let { colorResource(it) }
+        ?: AppTheme.colors.tertiary
+
     Column(
         modifier = modifier
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = ripple(),
+            ) {
+                onClick()
+                menuOpened = true
+            }
+            .padding(AppTheme.dimensions.paddingSmall)
     ) {
         Text(
             text = stringResource(id = R.string.importance),
@@ -54,32 +66,28 @@ internal fun ItemImportanceSelector(
             style = AppTheme.typography.body,
             color = AppTheme.colors.primary
         )
-        TextButton(
-            onClick = {
-                onClick()
-                menuOpened = true
-            },
-            colors = ButtonDefaults.textButtonColors(
-                contentColor = importance.colorId?.let { colorResource(it) }
-                    ?: AppTheme.colors.tertiary
-            )
+        Row(
+            modifier = Modifier.padding(
+                horizontal = AppTheme.dimensions.paddingMedium,
+                vertical = AppTheme.dimensions.paddingSmall
+            ),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                if (importance.logoId != null) {
-                    Icon(
-                        painter = painterResource(id = importance.logoId!!),
-                        contentDescription = stringResource(id = importance.nameId),
-                        modifier = Modifier,
-                    )
-                    Spacer(modifier = Modifier.width(AppTheme.dimensions.paddingMedium))
-                }
-                Text(
-                    text = stringResource(id = importance.nameId),
-                    style = AppTheme.typography.subhead
+            if (importance.logoId != null) {
+                Icon(
+                    painter = painterResource(id = importance.logoId!!),
+                    contentDescription = stringResource(id = importance.nameId),
+                    modifier = Modifier,
+                    tint = contentColor,
                 )
+                Spacer(modifier = Modifier.width(AppTheme.dimensions.paddingMedium))
             }
+            Text(
+                text = stringResource(id = importance.nameId),
+                style = AppTheme.typography.subhead,
+                color = importance.colorId?.let { colorResource(it) }
+                    ?: AppTheme.colors.tertiary,
+            )
         }
 
         if (menuOpened) {
@@ -104,7 +112,7 @@ private fun ItemImportanceSelectorPreview() {
                 .padding(paddingValue),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            var importance by remember { mutableStateOf(TodoImportance.No) }
+            var importance by remember { mutableStateOf(TodoImportance.Low) }
             ItemImportanceSelector(importance = importance, onChanged = { importance = it })
         }
     }
