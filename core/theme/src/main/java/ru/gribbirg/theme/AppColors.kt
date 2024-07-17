@@ -27,6 +27,7 @@ class AppColors(
     gray: Color,
     grayLight: Color,
     white: Color,
+    black: Color,
     appBar: Color,
     isDark: Boolean,
 ) {
@@ -60,6 +61,8 @@ class AppColors(
         private set
     var white by mutableStateOf(white)
         private set
+    var black by mutableStateOf(black)
+        private set
     var appBar by mutableStateOf(appBar)
         internal set
     var isDark by mutableStateOf(isDark)
@@ -81,6 +84,7 @@ class AppColors(
         gray: Color = this.gray,
         grayLight: Color = this.grayLight,
         white: Color = this.white,
+        black: Color = this.black,
         appBar: Color = this.appBar,
         isDark: Boolean = this.isDark,
     ) = AppColors(
@@ -99,6 +103,7 @@ class AppColors(
         gray,
         grayLight,
         white,
+        black,
         appBar,
         isDark
     )
@@ -119,6 +124,7 @@ class AppColors(
         gray = other.gray
         grayLight = other.grayLight
         white = other.white
+        black = other.black
         appBar = other.appBar
     }
 
@@ -139,6 +145,7 @@ class AppColors(
             blue: Color = LightBlue,
             gray: Color = LightGray,
             grayLight: Color = LightGrayLight,
+            black: Color = Black,
             appBar: Color = primaryBack,
             white: Color = White
         ) = AppColors(
@@ -157,6 +164,7 @@ class AppColors(
             gray,
             grayLight,
             white,
+            black,
             appBar,
             isDark = false
         )
@@ -176,6 +184,7 @@ class AppColors(
             blue: Color = DarkBlue,
             gray: Color = DarkGray,
             grayLight: Color = DarkGrayLight,
+            black: Color = Black,
             appBar: Color = secondaryBack,
             white: Color = White
         ) = AppColors(
@@ -194,6 +203,7 @@ class AppColors(
             gray,
             grayLight,
             white,
+            black,
             appBar,
             isDark = true
         )

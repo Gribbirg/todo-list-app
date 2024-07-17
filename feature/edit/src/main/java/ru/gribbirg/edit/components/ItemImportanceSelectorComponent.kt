@@ -8,10 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -85,51 +82,10 @@ internal fun ItemImportanceSelector(
             }
         }
 
-        ItemImportanceMenu(
-            menuOpened = menuOpened,
-            onChanged = onChanged,
-            onClose = { menuOpened = false }
-        )
-    }
-}
-
-@Composable
-private fun ItemImportanceMenu(
-    menuOpened: Boolean,
-    onChanged: (TodoImportance) -> Unit,
-    onClose: () -> Unit,
-) {
-    DropdownMenu(
-        expanded = menuOpened,
-        onDismissRequest = onClose,
-        modifier = Modifier.background(AppTheme.colors.elevated)
-    ) {
-        for (importanceValue in TodoImportance.entries) {
-            val color = importanceValue.colorId?.let { colorResource(it) }
-                ?: AppTheme.colors.primary
-            DropdownMenuItem(
-                text = {
-                    Text(
-                        text = stringResource(id = importanceValue.nameId),
-                        style = AppTheme.typography.body
-                    )
-                },
-                onClick = {
-                    onChanged(importanceValue)
-                    onClose()
-                },
-                leadingIcon = {
-                    importanceValue.logoId?.let {
-                        Icon(
-                            painterResource(id = it),
-                            contentDescription = stringResource(id = importanceValue.nameId)
-                        )
-                    } ?: Spacer(modifier = Modifier)
-                },
-                colors = MenuDefaults.itemColors(
-                    textColor = color,
-                    leadingIconColor = color
-                )
+        if (menuOpened) {
+            ItemImportanceMenu(
+                onChanged = onChanged,
+                onClose = { menuOpened = false }
             )
         }
     }

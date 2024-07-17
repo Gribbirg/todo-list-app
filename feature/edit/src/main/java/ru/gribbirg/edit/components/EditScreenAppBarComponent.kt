@@ -1,5 +1,6 @@
 package ru.gribbirg.edit.components
 
+import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -61,7 +62,7 @@ internal fun EditScreenAppBarComponent(
     val scrolledAppBarColor = AppTheme.colors.appBar
 
     val color = remember {
-        androidx.compose.animation.Animatable(if (scrollState.canScrollBackward) appBarColor else scrolledAppBarColor)
+        Animatable(if (scrollState.canScrollBackward) appBarColor else scrolledAppBarColor)
     }
 
     val elevationNo = AppTheme.dimensions.shadowElevationNo.value
