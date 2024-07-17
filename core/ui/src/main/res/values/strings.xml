@@ -2,4 +2,5 @@
 <resources>
     <string name="error_occurred">An error has occurred:</string>
     <string name="unknown_error">Unknown error</string>
+    <string name="close">Close</string>
 </resources>

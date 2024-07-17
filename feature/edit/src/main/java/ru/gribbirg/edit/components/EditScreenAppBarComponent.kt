@@ -12,12 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -39,6 +35,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 import ru.gribbirg.theme.AppTheme
 import ru.gribbirg.todoapp.edit.R
+import ru.gribbirg.ui.components.CloseButton
 import ru.gribbirg.ui.previews.BooleanPreviewParameterProvider
 import ru.gribbirg.ui.previews.DefaultPreview
 import ru.gribbirg.ui.previews.LanguagePreviews
@@ -115,13 +112,7 @@ internal fun EditScreenAppBarComponent(
             scrolledContainerColor = Color.Transparent
         ),
         navigationIcon = {
-            IconButton(onClick = onClose) {
-                Icon(
-                    Icons.Filled.Close,
-                    contentDescription = stringResource(id = R.string.close),
-                    tint = AppTheme.colors.primary
-                )
-            }
+            CloseButton(onClick = onClose)
         }
     )
 }

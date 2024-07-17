@@ -2,4 +2,5 @@
 <resources>
     <string name="error_occurred">Произошла ошибка:</string>
     <string name="unknown_error">Неизвестная ошибка</string>
+    <string name="close">Закрыть</string>
 </resources>

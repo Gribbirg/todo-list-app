@@ -7,12 +7,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -29,6 +25,7 @@ import ru.gribbirg.domain.model.user.UserSettings
 import ru.gribbirg.settings.components.AppSettingsContent
 import ru.gribbirg.settings.components.LoginRow
 import ru.gribbirg.theme.AppTheme
+import ru.gribbirg.ui.components.CloseButton
 import ru.gribbirg.ui.previews.DefaultPreview
 import ru.gribbirg.ui.previews.LanguagePreviews
 import ru.gribbirg.ui.previews.LayoutDirectionPreviews
@@ -66,15 +63,7 @@ private fun SettingsScreenContent(
             TopAppBar(
                 title = { },
                 navigationIcon = {
-                    IconButton(
-                        onClick = onBack,
-                    ) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = null, // TODO: add
-                            tint = AppTheme.colors.primary
-                        )
-                    }
+                    CloseButton(onClick = onBack)
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = AppTheme.colors.primaryBack,

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="save">SAVE</string>
-    <string name="close">Close</string>
     <string name="deadline">Deadline</string>
     <string name="ready">SAVE</string>
     <string name="cancel">CANCEL</string>
