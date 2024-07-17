@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
-import ru.gribbirg.theme.AppTheme
+import ru.gribbirg.theme.custom.AppTheme
 import ru.gribbirg.ui.previews.DefaultPreview
 import ru.gribbirg.ui.previews.ItemPreviewTemplate
 import ru.gribbirg.ui.previews.ThemePreviews

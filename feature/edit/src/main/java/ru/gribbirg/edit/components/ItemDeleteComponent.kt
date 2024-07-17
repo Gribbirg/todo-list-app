@@ -15,7 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import ru.gribbirg.theme.AppTheme
+import ru.gribbirg.theme.custom.AppTheme
 import ru.gribbirg.todoapp.edit.R
 import ru.gribbirg.ui.previews.DefaultPreview
 import ru.gribbirg.ui.previews.ItemPreviewTemplate

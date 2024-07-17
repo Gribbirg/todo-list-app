@@ -16,9 +16,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
-import ru.gribbirg.theme.AppColors
-import ru.gribbirg.theme.AppTheme
-import ru.gribbirg.theme.TodoAppTheme
+import ru.gribbirg.theme.custom.AppColors
+import ru.gribbirg.theme.custom.AppTheme
+import ru.gribbirg.theme.custom.TodoAppTheme
 import ru.gribbirg.ui.previews.DefaultPreview
 import ru.gribbirg.ui.previews.ThemePreviews
 import java.lang.reflect.Modifier

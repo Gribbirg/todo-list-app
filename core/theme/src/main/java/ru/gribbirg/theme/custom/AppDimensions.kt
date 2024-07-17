@@ -1,4 +1,4 @@
-package ru.gribbirg.theme
+package ru.gribbirg.theme.custom
 
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.unit.Dp
@@ -18,7 +18,8 @@ data class AppDimensions(
     val paddingExtraExtraLarge: Dp = 48.dp,
     val paddingScreenMedium: Dp = 16.dp,
 
-    val sizeItemMinHeight: Dp = 54.dp,
+    val sizeItemMinHeightMedium: Dp = 54.dp,
+    val sizeItemMinHeightLarge: Dp = 80.dp,
 
     val cardCornersRadius: Dp = 10.dp,
 

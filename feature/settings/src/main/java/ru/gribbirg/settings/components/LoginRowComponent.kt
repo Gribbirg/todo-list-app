@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.HorizontalDivider
@@ -21,14 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.yandex.authsdk.YandexAuthLoginOptions
 import com.yandex.authsdk.YandexAuthOptions
 import com.yandex.authsdk.YandexAuthResult
 import com.yandex.authsdk.YandexAuthSdk
 import ru.gribbirg.domain.model.user.UserData
 import ru.gribbirg.settings.SettingsUiState
-import ru.gribbirg.theme.AppTheme
+import ru.gribbirg.theme.custom.AppTheme
 import ru.gribbirg.todoapp.settings.R
 import ru.gribbirg.ui.components.ErrorComponent
 import ru.gribbirg.ui.components.LoadingComponent
@@ -53,7 +52,7 @@ internal fun LoginRow(
                 LoadingContent(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(80.dp), // TODO: dimensions
+                        .defaultMinSize(minHeight = AppTheme.dimensions.sizeItemMinHeightLarge),
                 )
             }
 
@@ -77,7 +76,7 @@ internal fun LoginRow(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(80.dp) // TODO: dimensions
+                        .defaultMinSize(minHeight = AppTheme.dimensions.sizeItemMinHeightLarge),
                 )
             }
 
@@ -119,7 +118,7 @@ private fun UnauthorizedContent(
     ) {
         Icon(
             painterResource(id = R.drawable.baseline_login_24),
-            contentDescription = null, // TODO: add content desc
+            contentDescription = stringResource(id = R.string.login),
             tint = AppTheme.colors.blue
         )
         Spacer(modifier = Modifier.width(AppTheme.dimensions.paddingMedium))
@@ -151,8 +150,8 @@ private fun UserContent(
         IconButton(onClick = onLogout) {
             Icon(
                 painterResource(id = R.drawable.baseline_logout_24),
-                contentDescription = null, // TODO: contentDescription
-                tint = AppTheme.colors.blue
+                contentDescription = stringResource(id = R.string.logout),
+                tint = AppTheme.colors.blue,
             )
         }
     }
@@ -169,21 +168,21 @@ private fun LoginRowPreview() {
             LoadingContent(
                 Modifier
                     .fillMaxWidth()
-                    .height(80.dp)
+                    .defaultMinSize(minHeight = AppTheme.dimensions.sizeItemMinHeightLarge),
             )
             HorizontalDivider()
             UnauthorizedContent(
                 onClick = {},
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(80.dp),
+                    .defaultMinSize(minHeight = AppTheme.dimensions.sizeItemMinHeightLarge),
             )
             HorizontalDivider()
             UserContent(
                 user = UserData("Alex"), onLogout = { },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(80.dp),
+                    .defaultMinSize(minHeight = AppTheme.dimensions.sizeItemMinHeightLarge),
             )
         }
     }

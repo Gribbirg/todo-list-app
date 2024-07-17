@@ -7,9 +7,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import ru.gribbirg.theme.AppTheme
-import ru.gribbirg.theme.AppTypography
-import ru.gribbirg.theme.TodoAppTheme
+import ru.gribbirg.theme.custom.AppTheme
+import ru.gribbirg.theme.custom.AppTypography
+import ru.gribbirg.theme.custom.TodoAppTheme
 import ru.gribbirg.ui.previews.DefaultPreview
 import java.lang.reflect.Modifier
 

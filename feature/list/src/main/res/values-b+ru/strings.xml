@@ -9,4 +9,5 @@
     <string name="done_count">Выполнено — %1d</string>
     <string name="new_item">Новое</string>
     <string name="auth_error">Произошла ошибка. Повторите авторизацию позже.</string>
+    <string name="settings">Настройки</string>
 </resources>

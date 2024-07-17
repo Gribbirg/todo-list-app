@@ -8,7 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import ru.gribbirg.theme.AppTheme
+import ru.gribbirg.theme.custom.AppTheme
 import ru.gribbirg.todoapp.ui.R
 import ru.gribbirg.ui.previews.DefaultPreview
 import ru.gribbirg.ui.previews.ItemPreviewTemplate

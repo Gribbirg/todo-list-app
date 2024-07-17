@@ -33,7 +33,7 @@ import ru.gribbirg.edit.components.ItemDeadline
 import ru.gribbirg.edit.components.ItemDelete
 import ru.gribbirg.edit.components.ItemImportanceSelector
 import ru.gribbirg.edit.components.ItemTextField
-import ru.gribbirg.theme.AppTheme
+import ru.gribbirg.theme.custom.AppTheme
 import ru.gribbirg.ui.components.ErrorComponent
 import ru.gribbirg.ui.components.LoadingComponent
 import ru.gribbirg.ui.previews.DefaultPreview

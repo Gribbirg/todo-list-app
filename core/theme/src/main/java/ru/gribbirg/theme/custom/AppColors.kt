@@ -1,10 +1,40 @@
-package ru.gribbirg.theme
+package ru.gribbirg.theme.custom
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import ru.gribbirg.theme.Black
+import ru.gribbirg.theme.DarkBlue
+import ru.gribbirg.theme.DarkDisableLabel
+import ru.gribbirg.theme.DarkElevated
+import ru.gribbirg.theme.DarkGray
+import ru.gribbirg.theme.DarkGrayLight
+import ru.gribbirg.theme.DarkGreen
+import ru.gribbirg.theme.DarkOverlay
+import ru.gribbirg.theme.DarkPrimaryBack
+import ru.gribbirg.theme.DarkPrimaryLabel
+import ru.gribbirg.theme.DarkRed
+import ru.gribbirg.theme.DarkSecondaryBack
+import ru.gribbirg.theme.DarkSecondaryLabel
+import ru.gribbirg.theme.DarkSeparator
+import ru.gribbirg.theme.DarkTertiaryLabel
+import ru.gribbirg.theme.LightBlue
+import ru.gribbirg.theme.LightDisableLabel
+import ru.gribbirg.theme.LightElevated
+import ru.gribbirg.theme.LightGray
+import ru.gribbirg.theme.LightGrayLight
+import ru.gribbirg.theme.LightGreen
+import ru.gribbirg.theme.LightOverlay
+import ru.gribbirg.theme.LightPrimaryBack
+import ru.gribbirg.theme.LightPrimaryLabel
+import ru.gribbirg.theme.LightRed
+import ru.gribbirg.theme.LightSecondaryBack
+import ru.gribbirg.theme.LightSecondaryLabel
+import ru.gribbirg.theme.LightSeparator
+import ru.gribbirg.theme.LightTertiaryLabel
+import ru.gribbirg.theme.White
 
 /**
  * App colors

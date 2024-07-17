@@ -1,4 +1,4 @@
-package ru.gribbirg.theme
+package ru.gribbirg.theme.custom
 
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle

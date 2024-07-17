@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.compose.rememberNavController
-import ru.gribbirg.theme.TodoAppTheme
+import ru.gribbirg.theme.custom.TodoAppTheme
 import ru.gribbirg.todoapp.navigation.NavGraph
 
 /**

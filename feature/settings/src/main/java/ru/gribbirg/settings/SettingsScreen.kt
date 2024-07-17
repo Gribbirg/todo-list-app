@@ -24,7 +24,7 @@ import ru.gribbirg.domain.model.user.UserData
 import ru.gribbirg.domain.model.user.UserSettings
 import ru.gribbirg.settings.components.AppSettingsContent
 import ru.gribbirg.settings.components.LoginRow
-import ru.gribbirg.theme.AppTheme
+import ru.gribbirg.theme.custom.AppTheme
 import ru.gribbirg.ui.components.CloseButton
 import ru.gribbirg.ui.previews.DefaultPreview
 import ru.gribbirg.ui.previews.LanguagePreviews

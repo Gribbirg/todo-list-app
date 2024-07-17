@@ -1,4 +1,4 @@
-package ru.gribbirg.theme
+package ru.gribbirg.theme.material
 
 import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme

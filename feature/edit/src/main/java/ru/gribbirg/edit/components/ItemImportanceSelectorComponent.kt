@@ -23,7 +23,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import ru.gribbirg.domain.model.todo.TodoImportance
-import ru.gribbirg.theme.AppTheme
+import ru.gribbirg.theme.custom.AppTheme
 import ru.gribbirg.todoapp.edit.R
 import ru.gribbirg.ui.previews.DefaultPreview
 import ru.gribbirg.ui.previews.LanguagePreviews

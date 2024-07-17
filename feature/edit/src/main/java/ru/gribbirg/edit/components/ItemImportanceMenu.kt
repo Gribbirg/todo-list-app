@@ -31,7 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.launch
 import ru.gribbirg.domain.model.todo.TodoImportance
-import ru.gribbirg.theme.AppTheme
+import ru.gribbirg.theme.custom.AppTheme
 import ru.gribbirg.todoapp.edit.R
 
 // TODO: clean up
@@ -49,7 +49,7 @@ internal fun ItemImportanceMenu(
         sheetState = sheetState,
         containerColor = AppTheme.colors.primaryBack,
         contentColor = AppTheme.colors.primary,
-        scrimColor = AppTheme.colors.black.copy(alpha = 0.4f), // TODO: distensions
+        scrimColor = AppTheme.colors.overlay,
     ) {
         Column(
             modifier = Modifier.fillMaxWidth()

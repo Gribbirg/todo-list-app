@@ -1,4 +1,4 @@
-package ru.gribbirg.theme
+package ru.gribbirg.theme.custom
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
@@ -6,6 +6,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import ru.gribbirg.domain.model.user.ThemeSettings
+import ru.gribbirg.theme.material.TodoAppMaterialTheme
 
 /**
  * Main app theme

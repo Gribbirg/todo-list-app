@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import ru.gribbirg.edit.EditItemScreen
 import ru.gribbirg.list.TodoListItemScreen
 import ru.gribbirg.settings.SettingsScreen
-import ru.gribbirg.theme.AppTheme
+import ru.gribbirg.theme.custom.AppTheme
 import ru.gribbirg.todoapp.di.AppComponent
 
 /**

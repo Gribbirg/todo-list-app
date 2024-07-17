@@ -28,6 +28,6 @@ internal interface AppSettingsModule {
         @Provides
         @AppSettingsScope
         @AppSettingsQualifier
-        fun coroutineDispatcher(): CoroutineDispatcher = Dispatchers.Main.immediate
+        fun coroutineDispatcher(): CoroutineDispatcher = Dispatchers.IO
     }
 }

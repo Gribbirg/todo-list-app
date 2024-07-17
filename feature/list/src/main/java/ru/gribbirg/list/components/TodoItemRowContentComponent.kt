@@ -31,7 +31,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import ru.gribbirg.domain.model.todo.TodoImportance
 import ru.gribbirg.domain.model.todo.TodoItem
-import ru.gribbirg.theme.AppTheme
+import ru.gribbirg.theme.custom.AppTheme
 import ru.gribbirg.ui.previews.DefaultPreview
 import ru.gribbirg.ui.previews.FontScalePreviews
 import ru.gribbirg.ui.previews.ItemPreviewTemplate

@@ -47,7 +47,7 @@ import ru.gribbirg.list.components.Sides
 import ru.gribbirg.list.components.TodoItemListCollapsingToolbar
 import ru.gribbirg.list.components.TodoItemRow
 import ru.gribbirg.list.components.TodoItemsListPullToRefreshBox
-import ru.gribbirg.theme.AppTheme
+import ru.gribbirg.theme.custom.AppTheme
 import ru.gribbirg.todoapp.list.R
 import ru.gribbirg.ui.components.ErrorComponent
 import ru.gribbirg.ui.components.LoadingComponent
@@ -259,7 +259,7 @@ private fun ListLoadedContent(
             ) {
                 Row(
                     modifier = Modifier
-                        .defaultMinSize(minHeight = AppTheme.dimensions.sizeItemMinHeight)
+                        .defaultMinSize(minHeight = AppTheme.dimensions.sizeItemMinHeightMedium)
                         .fillMaxWidth()
                         .shadow(AppTheme.dimensions.shadowElevationSmall)
                         .background(AppTheme.colors.secondaryBack)

@@ -9,4 +9,5 @@
     <string name="exit_from_acc">Exit from account</string>
     <string name="login">Login</string>
     <string name="auth_error">Authorization failed. Try again later.</string>
+    <string name="settings">Settings</string>
 </resources>

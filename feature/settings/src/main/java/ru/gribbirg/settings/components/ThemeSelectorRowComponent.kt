@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import ru.gribbirg.domain.model.user.ThemeSettings
-import ru.gribbirg.theme.AppTheme
+import ru.gribbirg.theme.custom.AppTheme
 import ru.gribbirg.ui.previews.DefaultPreview
 import ru.gribbirg.ui.previews.ItemPreviewTemplate
 import ru.gribbirg.ui.previews.LanguagePreviews
