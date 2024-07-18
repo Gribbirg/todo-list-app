@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -57,6 +55,7 @@ internal fun TodoItemListCollapsingToolbar(
     filterState: TodoItemsListUiState.ListState.FilterState?,
     onFilterChange: (TodoItemsListUiState.ListState.FilterState) -> Unit,
     toSettingsScreen: () -> Unit,
+    toAboutScreen: () -> Unit,
     content: @Composable () -> Unit
 ) {
     val topBarState = rememberCollapsingToolbarScaffoldState()
@@ -162,13 +161,6 @@ internal fun TodoItemListCollapsingToolbar(
                         bottom = 20.dp
                     ),
             ) {
-                IconButton(onClick = toSettingsScreen) {
-                    Icon(
-                        Icons.Default.Settings,
-                        contentDescription = stringResource(id = R.string.settings),
-                        tint = AppTheme.colors.blue,
-                    )
-                }
                 IconButton(
                     onClick = {
                         onFilterChange(
@@ -186,6 +178,10 @@ internal fun TodoItemListCollapsingToolbar(
                 ) {
                     FilterIcon(filterState = filterState)
                 }
+                MenuIconButton(
+                    toAbout = toAboutScreen,
+                    toSettings = toSettingsScreen
+                )
             }
         }
     ) {
@@ -267,6 +263,7 @@ private fun TodoItemListCollapsingToolbarPreview() {
                         TodoItemsListUiState.ListState.FilterState.ALL
             },
             toSettingsScreen = {},
+            toAboutScreen = {},
         ) {
             Text(
                 text = TextPreviewParameterProvider().values.last(),

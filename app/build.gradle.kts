@@ -32,6 +32,7 @@ dependencies {
     api(project(":feature:list"))
     api(project(":feature:edit"))
     api(project(":feature:settings"))
+    api(project(":feature:about"))
 
     implementation(libs.androidx.room.ktx)
     testImplementation(libs.junit)

@@ -74,6 +74,7 @@ fun TodoListItemScreen(
     viewModel: TodoItemsListViewModel,
     toEditItemScreen: (itemId: String?) -> Unit,
     toSettingsScreen: () -> Unit,
+    toAboutScreen: () -> Unit,
     deleteId: String?
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -86,6 +87,7 @@ fun TodoListItemScreen(
         uiState = uiState,
         toEditItemScreen = toEditItemScreen,
         toSettingsScreen = toSettingsScreen,
+        toAboutScreen = toAboutScreen,
         onFilterChange = viewModel::onFilterChange,
         onChecked = viewModel::onChecked,
         onDelete = viewModel::delete,
@@ -100,6 +102,7 @@ private fun TodoItemsListScreenContent(
     uiState: TodoItemsListUiState,
     toEditItemScreen: (itemId: String?) -> Unit,
     toSettingsScreen: () -> Unit,
+    toAboutScreen: () -> Unit,
     onFilterChange: (TodoItemsListUiState.ListState.FilterState) -> Unit,
     onChecked: (TodoItem, Boolean) -> Unit,
     onDelete: (TodoItem) -> Unit,
@@ -168,6 +171,7 @@ private fun TodoItemsListScreenContent(
                 doneCount = (uiState.listState as? TodoItemsListUiState.ListState.Loaded)?.doneCount,
                 filterState = (uiState.listState as? TodoItemsListUiState.ListState.Loaded)?.filterState,
                 onFilterChange = onFilterChange,
+                toAboutScreen = toAboutScreen,
                 toSettingsScreen = toSettingsScreen,
             ) {
                 when (uiState.listState) {
@@ -368,6 +372,7 @@ private fun TodoListItemScreenPreview(
             onRefresh = {},
             onResetEvent = {},
             toSettingsScreen = {},
+            toAboutScreen = {},
             onAdd = {},
         )
     }

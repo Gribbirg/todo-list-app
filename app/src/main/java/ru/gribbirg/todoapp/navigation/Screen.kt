@@ -22,4 +22,6 @@ internal sealed class Screen(
     }
 
     data object Settings : Screen("settings")
+
+    data object About : Screen("about")
 }
