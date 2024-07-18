@@ -21,6 +21,10 @@ data class AppDimensions(
     val sizeItemMinHeightMedium: Dp = 54.dp,
     val sizeItemMinHeightLarge: Dp = 80.dp,
 
+    val sizeItemMedium: Dp = 24.dp,
+
+    val lineWidthMedium: Dp = 4.dp,
+
     val cardCornersRadius: Dp = 10.dp,
 
     val shadowElevationNo: Dp = 0.dp,
@@ -28,6 +32,7 @@ data class AppDimensions(
     val shadowElevationLarge: Dp = 10.dp,
 
     val animationDuration: Int = 500,
+    val animationDurationShort: Int = 200,
     val animationDurationNavigationTransition: Int = 500,
 )
 

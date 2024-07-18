@@ -34,6 +34,7 @@ data class TodoItemsListUiState(
 
     sealed class EventState {
         data class ShowSnackBar(override val time: Long, @StringRes val textId: Int) : EventState()
+        data class ItemDeleted(override val time: Long, val item: TodoItem): EventState()
 
         abstract val time: Long
     }

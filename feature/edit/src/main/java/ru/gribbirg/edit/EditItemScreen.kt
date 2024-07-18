@@ -53,7 +53,7 @@ import ru.gribbirg.ui.previews.ThemePreviews
 @Composable
 fun EditItemScreen(
     viewModel: EditItemViewModel,
-    onClose: () -> Unit
+    onClose: (String?) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -62,17 +62,15 @@ fun EditItemScreen(
         onClose = onClose,
         onSave = viewModel::save,
         onEdit = viewModel::edit,
-        onDelete = viewModel::delete
     )
 }
 
 @Composable
 private fun EditItemScreenContent(
     uiState: EditItemUiState,
-    onClose: () -> Unit,
+    onClose: (String?) -> Unit,
     onSave: () -> Unit,
     onEdit: (TodoItem) -> Unit,
-    onDelete: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
@@ -84,7 +82,7 @@ private fun EditItemScreenContent(
             EditScreenAppBarComponent(
                 focusManager = focusManager,
                 onSave = onSave,
-                onClose = onClose,
+                onClose = { onClose(null) },
                 saveEnabled = uiState is EditItemUiState.Loaded,
                 scrollState = scrollState,
             )
@@ -96,8 +94,7 @@ private fun EditItemScreenContent(
                     uiState = uiState,
                     onEdit = onEdit,
                     focusManager = focusManager,
-                    onDelete = onDelete,
-                    onClose = onClose,
+                    onDelete = { onClose(uiState.item.id) },
                     modifier = Modifier
                         .padding(
                             top = paddingValue.calculateTopPadding(),
@@ -136,7 +133,6 @@ private fun EditScreenLoadedContent(
     onEdit: (TodoItem) -> Unit,
     focusManager: FocusManager,
     onDelete: () -> Unit,
-    onClose: () -> Unit,
     modifier: Modifier = Modifier,
     bottomPadding: Dp = 0.dp,
 ) {
@@ -190,10 +186,7 @@ private fun EditScreenLoadedContent(
         )
         ItemDelete(
             enabled = uiState.itemState == EditItemUiState.ItemState.EDIT,
-            onDeleted = {
-                onDelete()
-                onClose()
-            },
+            onDeleted = onDelete,
             onClick = focusManager::clearFocus,
         )
         Spacer(modifier = Modifier.height(bottomPadding))
@@ -234,7 +227,6 @@ private fun EditItemScreenPreview(
                 if (state is EditItemUiState.Loaded) state =
                     (state as EditItemUiState.Loaded).copy(item = it)
             },
-            onDelete = { },
         )
     }
 }

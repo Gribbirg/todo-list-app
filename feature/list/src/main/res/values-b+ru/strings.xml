@@ -10,4 +10,6 @@
     <string name="new_item">Новое</string>
     <string name="auth_error">Произошла ошибка. Повторите авторизацию позже.</string>
     <string name="settings">Настройки</string>
+    <string name="item_deleted">Удалено "%1$s"</string>
+    <string name="cancel">ОТМЕНИТЬ</string>
 </resources>

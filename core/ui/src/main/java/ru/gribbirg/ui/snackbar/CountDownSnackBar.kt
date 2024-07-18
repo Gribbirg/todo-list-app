@@ -1,0 +1,135 @@
+package ru.gribbirg.ui.snackbar
+
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarData
+import androidx.compose.material3.SnackbarDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import ru.gribbirg.theme.custom.AppTheme
+
+@Composable
+fun CountDownSnackBar(
+    snackBarData: SnackbarData,
+    modifier: Modifier = Modifier,
+    durationInSeconds: Int = 5,
+) {
+    val scope = rememberCoroutineScope()
+    val inOutAnimDuration = AppTheme.dimensions.animationDurationShort
+
+    var shown by remember { mutableStateOf(false) }
+    val totalDuration = remember(durationInSeconds) { durationInSeconds * 1000 } // TODO: magic num
+    var millisRemaining by remember { mutableIntStateOf(totalDuration) }
+
+    LaunchedEffect(snackBarData) {
+        shown = true
+        while (millisRemaining > 0) {
+            delay(40)
+            millisRemaining -= 40
+        }
+        shown = false
+        delay(inOutAnimDuration.toLong())
+        snackBarData.dismiss()
+    }
+
+    val actionLabel = snackBarData.visuals.actionLabel
+    val actionComposable: (@Composable () -> Unit)? = if (actionLabel != null) {
+        @Composable {
+            TextButton(
+                colors = ButtonDefaults.textButtonColors(contentColor = AppTheme.colors.blue),
+                onClick = {
+                    scope.launch {
+                        shown = false
+                        millisRemaining = maxOf(millisRemaining, inOutAnimDuration * 2)
+                        delay(inOutAnimDuration.toLong())
+                        snackBarData.performAction()
+                    }
+                },
+                content = { Text(actionLabel, style = AppTheme.typography.button) }
+            )
+        }
+    } else {
+        null
+    }
+
+    val dismissActionComposable: (@Composable () -> Unit)? =
+        if (snackBarData.visuals.withDismissAction) {
+            @Composable {
+                IconButton(
+                    onClick = { snackBarData.dismiss() },
+                    content = {
+                        Icon(Icons.Rounded.Close, null)
+                    }
+                )
+            }
+        } else {
+            null
+        }
+
+    AnimatedVisibility(
+        visible = shown,
+        enter = slideInVertically(
+            initialOffsetY = { it * 2 },
+            animationSpec = tween(durationMillis = inOutAnimDuration)
+        ),
+        exit = slideOutVertically(
+            targetOffsetY = { it * 2 },
+            animationSpec = tween(durationMillis = inOutAnimDuration)
+        ),
+    ) {
+        Snackbar(
+            modifier = modifier.padding(AppTheme.dimensions.paddingMediumLarge),
+            action = actionComposable,
+            actionOnNewLine = false,
+            dismissAction = dismissActionComposable,
+            dismissActionContentColor = AppTheme.colors.disable,
+            actionContentColor = AppTheme.colors.blue,
+            containerColor = AppTheme.colors.elevated,
+            contentColor = AppTheme.colors.primary,
+            shape = SnackbarDefaults.shape,
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingMediumLarge)
+            ) {
+                SnackBarCountDown(
+                    timerProgress = millisRemaining.toFloat() / totalDuration.toFloat(),
+                    secondsRemaining = (millisRemaining / 1000) + 1, // TODO: magic num
+                    color = AppTheme.colors.primary,
+                    backColor = AppTheme.colors.disable,
+                    modifier = Modifier.size(AppTheme.dimensions.sizeItemMedium)
+                )
+                Text(
+                    snackBarData.visuals.message,
+                    style = AppTheme.typography.body,
+                    color = AppTheme.colors.primary,
+                    maxLines = 1,
+                )
+            }
+        }
+    }
+}

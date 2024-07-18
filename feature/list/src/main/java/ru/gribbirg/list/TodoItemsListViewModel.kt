@@ -2,7 +2,6 @@ package ru.gribbirg.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yandex.authsdk.YandexAuthResult
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,7 +17,6 @@ import ru.gribbirg.domain.model.NetworkState
 import ru.gribbirg.domain.model.todo.TodoItem
 import ru.gribbirg.domain.repositories.LoginRepository
 import ru.gribbirg.domain.repositories.TodoItemRepository
-import ru.gribbirg.todoapp.list.R
 import ru.gribbirg.utils.extensions.toTimestamp
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -39,7 +37,7 @@ class TodoItemsListViewModel @Inject constructor(
     private val filterFlow =
         MutableStateFlow(TodoItemsListUiState.ListState.FilterState.NOT_COMPLETED)
     private val _uiState = MutableStateFlow(TodoItemsListUiState())
-    val uiState: StateFlow<TodoItemsListUiState> = _uiState.asStateFlow()
+    internal val uiState: StateFlow<TodoItemsListUiState> = _uiState.asStateFlow()
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
         _uiState.update { state ->
@@ -145,7 +143,7 @@ class TodoItemsListViewModel @Inject constructor(
                                 state.copy(
                                     networkState = TodoItemsListUiState.NetworkState.Updating,
                                     eventState = TodoItemsListUiState.EventState.ShowSnackBar(
-                                        LocalDateTime.now(ZoneId.of("UTC")).toTimestamp(),
+                                        LocalDateTime.now(ZoneId.of("UTC")).toTimestamp(), // TODO
                                         networkState.messageId
                                     ),
                                 )
@@ -156,35 +154,53 @@ class TodoItemsListViewModel @Inject constructor(
         }
     }
 
-    fun onChecked(item: TodoItem, checked: Boolean) {
+    internal fun onChecked(item: TodoItem, checked: Boolean) {
         viewModelScope.launch(coroutineExceptionHandler) {
             if (uiState.value.listState is TodoItemsListUiState.ListState.Loaded) {
                 val newItem =
-                    item.copy(completed = checked, editDate = LocalDateTime.now(ZoneId.of("UTC")))
+                    item.copy(
+                        completed = checked,
+                        editDate = LocalDateTime.now(ZoneId.of("UTC"))
+                    ) // TODO
                 todoItemRepository.saveItem(newItem)
             }
         }
     }
 
-    fun delete(item: TodoItem) {
+    internal fun delete(item: TodoItem) {
         viewModelScope.launch(coroutineExceptionHandler) {
+            _uiState.update { state ->
+                state.copy(
+                    eventState = TodoItemsListUiState.EventState.ItemDeleted(
+                        time = LocalDateTime.now(ZoneId.of("UTC")).toTimestamp(),
+                        item = item,
+                    )
+                )
+            }
             todoItemRepository.deleteItem(item.id)
         }
     }
 
-    fun onFilterChange(filterState: TodoItemsListUiState.ListState.FilterState) {
+    fun deleteById(id: String?) {
+        viewModelScope.launch(coroutineExceptionHandler) {
+            if (id == null) return@launch
+            delete(todoItemRepository.getItem(id) ?: return@launch)
+        }
+    }
+
+    internal fun onFilterChange(filterState: TodoItemsListUiState.ListState.FilterState) {
         viewModelScope.launch(coroutineExceptionHandler) {
             filterFlow.update { filterState }
         }
     }
 
-    fun onUpdate() {
+    internal fun onUpdate() {
         viewModelScope.launch(coroutineExceptionHandler) {
             todoItemRepository.updateItems()
         }
     }
 
-    fun onResetEvent() {
+    internal fun onResetEvent() {
         viewModelScope.launch(coroutineExceptionHandler) {
             _uiState.update { state ->
                 state.copy(eventState = null)
@@ -192,43 +208,13 @@ class TodoItemsListViewModel @Inject constructor(
         }
     }
 
-    fun onLogin(result: YandexAuthResult) {
+    internal fun onAdd(item: TodoItem) {
         viewModelScope.launch(coroutineExceptionHandler) {
-            when (result) {
-                is YandexAuthResult.Success -> {
-                    loginRepository.registerUser(result.token.value)
-                    _uiState.update { state ->
-                        state.copy(
-                            loginState = TodoItemsListUiState.LoginState.Auth
-                        )
-                    }
-                    todoItemRepository.updateItems()
-                }
-
-                is YandexAuthResult.Failure -> {
-                    _uiState.update { state ->
-                        state.copy(
-                            eventState = TodoItemsListUiState.EventState.ShowSnackBar(
-                                time = LocalDateTime.now(ZoneId.of("UTC")).toTimestamp(),
-                                textId = R.string.auth_error,
-                            )
-                        )
-                    }
-                }
-
-                YandexAuthResult.Cancelled -> {}
-            }
-        }
-    }
-
-    fun onExit() {
-        viewModelScope.launch(coroutineExceptionHandler) {
-            loginRepository.removeLogin()
-            _uiState.update { state ->
-                state.copy(
-                    loginState = TodoItemsListUiState.LoginState.Unauthorized
+            todoItemRepository.addItem(
+                item.copy(
+                    editDate = LocalDateTime.now(ZoneId.of("UTC")) // TODO
                 )
-            }
+            )
         }
     }
 }

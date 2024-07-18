@@ -22,11 +22,11 @@ roomRuntime = "2.6.1"
 toolbarCompose = "2.3.5"
 serialization = "1.6.3"
 workRuntimeKtx = "2.9.0"
-coroutines = "1.7.3"
+coroutines = "1.8.1"
 lingalaZip = "2.11.5"
 appcompat = "1.7.0"
 material = "1.12.0"
-jetbrainsKotlinJvm = "1.9.0"
+jetbrainsKotlinJvm = "1.9.22"
 ksp = "2.0.0-1.0.22"
 
 

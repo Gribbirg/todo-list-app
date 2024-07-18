@@ -35,12 +35,14 @@ internal fun NavGraph(
     ) {
         composable(
             Screen.TodoList.route,
-            arguments = Screen.Edit.arguments,
+            arguments = Screen.TodoList.arguments,
             enterTransition = TransitionAnimations.mainScreenEnter(animationDuration),
             exitTransition = TransitionAnimations.mainScreenExit(animationDuration),
-        ) {
+        ) { backStackEntry ->
+            val deleteId = backStackEntry.arguments?.getString(Screen.Edit.arguments.first().name)
             TodoListItemScreen(
                 viewModel = listViewModel,
+                deleteId = deleteId,
                 toEditItemScreen = { id ->
                     navController.navigate(Screen.Edit.getRoute(itemId = id)) {
                         launchSingleTop = true
@@ -65,7 +67,8 @@ internal fun NavGraph(
             }
             EditItemScreen(
                 viewModel = viewModel,
-                onClose = {
+                onClose = { deleteId ->
+                    listViewModel.deleteById(deleteId)
                     navController.popBackStack(Screen.TodoList.route, false)
                 },
             )

@@ -96,14 +96,6 @@ class EditItemViewModel @AssistedInject constructor(
         }
     }
 
-    internal fun delete() {
-        viewModelScope.launch(coroutineExceptionHandler) {
-            val state = uiState.value
-            if (state is EditItemUiState.Loaded)
-                todoItemRepository.deleteItem(state.item.id)
-        }
-    }
-
     @AssistedFactory
     interface Factory {
         fun create(itemId: String?): EditItemViewModel

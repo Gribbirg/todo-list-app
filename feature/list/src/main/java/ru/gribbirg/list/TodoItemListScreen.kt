@@ -24,12 +24,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,7 +42,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.yandex.authsdk.YandexAuthResult
+import kotlinx.coroutines.launch
 import ru.gribbirg.domain.model.todo.TodoItem
 import ru.gribbirg.list.components.BoxWithSidesForShadow
 import ru.gribbirg.list.components.Sides
@@ -59,6 +61,7 @@ import ru.gribbirg.ui.previews.OrientationPreviews
 import ru.gribbirg.ui.previews.ScreenPreviewTemplate
 import ru.gribbirg.ui.previews.ThemePreviews
 import ru.gribbirg.ui.previews.TodoItemPreviewParameterProvider
+import ru.gribbirg.ui.snackbar.CountDownSnackBar
 
 /**
  * Main app screen with list of items
@@ -71,8 +74,13 @@ fun TodoListItemScreen(
     viewModel: TodoItemsListViewModel,
     toEditItemScreen: (itemId: String?) -> Unit,
     toSettingsScreen: () -> Unit,
+    deleteId: String?
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(deleteId) {
+        deleteId?.let { viewModel.deleteById(it) }
+    }
 
     TodoItemsListScreenContent(
         uiState = uiState,
@@ -82,9 +90,8 @@ fun TodoListItemScreen(
         onChecked = viewModel::onChecked,
         onDelete = viewModel::delete,
         onRefresh = viewModel::onUpdate,
-        onLogin = viewModel::onLogin,
-        onExit = viewModel::onExit,
         onResetEvent = viewModel::onResetEvent,
+        onAdd = viewModel::onAdd,
     )
 }
 
@@ -96,29 +103,46 @@ private fun TodoItemsListScreenContent(
     onFilterChange: (TodoItemsListUiState.ListState.FilterState) -> Unit,
     onChecked: (TodoItem, Boolean) -> Unit,
     onDelete: (TodoItem) -> Unit,
+    onAdd: (TodoItem) -> Unit,
     onRefresh: () -> Unit,
-    onLogin: (YandexAuthResult) -> Unit,
-    onExit: () -> Unit,
     onResetEvent: () -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
     val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
     LaunchedEffect(uiState.eventState?.time) {
-        when (uiState.eventState) {
-            is TodoItemsListUiState.EventState.ShowSnackBar -> {
-                snackbarHostState.showSnackbar(context.getString(uiState.eventState.textId))
-            }
+        coroutineScope.launch {
+            when (uiState.eventState) {
+                is TodoItemsListUiState.EventState.ShowSnackBar -> {
+                    snackbarHostState.showSnackbar(context.getString(uiState.eventState.textId))
+                }
 
-            null -> {}
+                is TodoItemsListUiState.EventState.ItemDeleted -> {
+                    val res = snackbarHostState.showSnackbar(
+                        context.getString(
+                            R.string.item_deleted,
+                            uiState.eventState.item.text
+                        ),
+                        actionLabel = context.getString(R.string.cancel)
+                    )
+                    if (res == SnackbarResult.ActionPerformed) {
+                        onAdd(uiState.eventState.item)
+                    }
+                }
+
+                null -> return@launch
+            }
         }
         onResetEvent()
     }
 
     Scaffold(
         snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
+            SnackbarHost(hostState = snackbarHostState) { data ->
+                CountDownSnackBar(snackBarData = data)
+            }
         },
         containerColor = AppTheme.colors.primaryBack,
         floatingActionButton = {
@@ -225,7 +249,7 @@ private fun ListLoadedContent(
         }
         items(
             listState.items.size,
-            key = { i -> listState.items[i].id },
+            key = { i -> listState.items[i].hashCode() },
         ) {
             val item = listState.items[it]
             TodoItemRow(
@@ -343,9 +367,8 @@ private fun TodoListItemScreenPreview(
             onDelete = {},
             onRefresh = {},
             onResetEvent = {},
-            onLogin = {},
-            onExit = {},
             toSettingsScreen = {},
+            onAdd = {},
         )
     }
 }
