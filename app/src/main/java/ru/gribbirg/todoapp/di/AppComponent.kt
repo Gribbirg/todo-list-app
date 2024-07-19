@@ -3,6 +3,7 @@ package ru.gribbirg.todoapp.di
 import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
+import ru.gribbirg.about.di.AboutFeatureDependencies
 import ru.gribbirg.data.di.DataDependencies
 import ru.gribbirg.data.di.DataScope
 import ru.gribbirg.domain.utils.SettingsHandler
@@ -11,6 +12,7 @@ import ru.gribbirg.list.di.ListFeatureDependencies
 import ru.gribbirg.network.di.modules.ApiClientScope
 import ru.gribbirg.settings.di.SettingsFeatureDependencies
 import ru.gribbirg.todoapp.TodoApplication
+import ru.gribbirg.todoapp.di.modules.AboutFeatureModule
 import ru.gribbirg.todoapp.di.modules.DataModule
 import ru.gribbirg.todoapp.di.modules.EditFeatureModule
 import ru.gribbirg.todoapp.di.modules.ListFeatureModule
@@ -28,6 +30,7 @@ annotation class AppScope
         ListFeatureModule::class,
         EditFeatureModule::class,
         UtilsModule::class,
+        AboutFeatureModule::class,
     ]
 )
 @DataScope
@@ -39,7 +42,8 @@ internal interface AppComponent :
     UtilsDependencies,
     ListFeatureDependencies,
     EditFeatureDependencies,
-    SettingsFeatureDependencies {
+    SettingsFeatureDependencies,
+    AboutFeatureDependencies {
 
     @Component.Factory
     interface Factory {
@@ -55,6 +59,8 @@ internal interface AppComponent :
     fun editFeatureComponent(): EditFeatureComponent
 
     fun settingsFeatureComponent(): SettingsFeatureComponent
+
+    fun aboutFeatureComponent(): AboutFeatureComponent
 
     fun settingsHandler(): SettingsHandler
 }

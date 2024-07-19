@@ -1,4 +1,4 @@
-package ru.gribbirg.about
+package ru.gribbirg.about.divkit
 
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context

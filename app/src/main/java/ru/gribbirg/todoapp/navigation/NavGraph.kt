@@ -97,7 +97,11 @@ internal fun NavGraph(
             enterTransition = TransitionAnimations.secondScreenEnter(animationDuration),
             exitTransition = TransitionAnimations.secondScreenExit(animationDuration),
         ) {
+            val viewModel = remember {
+                appComponent.aboutFeatureComponent().viewModel
+            }
             AboutScreen(
+                viewModel = viewModel,
                 onBack = { navController.popBackStack(Screen.TodoList.route, false) }
             )
         }

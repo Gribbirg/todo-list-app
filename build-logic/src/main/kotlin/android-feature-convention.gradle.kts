@@ -50,8 +50,6 @@ dependencies {
     implementation(libs.yandex.div.json)
     implementation(libs.yandex.div.utils)
     implementation(libs.yandex.div.picasso)
-    implementation(libs.yandex.div.zoom)
-    implementation(libs.yandex.div.rive)
     implementation(libs.okhttp3)
 
     implementation(libs.androidx.ui.viewbinding)

@@ -122,7 +122,7 @@ fun CountDownSnackBar(
             ) {
                 SnackBarCountDown(
                     timerProgress = millisRemaining.toFloat() / totalDuration.toFloat(),
-                    secondsRemaining = durationInSeconds + 1,
+                    secondsRemaining = (millisRemaining / MILLIS_IN_SECOND) + 1,
                     color = AppTheme.colors.primary,
                     backColor = AppTheme.colors.disable,
                     modifier = Modifier.size(AppTheme.dimensions.sizeItemMedium)
