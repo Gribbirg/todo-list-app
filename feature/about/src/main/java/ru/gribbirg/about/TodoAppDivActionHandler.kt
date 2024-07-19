@@ -38,7 +38,7 @@ internal class TodoAppDivActionHandler(
 
     private fun handleNavAction(action: Uri): Boolean {
         return when (action.host) {
-            "back" -> {
+            BACK_ACTION -> {
                 goBack()
                 true
             }
@@ -50,5 +50,6 @@ internal class TodoAppDivActionHandler(
     companion object {
         private const val NAV_SCHEME = "nav-action"
         private val BROWSER_LINKS_SCHEME = listOf("https", "http", "mailto")
+        private const val BACK_ACTION = "back"
     }
 }
