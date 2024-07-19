@@ -156,6 +156,7 @@ class AppColors(
         white = other.white
         black = other.black
         appBar = other.appBar
+        isDark = other.isDark
     }
 
     companion object {

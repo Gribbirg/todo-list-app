@@ -1,0 +1,355 @@
+{
+  "templates": {
+    "elevated_card": {
+      "type": "container",
+      "margins": {
+        "top": "@{margin.medium}",
+        "bottom": "@{margin.medium}",
+        "left": "@{margin.medium}",
+        "right": "@{margin.medium}"
+      },
+      "paddings": {
+        "top": "@{margin.medium}",
+        "bottom": "@{margin.medium}",
+        "left": "@{margin.medium}",
+        "right": "@{margin.medium}"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "border": {
+        "corner_radius": "@{corner.radius.medium}",
+        "shadow": {
+          "offset": {
+            "x": {
+              "value": "@{offsets.shadow.x}"
+            },
+            "y": {
+              "value": "@{offsets.shadow.y}"
+            }
+          },
+          "color": "@{getColorFromDict(theme, app_theme, 'shadow')}"
+        },
+        "has_shadow": true
+      },
+      "$width": "width",
+      "$items": "items",
+      "$action": "action"
+    },
+    "text_content": {
+      "type": "container",
+      "items": [
+        {
+          "type": "text",
+          "font_size": "@{font.size.title}",
+          "font_weight": "bold",
+          "margins": {
+            "bottom": "@{margin.medium}"
+          },
+          "text_color": "@{getColorFromDict(theme, app_theme, 'primary')}",
+          "$text": "title"
+        },
+        {
+          "type": "text",
+          "font_size": "@{font.size.body}",
+          "text_color": "@{getColorFromDict(theme, app_theme, 'primary')}",
+          "$text": "body"
+        },
+        {
+          "type": "container",
+          "$items": "links"
+        },
+        {
+          "type": "container",
+          "$items": "footer"
+        }
+      ]
+    },
+    "image_content": {
+      "type": "image",
+      "$image_url": "url",
+      "placeholder_color": "#00000000"
+    },
+    "link": {
+      "type": "text",
+      "action": {
+        "$url": "link",
+        "$log_id": "log"
+      },
+      "font_size": "@{font.size.body}",
+      "margins": {
+        "top": "@{margin.small}",
+        "bottom": "@{margin.small}"
+      },
+      "text_color": "@{getColorFromDict(theme, app_theme, 'blue')}",
+      "underline": "single",
+      "$text": "link_text"
+    },
+    "footer_text": {
+      "type": "text",
+      "font_size": "@{font.size.subhead}",
+      "alignment_horizontal": "right",
+      "margins": {
+        "top": "@{margin.medium}",
+        "bottom": "@{margin.small}"
+      },
+      "text_color": "@{getColorFromDict(theme, app_theme, 'secondary')}",
+      "$text": "text"
+    }
+  },
+  "card": {
+    "variables": [
+      {
+        "name": "theme",
+        "type": "dict",
+        "value": {
+          "light": {
+            "white": "#FFFFFFFF",
+            "shadow": "#000",
+            "elevated": "#FFFFFFFF",
+            "background": "#FFF7F6F2",
+            "primary": "#FF000000",
+            "secondary": "#99000000",
+            "blue": "#FF007AFF",
+            "secondary_back": "#FFFFFFFF",
+            "github_logo_url": "https://cdn-icons-png.flaticon.com/512/25/25231.png"
+          },
+          "dark": {
+            "white": "#FFFFFFFF",
+            "shadow": "#000",
+            "elevated": "#FF3C3C3F",
+            "background": "#FF161618",
+            "primary": "#FFFFFFFF",
+            "secondary": "#99FFFFFF",
+            "blue": "#FF0A84FF",
+            "secondary_back": "#FF252528",
+            "github_logo_url": "https://cdn0.iconfinder.com/data/icons/shift-logotypes/32/Github-512.png"
+          }
+        }
+      },
+      {
+        "name": "text",
+        "type": "dict",
+        "value": {
+          "en": {
+            "app_name": "Todo app",
+            "desc": "Application for making a to-do list and tracking their completion. Synchronization between devices is supported (for this you need to log in to your Yandex ID account).\n\nThis is an open source application developed as part of the Summer School of Mobile Develop from Yandex.",
+            "developer_contacts": "Developer contacts",
+            "dev_sign": "made by Gribbirg",
+            "go_back": "Go back",
+            "for_contact_with_developer": "Use this for contact with developer:"
+          },
+          "ru": {
+            "app_name": "Список дел",
+            "desc": "Приложение для составления списка дел и отслеживания их выполнения. Поддерживается синхронизация между устройствами (для этого необходимо войти в свой аккаунт Яндекс ID).\n\nЭто приложение с открытым исходным кодом, разработанное в рамках Летней Школы Мобильных Разработки от Яндекса.",
+            "developer_contacts": "Контакты разработчика",
+            "dev_sign": "сделал Gribbirg",
+            "go_back": "Вернуться назад",
+            "for_contact_with_developer": "Для связи с разработчиком используйте:"
+          }
+        }
+      },
+      {
+        "name": "font.size.body",
+        "type": "integer",
+        "value": 16
+      },
+      {
+        "name": "font.size.title",
+        "type": "integer",
+        "value": 20
+      },
+      {
+        "name": "font.size.subhead",
+        "type": "integer",
+        "value": 14
+      },
+      {
+        "name": "font.size.button",
+        "type": "integer",
+        "value": 14
+      },
+      {
+        "name": "margin.small",
+        "type": "integer",
+        "value": 1
+      },
+      {
+        "name": "margin.medium",
+        "type": "integer",
+        "value": 12
+      },
+      {
+        "name": "corner.radius.medium",
+        "type": "integer",
+        "value": 10
+      },
+      {
+        "name": "offsets.shadow.x",
+        "type": "integer",
+        "value": 1
+      },
+      {
+        "name": "offsets.shadow.y",
+        "type": "integer",
+        "value": 4
+      }
+    ],
+    "log_id": "about",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "background": [
+            {
+              "type": "solid",
+              "color": "@{getColorFromDict(theme, app_theme, 'background')}"
+            }
+          ],
+          "items": [
+            {
+              "type": "elevated_card",
+              "background_color": "@{getColorFromDict(theme, app_theme, 'elevated')}",
+              "items": [
+                {
+                  "type": "text_content",
+                  "title": "@{getStringFromDict(text, lang, 'app_name')}",
+                  "body": "@{getStringFromDict(text, lang, 'desc')}"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "content_alignment_vertical": "center",
+              "items": [
+                {
+                  "type": "elevated_card",
+                  "background_color": "@{getColorFromDict(theme, app_theme, 'elevated')}",
+                  "action": {
+                    "url": "https://t.me/gribtodoappyandexsummerschool",
+                    "log_id": "telegram_link"
+                  },
+                  "items": [
+                    {
+                      "type": "image_content",
+                      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Telegram_2019_Logo.svg/2048px-Telegram_2019_Logo.svg.png"
+                    }
+                  ]
+                },
+                {
+                  "type": "state",
+                  "id": "logo.elevation",
+                  "states": [
+                    {
+                      "state_id": "elevated",
+                      "div": {
+                        "type": "elevated_card",
+                        "background_color": "@{getColorFromDict(theme, app_theme, 'elevated')}",
+                        "action": {
+                          "url": "div-action://set_state?state_id=0/logo.elevation/not_elevated",
+                          "log_id": "logo.set_elevation.elevated"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "image_url": "https://raw.githubusercontent.com/Gribbirg/todo-list-app/fifth-task/assets/images/logo.png",
+                            "placeholder_color": "#00000000"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "state_id": "not_elevated",
+                      "div": {
+                        "type": "image",
+                        "image_url": "https://raw.githubusercontent.com/Gribbirg/todo-list-app/fifth-task/assets/images/logo.png",
+                        "placeholder_color": "#00000000",
+                        "action": {
+                          "url": "div-action://set_state?state_id=0/logo.elevation/elevated",
+                          "log_id": "logo.set_elevation.not_elevated"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "elevated_card",
+                  "background_color": "@{getColorFromDict(theme, app_theme, 'elevated')}",
+                  "items": [
+                    {
+                      "type": "image_content",
+                      "url": "@{getStringFromDict(theme, app_theme, 'github_logo_url')}"
+                    }
+                  ],
+                  "action": {
+                    "url": "https://github.com/Gribbirg/todo-list-app",
+                    "log_id": "github_link"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "elevated_card",
+              "background_color": "@{getColorFromDict(theme, app_theme, 'secondary_back')}",
+              "items": [
+                {
+                  "type": "text_content",
+                  "title": "@{getStringFromDict(text, lang, 'developer_contacts')}",
+                  "body": "@{getStringFromDict(text, lang, 'for_contact_with_developer')}",
+                  "links": [
+                    {
+                      "type": "link",
+                      "link_text": "https://t.me/Alex_Gribbirg",
+                      "link": "https://t.me/Alex_Gribbirg",
+                      "log": "dev_teleg"
+                    },
+                    {
+                      "type": "link",
+                      "link_text": "gribkovalexander@gmail.com",
+                      "link": "mailto:gribkovalexander@gmail.com?subject=Todo%20app",
+                      "log": "dev_email"
+                    }
+                  ],
+                  "footer": [
+                    {
+                      "type": "footer_text",
+                      "text": "@{getStringFromDict(text, lang, 'dev_sign')}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "elevated_card",
+              "background_color": "@{getColorFromDict(theme, app_theme, 'blue')}",
+              "width": {
+                "type": "wrap_content"
+              },
+              "alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "text",
+                  "text": "@{getStringFromDict(text, lang, 'go_back')}",
+                  "text_color": "@{getColorFromDict(theme, app_theme, 'white')}",
+                  "width": {
+                    "type": "wrap_content"
+                  },
+                  "font_size": "@{font.size.button}"
+                }
+              ],
+              "action": {
+                "url": "nav-action://back",
+                "log_id": "nav_back"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

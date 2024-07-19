@@ -97,7 +97,9 @@ internal fun NavGraph(
             enterTransition = TransitionAnimations.secondScreenEnter(animationDuration),
             exitTransition = TransitionAnimations.secondScreenExit(animationDuration),
         ) {
-            AboutScreen()
+            AboutScreen(
+                onBack = { navController.popBackStack(Screen.TodoList.route, false) }
+            )
         }
     }
 }
