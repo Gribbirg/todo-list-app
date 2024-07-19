@@ -32,6 +32,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.gribbirg.theme.custom.AppTheme
 import ru.gribbirg.ui.snackbar.SnackBarConstants.ANIM_DELAY
+import ru.gribbirg.ui.snackbar.SnackBarConstants.DEFAULT_DURATION_IN_SECONDS
 import ru.gribbirg.ui.snackbar.SnackBarConstants.MILLIS_IN_SECOND
 import ru.gribbirg.ui.snackbar.SnackBarConstants.TARGET_OFFSET_MULTIPLE
 
@@ -39,7 +40,7 @@ import ru.gribbirg.ui.snackbar.SnackBarConstants.TARGET_OFFSET_MULTIPLE
 fun CountDownSnackBar(
     snackBarData: SnackbarData,
     modifier: Modifier = Modifier,
-    durationInSeconds: Int = 5,
+    durationInSeconds: Int = DEFAULT_DURATION_IN_SECONDS,
 ) {
     val scope = rememberCoroutineScope()
     val inOutAnimDuration = AppTheme.dimensions.animationDurationShort
