@@ -5,6 +5,10 @@
 
 ToDo list application developed at [Yandex summer school](https://yandex.ru/yaintern/schools/mobile).
 
+## Get apk
+
+See [Telegram channel](https://t.me/gribtodoappyandexsummerschool) for getting last release apk.
+
 ## Build
 
 To launch app, create `secrets.properties` file in project root:

@@ -5,6 +5,10 @@
 
 Мобильное приложение со списком дел, написанное в рамках [летней школы Яндекса](https://yandex.ru/yaintern/schools/mobile).
 
+## Загрузить apk
+
+Последняя версия `apk` доступна в [Телергам канале](https://t.me/gribtodoappyandexsummerschool).
+
 ## Сборка
 
 Для сборки приложения, создайте `secrets.properties` файл в корне проекта:
