@@ -31,6 +31,9 @@ import androidx.compose.ui.Modifier
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.gribbirg.theme.custom.AppTheme
+import ru.gribbirg.ui.snackbar.SnackBarConstants.ANIM_DELAY
+import ru.gribbirg.ui.snackbar.SnackBarConstants.MILLIS_IN_SECOND
+import ru.gribbirg.ui.snackbar.SnackBarConstants.TARGET_OFFSET_MULTIPLE
 
 @Composable
 fun CountDownSnackBar(
@@ -42,14 +45,14 @@ fun CountDownSnackBar(
     val inOutAnimDuration = AppTheme.dimensions.animationDurationShort
 
     var shown by remember { mutableStateOf(false) }
-    val totalDuration = remember(durationInSeconds) { durationInSeconds * 1000 } // TODO: magic num
+    val totalDuration = remember(durationInSeconds) { durationInSeconds * MILLIS_IN_SECOND }
     var millisRemaining by remember { mutableIntStateOf(totalDuration) }
 
     LaunchedEffect(snackBarData) {
         shown = true
         while (millisRemaining > 0) {
-            delay(40)
-            millisRemaining -= 40
+            delay(ANIM_DELAY.toLong())
+            millisRemaining -= ANIM_DELAY
         }
         shown = false
         delay(inOutAnimDuration.toLong())
@@ -93,11 +96,11 @@ fun CountDownSnackBar(
     AnimatedVisibility(
         visible = shown,
         enter = slideInVertically(
-            initialOffsetY = { it * 2 },
+            initialOffsetY = { it * TARGET_OFFSET_MULTIPLE },
             animationSpec = tween(durationMillis = inOutAnimDuration)
         ),
         exit = slideOutVertically(
-            targetOffsetY = { it * 2 },
+            targetOffsetY = { it * TARGET_OFFSET_MULTIPLE },
             animationSpec = tween(durationMillis = inOutAnimDuration)
         ),
     ) {
@@ -118,7 +121,7 @@ fun CountDownSnackBar(
             ) {
                 SnackBarCountDown(
                     timerProgress = millisRemaining.toFloat() / totalDuration.toFloat(),
-                    secondsRemaining = (millisRemaining / 1000) + 1, // TODO: magic num
+                    secondsRemaining = durationInSeconds + 1,
                     color = AppTheme.colors.primary,
                     backColor = AppTheme.colors.disable,
                     modifier = Modifier.size(AppTheme.dimensions.sizeItemMedium)

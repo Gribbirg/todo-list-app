@@ -17,9 +17,8 @@ import ru.gribbirg.domain.model.NetworkState
 import ru.gribbirg.domain.model.todo.TodoItem
 import ru.gribbirg.domain.repositories.LoginRepository
 import ru.gribbirg.domain.repositories.TodoItemRepository
+import ru.gribbirg.utils.extensions.currentLocalDateTimeAtUtc
 import ru.gribbirg.utils.extensions.toTimestamp
-import java.time.LocalDateTime
-import java.time.ZoneId
 import javax.inject.Inject
 
 /**
@@ -143,7 +142,7 @@ class TodoItemsListViewModel @Inject constructor(
                                 state.copy(
                                     networkState = TodoItemsListUiState.NetworkState.Updating,
                                     eventState = TodoItemsListUiState.EventState.ShowSnackBar(
-                                        LocalDateTime.now(ZoneId.of("UTC")).toTimestamp(), // TODO
+                                        currentLocalDateTimeAtUtc.toTimestamp(),
                                         networkState.messageId
                                     ),
                                 )
@@ -160,8 +159,8 @@ class TodoItemsListViewModel @Inject constructor(
                 val newItem =
                     item.copy(
                         completed = checked,
-                        editDate = LocalDateTime.now(ZoneId.of("UTC"))
-                    ) // TODO
+                        editDate = currentLocalDateTimeAtUtc
+                    )
                 todoItemRepository.saveItem(newItem)
             }
         }
@@ -172,7 +171,7 @@ class TodoItemsListViewModel @Inject constructor(
             _uiState.update { state ->
                 state.copy(
                     eventState = TodoItemsListUiState.EventState.ItemDeleted(
-                        time = LocalDateTime.now(ZoneId.of("UTC")).toTimestamp(),
+                        time = currentLocalDateTimeAtUtc.toTimestamp(),
                         item = item,
                     )
                 )
@@ -212,7 +211,7 @@ class TodoItemsListViewModel @Inject constructor(
         viewModelScope.launch(coroutineExceptionHandler) {
             todoItemRepository.addItem(
                 item.copy(
-                    editDate = LocalDateTime.now(ZoneId.of("UTC")) // TODO
+                    editDate = currentLocalDateTimeAtUtc,
                 )
             )
         }

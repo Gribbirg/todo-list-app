@@ -33,7 +33,7 @@ internal fun MenuIconButton(
     IconButton(onClick = { menuOpened = true }) {
         Icon(
             Icons.Default.MoreVert,
-            contentDescription = null, // TODO
+            contentDescription = stringResource(id = R.string.menu),
             tint = AppTheme.colors.blue
         )
 

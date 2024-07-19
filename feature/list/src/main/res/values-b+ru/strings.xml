@@ -13,4 +13,5 @@
     <string name="about_app">О приложении</string>
     <string name="item_deleted">Удалено "%1$s"</string>
     <string name="cancel">ОТМЕНИТЬ</string>
+    <string name="menu">Меню</string>
 </resources>

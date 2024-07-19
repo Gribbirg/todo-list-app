@@ -10,6 +10,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import ru.gribbirg.theme.custom.AppTheme
+import ru.gribbirg.ui.snackbar.SnackBarConstants.CIRCLE_BACK_ANGLE
+import ru.gribbirg.ui.snackbar.SnackBarConstants.COUNT_DOWN_CIRCLE_BACKGROUND_ALPHA
+import ru.gribbirg.ui.snackbar.SnackBarConstants.COUNT_DOWN_CIRCLE_START_ANGLE
 
 @Composable
 internal fun SnackBarCountDown(
@@ -30,13 +33,13 @@ internal fun SnackBarCountDown(
                 cap = StrokeCap.Round
             )
             drawCircle(
-                color = backColor.copy(alpha = 0.12f), // TODO: magic num
+                color = backColor.copy(alpha = COUNT_DOWN_CIRCLE_BACKGROUND_ALPHA),
                 style = strokeStyle
             )
             drawArc(
                 color = color,
-                startAngle = -90f, // TODO: magic num
-                sweepAngle = (-360f * timerProgress), // TODO: magic num
+                startAngle = COUNT_DOWN_CIRCLE_START_ANGLE,
+                sweepAngle = (CIRCLE_BACK_ANGLE * timerProgress),
                 useCenter = false,
                 style = strokeStyle
             )

@@ -20,3 +20,6 @@ fun LocalDateTime.toTimestamp(zoneId: ZoneId = ZoneId.of("UTC")) =
 
 fun Long.toLocalDateTime(): LocalDateTime? =
     LocalDateTime.ofInstant(Instant.ofEpochMilli(this), ZoneOffset.UTC)
+
+val currentLocalDateTimeAtUtc
+    get() = LocalDateTime.now(ZoneId.of("UTC"))
