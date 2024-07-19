@@ -36,19 +36,11 @@ class SettingsViewModel @Inject constructor(
     internal val uiState: StateFlow<SettingsUiState> = _uiState.asStateFlow()
 
     private val coroutineLoginExceptionHandler = CoroutineExceptionHandler { _, exception ->
-        _uiState.update { state ->
-            state.copy(
-                loginState = SettingsUiState.LoginState.Error(exception)
-            )
-        }
+        handleLoginError(exception)
     }
 
     private val coroutineSettingsExceptionHandler = CoroutineExceptionHandler { _, exception ->
-        _uiState.update { state ->
-            state.copy(
-                appSettingsState = SettingsUiState.AppSettingsState.Error(exception)
-            )
-        }
+        handleAppSettingsError(exception)
     }
 
     init {
@@ -63,11 +55,7 @@ class SettingsViewModel @Inject constructor(
                 .map { settings ->
                     SettingsUiState.AppSettingsState.Loaded(settings)
                 }.catch { e ->
-                    _uiState.update { state ->
-                        state.copy(
-                            appSettingsState = SettingsUiState.AppSettingsState.Error(e)
-                        )
-                    }
+                    handleAppSettingsError(e)
                 }
                 .stateIn(
                     viewModelScope,
@@ -92,11 +80,7 @@ class SettingsViewModel @Inject constructor(
                         ?: SettingsUiState.LoginState.Unauthorized
                 }
                 .catch { e ->
-                    _uiState.update { state ->
-                        state.copy(
-                            loginState = SettingsUiState.LoginState.Error(e)
-                        )
-                    }
+                    handleLoginError(e)
                 }
                 .stateIn(
                     viewModelScope,
@@ -118,11 +102,7 @@ class SettingsViewModel @Inject constructor(
             when (result) {
                 is YandexAuthResult.Success -> loginRepository.registerUser(result.token.value)
 
-                is YandexAuthResult.Failure -> _uiState.update { state ->
-                    state.copy(
-                        loginState = SettingsUiState.LoginState.Error(LoginException())
-                    )
-                }
+                is YandexAuthResult.Failure -> handleLoginError(LoginException())
 
                 is YandexAuthResult.Cancelled -> {}
             }
@@ -138,6 +118,22 @@ class SettingsViewModel @Inject constructor(
     internal fun onAppSettingsChange(userSettings: UserSettings) {
         viewModelScope.launch(coroutineSettingsExceptionHandler) {
             settingsHandler.saveSettings(userSettings)
+        }
+    }
+
+    private fun handleLoginError(exception: Throwable) {
+        _uiState.update { state ->
+            state.copy(
+                loginState = SettingsUiState.LoginState.Error(exception)
+            )
+        }
+    }
+
+    private fun handleAppSettingsError(exception: Throwable) {
+        _uiState.update { state ->
+            state.copy(
+                appSettingsState = SettingsUiState.AppSettingsState.Error(exception)
+            )
         }
     }
 }
