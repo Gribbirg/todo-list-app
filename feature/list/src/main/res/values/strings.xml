@@ -2,8 +2,8 @@
 <resources>
     <string name="todo_items_list">Todo list</string>
     <string name="done_count">Done — %1$d</string>
-    <string name="show">Show</string>
-    <string name="hide">Hide</string>
+    <string name="show_completed">Show completed</string>
+    <string name="hide_completed">Hide completed</string>
     <string name="add">Add</string>
     <string name="new_item">New</string>
     <string name="exit_from_acc">Exit from account</string>
@@ -14,4 +14,14 @@
     <string name="item_deleted">Deleted "%1$s"</string>
     <string name="cancel">UNDO</string>
     <string name="menu">Menu</string>
+    <string name="done">Done</string>
+    <string name="done_not">Not done</string>
+    <string name="perform">Perform</string>
+    <string name="fail">Fail</string>
+    <string name="edit">Edit</string>
+    <string name="deadline_desc_template">%1$s deadline</string>
+    <string name="importance_desc_template">%1$s importance</string>
+    <string name="done_count_inverse">%1$d done</string>
+    <string name="delete">Delete</string>
+    <string name="new_item_desc">New todo</string>
 </resources>

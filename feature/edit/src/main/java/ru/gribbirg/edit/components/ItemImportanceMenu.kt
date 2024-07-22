@@ -124,7 +124,7 @@ private fun ImportanceContent(
     importance.logoId?.let {
         Icon(
             painterResource(id = it),
-            contentDescription = stringResource(id = importance.nameId),
+            contentDescription = null,
             modifier = Modifier
                 .shadow(
                     AppTheme.dimensions.shadowElevationSmall,

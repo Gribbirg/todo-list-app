@@ -15,6 +15,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import ru.gribbirg.domain.model.user.ThemeSettings
@@ -55,12 +58,16 @@ private fun ThemeSelectorRowRadioRow(
 ) {
     Row(
         modifier = modifier
-            .clickable(onClick = onSelect),
+            .clickable(onClick = onSelect)
+            .semantics(mergeDescendants = true) {
+                this.selected = selected
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(
             selected = selected,
             onClick = onSelect,
+            modifier = Modifier.clearAndSetSemantics { },
             colors = RadioButtonDefaults.colors(
                 selectedColor = AppTheme.colors.blue,
                 unselectedColor = AppTheme.colors.gray,

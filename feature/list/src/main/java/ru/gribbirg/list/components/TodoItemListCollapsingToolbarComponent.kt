@@ -25,8 +25,11 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,6 +63,7 @@ internal fun TodoItemListCollapsingToolbar(
 ) {
     val topBarState = rememberCollapsingToolbarScaffoldState()
     val systemUiController = rememberSystemUiController()
+    val context = LocalContext.current
 
     CollapsingToolbarScaffold(modifier = Modifier
         .fillMaxSize()
@@ -143,7 +147,11 @@ internal fun TodoItemListCollapsingToolbar(
                             top = 16.dp,
                             end = 16.dp,
                             bottom = 20.dp
-                        ),
+                        )
+                        .semantics {
+                            contentDescription =
+                                context.getString(R.string.done_count_inverse, doneCount)
+                        },
                     color = countColor,
                     style = AppTheme.typography.body
                 )
@@ -194,12 +202,12 @@ private fun FilterIcon(filterState: TodoItemsListUiState.ListState.FilterState?)
     if (filterState != null && filterState == TodoItemsListUiState.ListState.FilterState.ALL) {
         Icon(
             painter = painterResource(id = R.drawable.baseline_visibility_24),
-            contentDescription = stringResource(id = R.string.show)
+            contentDescription = stringResource(id = R.string.hide_completed)
         )
     } else {
         Icon(
             painter = painterResource(id = R.drawable.baseline_visibility_off_24),
-            contentDescription = stringResource(id = R.string.hide)
+            contentDescription = stringResource(id = R.string.show_completed)
         )
     }
 }

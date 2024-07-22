@@ -54,7 +54,7 @@ internal fun MenuIconButton(
                 leadingIcon = {
                     Icon(
                         Icons.Default.Settings,
-                        contentDescription = stringResource(id = R.string.settings),
+                        contentDescription = null,
                         tint = AppTheme.colors.primary
                     )
                 }
@@ -71,7 +71,7 @@ internal fun MenuIconButton(
                 leadingIcon = {
                     Icon(
                         Icons.Default.Info,
-                        contentDescription = stringResource(id = R.string.about_app),
+                        contentDescription = null,
                         tint = AppTheme.colors.primary,
                     )
                 }

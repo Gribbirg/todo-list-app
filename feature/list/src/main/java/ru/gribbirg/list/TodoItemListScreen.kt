@@ -38,6 +38,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
@@ -225,6 +230,8 @@ private fun ListLoadedContent(
     modifier: Modifier = Modifier,
     bottomPadding: Dp = 0.dp,
 ) {
+    val context = LocalContext.current
+
     LazyColumn(
         modifier = modifier,
         userScrollEnabled = true,
@@ -291,13 +298,19 @@ private fun ListLoadedContent(
                         .fillMaxWidth()
                         .shadow(AppTheme.dimensions.shadowElevationSmall)
                         .background(AppTheme.colors.secondaryBack)
-                        .clickable { toEditItemScreen(null) },
+                        .clickable { toEditItemScreen(null) }
+                        .semantics(mergeDescendants = true) {
+                            contentDescription = context.getString(R.string.new_item_desc)
+                            role = Role.Button
+                        },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Spacer(modifier = Modifier.width(AppTheme.dimensions.paddingExtraExtraLarge))
                     Text(
                         text = stringResource(id = R.string.new_item),
-                        modifier = Modifier.padding(AppTheme.dimensions.paddingLarge),
+                        modifier = Modifier
+                            .padding(AppTheme.dimensions.paddingLarge)
+                            .clearAndSetSemantics { },
                         color = AppTheme.colors.secondary,
                         style = AppTheme.typography.body
                     )

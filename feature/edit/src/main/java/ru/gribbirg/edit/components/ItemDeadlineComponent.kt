@@ -18,6 +18,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import ru.gribbirg.theme.custom.AppTheme
 import ru.gribbirg.todoapp.edit.R
 import ru.gribbirg.ui.previews.DefaultPreview
@@ -61,6 +63,11 @@ internal fun ItemDeadline(
                 onClick = {
                     onClick()
                     dialogOpened = true
+                },
+                modifier = Modifier.clearAndSetSemantics {
+                    if (deadline != null) {
+                        contentDescription = dateFormatter.format(deadline)
+                    }
                 },
                 colors = ButtonDefaults.textButtonColors(
                     contentColor = AppTheme.colors.blue

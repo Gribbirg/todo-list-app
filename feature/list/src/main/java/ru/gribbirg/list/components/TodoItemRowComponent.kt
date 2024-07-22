@@ -14,9 +14,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import ru.gribbirg.domain.model.todo.TodoItem
 import ru.gribbirg.theme.custom.AppTheme
+import ru.gribbirg.todoapp.list.R
 import ru.gribbirg.ui.previews.DefaultPreview
 import ru.gribbirg.ui.previews.FontScalePreviews
 import ru.gribbirg.ui.previews.ItemPreviewTemplate
@@ -36,6 +42,8 @@ internal fun TodoItemRow(
     modifier: Modifier = Modifier,
     dismissOnCheck: Boolean = false,
 ) {
+    val context = LocalContext.current
+
     BoxWithSidesForShadow(
         sides = Sides.LEFT_AND_RIGHT,
         modifier = modifier,
@@ -45,6 +53,35 @@ internal fun TodoItemRow(
             onChecked = { onChecked(true) },
             onDelete = onDeleted,
             dismissOnCheck = dismissOnCheck,
+            modifier = Modifier
+                .semantics(mergeDescendants = true) {
+                    stateDescription = if (item.completed)
+                        context.getString(R.string.done)
+                    else
+                        context.getString(R.string.done_not)
+
+                    this[SemanticsActions.CustomActions] = listOf(
+                        if (item.completed) {
+                            CustomAccessibilityAction(context.getString(R.string.perform)) {
+                                onChecked(true)
+                                true
+                            }
+                        } else {
+                            CustomAccessibilityAction(context.getString(R.string.fail)) {
+                                onChecked(false)
+                                true
+                            }
+                        },
+                        CustomAccessibilityAction(context.getString(R.string.edit)) {
+                            onInfoClicked()
+                            true
+                        },
+                        CustomAccessibilityAction(context.getString(R.string.delete)) {
+                            onDeleted()
+                            true
+                        }
+                    )
+                }
         ) {
             TodoItemRowContent(
                 item = item,

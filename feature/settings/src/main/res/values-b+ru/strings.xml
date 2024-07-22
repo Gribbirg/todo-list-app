@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="login">Войти</string>
-    <string name="logout">Выйти</string>
+    <string name="login_to_acc">Войти в аккаунт</string>
+    <string name="logout_of_acc">Выйти из аккаунта</string>
 </resources>

@@ -76,7 +76,7 @@ internal fun ItemImportanceSelector(
             if (importance.logoId != null) {
                 Icon(
                     painter = painterResource(id = importance.logoId!!),
-                    contentDescription = stringResource(id = importance.nameId),
+                    contentDescription = null,
                     modifier = Modifier,
                     tint = contentColor,
                 )

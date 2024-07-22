@@ -118,12 +118,12 @@ private fun UnauthorizedContent(
     ) {
         Icon(
             painterResource(id = R.drawable.baseline_login_24),
-            contentDescription = stringResource(id = R.string.login),
+            contentDescription = stringResource(id = R.string.login_to_acc),
             tint = AppTheme.colors.blue
         )
         Spacer(modifier = Modifier.width(AppTheme.dimensions.paddingMedium))
         Text(
-            text = stringResource(id = R.string.login),
+            text = stringResource(id = R.string.login_to_acc),
             style = AppTheme.typography.title,
             color = AppTheme.colors.blue
         )
@@ -150,7 +150,7 @@ private fun UserContent(
         IconButton(onClick = onLogout) {
             Icon(
                 painterResource(id = R.drawable.baseline_logout_24),
-                contentDescription = stringResource(id = R.string.logout),
+                contentDescription = stringResource(id = R.string.logout_of_acc),
                 tint = AppTheme.colors.blue,
             )
         }

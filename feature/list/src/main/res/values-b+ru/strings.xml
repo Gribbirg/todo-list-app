@@ -3,8 +3,8 @@
     <string name="exit_from_acc">Выйти из аккаунта</string>
     <string name="login">Войти в аккаунт</string>
     <string name="add">Добавить</string>
-    <string name="show">Показать</string>
-    <string name="hide">Скрыть</string>
+    <string name="show_completed">Показать выполненые</string>
+    <string name="hide_completed">Скрыть выполненые</string>
     <string name="todo_items_list">Мои дела</string>
     <string name="done_count">Выполнено — %1d</string>
     <string name="new_item">Новое</string>
@@ -14,4 +14,15 @@
     <string name="item_deleted">Удалено "%1$s"</string>
     <string name="cancel">ОТМЕНИТЬ</string>
     <string name="menu">Меню</string>
+    <string name="done">Выполнено</string>
+    <string name="done_not">Не выполнено</string>
+    <string name="perform">Выполнить</string>
+<!--  TODO: подумать  -->
+    <string name="fail">Не выполнить</string>
+    <string name="edit">Изменить</string>
+    <string name="deadline_desc_template">%1$s срок выполнения</string>
+    <string name="importance_desc_template">%1$s важность</string>
+    <string name="done_count_inverse">%1$d выполнено</string>
+    <string name="delete">Удалить</string>
+    <string name="new_item_desc">Новое дело</string>
 </resources>

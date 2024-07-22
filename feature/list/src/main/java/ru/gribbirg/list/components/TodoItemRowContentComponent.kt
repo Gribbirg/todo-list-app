@@ -23,15 +23,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import ru.gribbirg.domain.model.todo.TodoImportance
 import ru.gribbirg.domain.model.todo.TodoItem
 import ru.gribbirg.theme.custom.AppTheme
+import ru.gribbirg.todoapp.list.R
 import ru.gribbirg.ui.previews.DefaultPreview
 import ru.gribbirg.ui.previews.FontScalePreviews
 import ru.gribbirg.ui.previews.ItemPreviewTemplate
@@ -54,6 +59,8 @@ internal fun TodoItemRowContent(
     onInfoClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+
     Row(
         modifier = modifier
     ) {
@@ -97,7 +104,10 @@ internal fun TodoItemRowContent(
 private fun ImportanceIcon(importance: TodoImportance, modifier: Modifier = Modifier) {
     Icon(
         painter = painterResource(id = importance.logoId!!),
-        contentDescription = stringResource(id = importance.nameId),
+        contentDescription = stringResource(
+            R.string.importance_desc_template,
+            stringResource(id = importance.nameId)
+        ),
         modifier = modifier,
         tint = importance.colorId?.let { colorResource(id = it) }
             ?: AppTheme.colors.gray
@@ -105,9 +115,10 @@ private fun ImportanceIcon(importance: TodoImportance, modifier: Modifier = Modi
 }
 
 @Composable
-private fun InfoIconButton(onInfoClicked: () -> Unit) {
+private fun InfoIconButton(onInfoClicked: () -> Unit, modifier: Modifier = Modifier) {
     IconButton(
         onClick = { onInfoClicked() },
+        modifier = modifier.clearAndSetSemantics { },
         colors = IconButtonDefaults.iconButtonColors(
             contentColor = AppTheme.colors.tertiary
         )
@@ -119,9 +130,15 @@ private fun InfoIconButton(onInfoClicked: () -> Unit) {
 @Composable
 private fun DeadlineText(deadline: LocalDate, modifier: Modifier = Modifier) {
     val dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
+    val dateText = dateFormatter.format(deadline)
+
+    val context = LocalContext.current
+
     Text(
-        text = dateFormatter.format(deadline),
-        modifier = modifier,
+        text = dateText,
+        modifier = modifier.semantics {
+            contentDescription = context.getString(R.string.deadline_desc_template, dateText)
+        },
         color = AppTheme.colors.tertiary,
         style = AppTheme.typography.subhead
     )
@@ -157,7 +174,7 @@ private fun ItemCheckBox(
     Checkbox(
         checked = completed,
         onCheckedChange = { onChecked(it) },
-        modifier = modifier,
+        modifier = modifier.clearAndSetSemantics { },
         colors =
         if (highImportance)
             CheckboxColors(
