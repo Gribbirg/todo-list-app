@@ -61,7 +61,7 @@ internal fun TodoItemRow(
                         context.getString(R.string.done_not)
 
                     this[SemanticsActions.CustomActions] = listOf(
-                        if (item.completed) {
+                        if (!item.completed) {
                             CustomAccessibilityAction(context.getString(R.string.perform)) {
                                 onChecked(true)
                                 true

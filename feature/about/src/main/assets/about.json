@@ -37,7 +37,8 @@
       },
       "$width": "width",
       "$items": "items",
-      "$action": "action"
+      "$action": "action",
+      "$accessibility": "accessibility"
     },
     "text_content": {
       "type": "container",
@@ -98,7 +99,8 @@
       },
       "text_color": "@{getColorFromDict(theme, app_theme, 'secondary')}",
       "$text": "text"
-    }
+    },
+    "$accessibility": "accessibility"
   },
   "card": {
     "variables": [
@@ -140,15 +142,29 @@
             "developer_contacts": "Developer contacts",
             "dev_sign": "made by Gribbirg",
             "go_back": "Go back",
-            "for_contact_with_developer": "Use this for contact with developer:"
+            "for_contact_with_developer": "Use this for contact with developer:",
+            "app_telegram": "Telegram chanel of app",
+            "app_gh": "GitHub repository of app",
+            "dev_telegram": "Telegram of developer: @Gribbirg",
+            "dev_mail": "Email of developer: gribkovalexandex@gmail.com",
+            "in_container": "In container",
+            "out_of_container": "Out of container",
+            "app_logo": "Application logo"
           },
           "ru": {
             "app_name": "Список дел",
-            "desc": "Приложение для составления списка дел и отслеживания их выполнения. Поддерживается синхронизация между устройствами (для этого необходимо войти в свой аккаунт Яндекс ID).\n\nЭто приложение с открытым исходным кодом, разработанное в рамках Летней Школы Мобильных Разработки от Яндекса.",
+            "desc": "Приложение для составления списка дел и отслеживания их выполнения. Поддерживается синхронизация между устройствами (для этого необходимо войти в свой аккаунт Яндекс ID).\n\nЭто приложение с открытым исходным кодом, разработанное в рамках Летней Школы Мобильной Разработки от Яндекса.",
             "developer_contacts": "Контакты разработчика",
             "dev_sign": "сделал Gribbirg",
             "go_back": "Вернуться назад",
-            "for_contact_with_developer": "Для связи с разработчиком используйте:"
+            "for_contact_with_developer": "Для связи с разработчиком используйте:",
+            "app_telegram": "Телеграмм канал приложения",
+            "app_gh": "GitHub репозиторий приложения",
+            "dev_telegram": "Телеграм разработчика: @Gribbirg",
+            "dev_mail": "Почта разработчика: gribkovalexandex@gmail.com",
+            "in_container": "В контейнере",
+            "out_of_container": "Не в контейнере",
+            "app_logo": "Логотип приложения"
           }
         }
       },
@@ -239,7 +255,11 @@
                       "type": "image_content",
                       "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Telegram_2019_Logo.svg/2048px-Telegram_2019_Logo.svg.png"
                     }
-                  ]
+                  ],
+                  "accessibility": {
+                    "type": "button",
+                    "description": "@{getStringFromDict(text, lang, 'app_telegram')}"
+                  }
                 },
                 {
                   "type": "state",
@@ -260,7 +280,13 @@
                             "image_url": "https://raw.githubusercontent.com/Gribbirg/todo-list-app/fifth-task/assets/images/logo.png",
                             "placeholder_color": "#00000000"
                           }
-                        ]
+                        ],
+                        "accessibility": {
+                          "type": "button",
+                          "description": "@{getStringFromDict(text, lang, 'app_logo')}",
+                          "state_description": "@{getStringFromDict(text, lang, 'in_container')}",
+                          "mode": "merge"
+                        }
                       }
                     },
                     {
@@ -272,6 +298,11 @@
                         "action": {
                           "url": "div-action://set_state?state_id=0/logo.elevation/elevated",
                           "log_id": "logo.set_elevation.not_elevated"
+                        },
+                        "accessibility": {
+                          "type": "button",
+                          "description": "@{getStringFromDict(text, lang, 'app_logo')}",
+                          "state_description": "@{getStringFromDict(text, lang, 'out_of_container')}"
                         }
                       }
                     }
@@ -289,6 +320,10 @@
                   "action": {
                     "url": "https://github.com/Gribbirg/todo-list-app",
                     "log_id": "github_link"
+                  },
+                  "accessibility": {
+                    "type": "button",
+                    "description": "@{getStringFromDict(text, lang, 'app_gh')}"
                   }
                 }
               ]
@@ -306,13 +341,21 @@
                       "type": "link",
                       "link_text": "https://t.me/Alex_Gribbirg",
                       "link": "https://t.me/Alex_Gribbirg",
-                      "log": "dev_teleg"
+                      "log": "dev_teleg",
+                      "accessibility": {
+                        "type": "button",
+                        "description": "@{getStringFromDict(text, lang, 'dev_telegram')}"
+                      }
                     },
                     {
                       "type": "link",
                       "link_text": "gribkovalexander@gmail.com",
                       "link": "mailto:gribkovalexander@gmail.com?subject=Todo%20app",
-                      "log": "dev_email"
+                      "log": "dev_email",
+                      "accessibility": {
+                        "type": "button",
+                        "description": "@{getStringFromDict(text, lang, 'dev_mail')}"
+                      }
                     }
                   ],
                   "footer": [
@@ -345,6 +388,10 @@
               "action": {
                 "url": "nav-action://back",
                 "log_id": "nav_back"
+              },
+              "accessibility": {
+                "type": "button",
+                "mode": "merge"
               }
             }
           ]

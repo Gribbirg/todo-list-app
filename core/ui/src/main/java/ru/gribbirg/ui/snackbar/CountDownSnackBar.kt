@@ -28,6 +28,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.gribbirg.theme.custom.AppTheme
@@ -106,7 +112,9 @@ fun CountDownSnackBar(
         ),
     ) {
         Snackbar(
-            modifier = modifier.padding(AppTheme.dimensions.paddingMediumLarge),
+            modifier = modifier
+                .padding(AppTheme.dimensions.paddingMediumLarge)
+                .semantics { role = Role.Tab },
             action = actionComposable,
             actionOnNewLine = false,
             dismissAction = dismissActionComposable,
@@ -117,6 +125,9 @@ fun CountDownSnackBar(
             shape = SnackbarDefaults.shape,
         ) {
             Row(
+                modifier = Modifier.semantics(mergeDescendants = true) {
+                    liveRegion = LiveRegionMode.Assertive
+                },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingMediumLarge)
             ) {
@@ -125,7 +136,9 @@ fun CountDownSnackBar(
                     secondsRemaining = (millisRemaining / MILLIS_IN_SECOND) + 1,
                     color = AppTheme.colors.primary,
                     backColor = AppTheme.colors.disable,
-                    modifier = Modifier.size(AppTheme.dimensions.sizeItemMedium)
+                    modifier = Modifier
+                        .size(AppTheme.dimensions.sizeItemMedium)
+                        .clearAndSetSemantics { }
                 )
                 Text(
                     snackBarData.visuals.message,
