@@ -123,7 +123,7 @@ internal fun TodoItemListCollapsingToolbar(
                     .padding(
                         start = leftPadding,
                         top = 16.dp,
-                        end = 16.dp,
+                        end = 140.dp,
                         bottom = 20.dp
                     ),
                 fontSize = textSize,
@@ -145,7 +145,7 @@ internal fun TodoItemListCollapsingToolbar(
                         .padding(
                             start = leftPadding,
                             top = 16.dp,
-                            end = 16.dp,
+                            end = 140.dp,
                             bottom = 20.dp
                         )
                         .semantics {

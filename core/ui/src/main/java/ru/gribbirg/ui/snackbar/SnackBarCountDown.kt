@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import ru.gribbirg.theme.custom.AppTheme
+import ru.gribbirg.ui.extensions.scaledSp
 import ru.gribbirg.ui.snackbar.SnackBarConstants.CIRCLE_BACK_ANGLE
 import ru.gribbirg.ui.snackbar.SnackBarConstants.COUNT_DOWN_CIRCLE_BACKGROUND_ALPHA
 import ru.gribbirg.ui.snackbar.SnackBarConstants.COUNT_DOWN_CIRCLE_START_ANGLE
@@ -48,6 +49,7 @@ internal fun SnackBarCountDown(
             text = secondsRemaining.toString(),
             style = AppTheme.typography.body,
             color = color,
+            fontSize = AppTheme.typography.body.fontSize.value.toInt().scaledSp
         )
     }
 }
