@@ -7,10 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -21,6 +18,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.yandex.div.core.view2.Div2View
 import ru.gribbirg.theme.custom.AppTheme
 import ru.gribbirg.todoapp.about.databinding.FragmentContainerDivBinding
+import ru.gribbirg.ui.components.AnimatedTopAppBar
 import ru.gribbirg.ui.components.CloseButton
 
 @Composable
@@ -34,12 +32,13 @@ fun AboutScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AboutScreenContent(
     createDivView: (Context, LifecycleOwner, () -> Unit, Locale, darkTheme: Boolean) -> Div2View,
     onBack: () -> Unit,
 ) {
+    val scrollState = rememberScrollState()
+
     val context = LocalContext.current
     val lifeCycleOwner = LocalLifecycleOwner.current
     val darkTheme = AppTheme.colors.isDark
@@ -47,20 +46,17 @@ private fun AboutScreenContent(
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            AnimatedTopAppBar(
+                scrollState = scrollState,
                 title = {},
                 navigationIcon = {
                     CloseButton(onClick = onBack)
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = AppTheme.colors.primaryBack,
-                    navigationIconContentColor = AppTheme.colors.blue,
-                )
+                }
             )
         }
     ) { paddingValues ->
         Column(
-            modifier = Modifier.verticalScroll(rememberScrollState())
+            modifier = Modifier.verticalScroll(scrollState)
         ) {
             AndroidViewBinding(
                 FragmentContainerDivBinding::inflate,

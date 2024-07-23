@@ -1,4 +1,5 @@
 import gradle.kotlin.dsl.accessors._8e8a6dd48b2094ffcd3758431423791d.debugImplementation
+import gradle.kotlin.dsl.accessors._8e8a6dd48b2094ffcd3758431423791d.implementation
 
 plugins {
     id("com.android.library")
@@ -48,6 +49,7 @@ dependencies {
     // Serialization
     implementation(libs.kotlinx.serialization.json)
 
+    implementation(libs.accompanist.systemuicontroller)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

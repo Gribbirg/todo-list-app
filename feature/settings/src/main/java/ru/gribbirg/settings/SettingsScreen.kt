@@ -7,11 +7,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -25,6 +22,7 @@ import ru.gribbirg.domain.model.user.UserSettings
 import ru.gribbirg.settings.components.AppSettingsContent
 import ru.gribbirg.settings.components.LoginRow
 import ru.gribbirg.theme.custom.AppTheme
+import ru.gribbirg.ui.components.AnimatedTopAppBar
 import ru.gribbirg.ui.components.CloseButton
 import ru.gribbirg.ui.previews.DefaultPreview
 import ru.gribbirg.ui.previews.LanguagePreviews
@@ -49,7 +47,6 @@ fun SettingsScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SettingsScreenContent(
     uiState: SettingsUiState,
@@ -58,23 +55,23 @@ private fun SettingsScreenContent(
     onLogout: () -> Unit,
     onAppSettingsChange: (UserSettings) -> Unit,
 ) {
+    val scrollState = rememberScrollState()
+
     Scaffold(
         topBar = {
-            TopAppBar(
+            AnimatedTopAppBar(
+                scrollState = scrollState,
                 title = { },
                 navigationIcon = {
                     CloseButton(onClick = onBack)
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = AppTheme.colors.primaryBack,
-                )
             )
         }
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
                 .padding(
                     start = AppTheme.dimensions.paddingSmall,
                     end = AppTheme.dimensions.paddingSmall,

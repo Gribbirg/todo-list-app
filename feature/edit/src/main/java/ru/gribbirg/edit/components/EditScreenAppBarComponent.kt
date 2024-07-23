@@ -1,9 +1,6 @@
 package ru.gribbirg.edit.components
 
-import androidx.compose.animation.Animatable
-import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,28 +10,19 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import kotlinx.coroutines.launch
 import ru.gribbirg.theme.custom.AppTheme
 import ru.gribbirg.todoapp.edit.R
+import ru.gribbirg.ui.components.AnimatedTopAppBar
 import ru.gribbirg.ui.components.CloseButton
 import ru.gribbirg.ui.previews.BooleanPreviewParameterProvider
 import ru.gribbirg.ui.previews.DefaultPreview
@@ -45,7 +33,6 @@ import ru.gribbirg.ui.previews.TextPreviewParameterProvider
 import ru.gribbirg.ui.previews.ThemePreviews
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 internal fun EditScreenAppBarComponent(
     focusManager: FocusManager,
     onSave: () -> Unit,
@@ -53,29 +40,8 @@ internal fun EditScreenAppBarComponent(
     saveEnabled: Boolean,
     scrollState: ScrollState,
 ) {
-    val systemUiController = rememberSystemUiController()
-
-    val appBarColor = AppTheme.colors.primaryBack
-    val scrolledAppBarColor = AppTheme.colors.appBar
-
-    val color = remember {
-        Animatable(if (scrollState.canScrollBackward) appBarColor else scrolledAppBarColor)
-    }
-
-    val elevationNo = AppTheme.dimensions.shadowElevationNo.value
-    val elevationFull = AppTheme.dimensions.shadowElevationLarge.value
-
-    val elevation = remember {
-        Animatable(if (scrollState.canScrollBackward) elevationFull else elevationNo)
-    }
-
-    LaunchedEffect(scrollState.canScrollBackward) {
-        launch { elevation.animateTo(if (scrollState.canScrollBackward) elevationFull else elevationNo) }
-        launch { color.animateTo(if (scrollState.canScrollBackward) scrolledAppBarColor else appBarColor) }
-    }
-    systemUiController.setStatusBarColor(color.value)
-
-    TopAppBar(
+    AnimatedTopAppBar(
+        scrollState = scrollState,
         title = {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -102,15 +68,6 @@ internal fun EditScreenAppBarComponent(
                 Spacer(modifier = Modifier.width(AppTheme.dimensions.paddingSmall))
             }
         },
-        modifier = Modifier
-            .shadow(
-                elevation = elevation.value.dp
-            )
-            .background(color.value),
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Transparent,
-            scrolledContainerColor = Color.Transparent
-        ),
         navigationIcon = {
             CloseButton(onClick = onClose)
         }
