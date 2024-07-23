@@ -34,11 +34,11 @@ fun AnimatedTopAppBar(
 ) {
     val systemUiController = rememberSystemUiController()
 
-    val color = remember {
-        Animatable(if (scrollState.canScrollBackward) startColor else scrolledColor)
+    val color = remember(startColor) {
+        Animatable(if (scrollState.canScrollBackward) scrolledColor else startColor)
     }
     val elevation = remember {
-        Animatable(if (scrollState.canScrollBackward) startElevation else scrolledElevation)
+        Animatable(if (scrollState.canScrollBackward) scrolledElevation else startElevation)
     }
 
     LaunchedEffect(scrollState.canScrollBackward) {
