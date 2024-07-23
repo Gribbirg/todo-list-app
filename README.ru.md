@@ -2,6 +2,7 @@
 
 [![en](https://img.shields.io/badge/lang-en-blue.svg)](README.md)
 [![ru](https://img.shields.io/badge/lang-ru-red.svg)](README.ru.md)
+[![wakatime](https://wakatime.com/badge/user/1d230f86-133e-401a-ace9-7805218f18d8/project/65aeb806-8e59-4e25-b954-7ae03f15a76e.svg)](https://wakatime.com/badge/user/1d230f86-133e-401a-ace9-7805218f18d8/project/65aeb806-8e59-4e25-b954-7ae03f15a76e)
 
 Мобильное приложение со списком дел, написанное в рамках [летней школы Яндекса](https://yandex.ru/yaintern/schools/mobile).
 
