@@ -16,6 +16,7 @@ import ru.gribbirg.db.toLocalDbItem
 import ru.gribbirg.domain.model.NetworkState
 import ru.gribbirg.domain.model.todo.TodoItem
 import ru.gribbirg.domain.repositories.LoginRepository
+import ru.gribbirg.domain.repositories.TodoItemRepository
 import ru.gribbirg.domain.utils.ItemsListsMerger
 import ru.gribbirg.domain.utils.SystemDataProvider
 import ru.gribbirg.network.ApiResponse
@@ -37,7 +38,7 @@ class TodoItemRepositoryImpl @Inject constructor(
     private val loginRepository: LoginRepository,
     private val listsMerger: ItemsListsMerger,
     @BackgroundOneThreadDispatcher private val dispatcher: CoroutineDispatcher,
-) : ru.gribbirg.domain.repositories.TodoItemRepository {
+) : TodoItemRepository {
 
     private val _networkStateFlow: MutableStateFlow<NetworkState> =
         MutableStateFlow(NetworkState.Success)

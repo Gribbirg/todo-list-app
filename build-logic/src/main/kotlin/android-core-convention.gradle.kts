@@ -1,6 +1,3 @@
-import gradle.kotlin.dsl.accessors._8e8a6dd48b2094ffcd3758431423791d.debugImplementation
-import gradle.kotlin.dsl.accessors._8e8a6dd48b2094ffcd3758431423791d.implementation
-
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -15,6 +12,10 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = AndroidConst.COMPOSE_COMPILER_VERSION
     }
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
 
 dependencies {
@@ -48,6 +49,13 @@ dependencies {
 
     // Serialization
     implementation(libs.kotlinx.serialization.json)
+
+    // Testing
+    testImplementation(libs.junit)
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.androidx.junit)
+    testImplementation(libs.androidx.ui.test.junit4)
+    testImplementation(libs.mockk)
 
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.androidx.core.ktx)

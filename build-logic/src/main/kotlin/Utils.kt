@@ -11,6 +11,8 @@ fun BaseExtension.baseAndroidConfig() {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        testInstrumentationRunner("androidx.test.runner.AndroidJUnitRunner")
     }
 
     signingConfigs {
