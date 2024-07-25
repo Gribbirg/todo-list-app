@@ -56,6 +56,7 @@ dependencies {
     testImplementation(libs.androidx.junit)
     testImplementation(libs.androidx.ui.test.junit4)
     testImplementation(libs.mockk)
+    testImplementation(libs.ktor.mock)
 
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.androidx.core.ktx)

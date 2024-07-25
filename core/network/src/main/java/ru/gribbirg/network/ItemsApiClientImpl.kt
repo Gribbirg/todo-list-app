@@ -12,9 +12,8 @@ import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import io.ktor.serialization.ContentConvertException
+import io.ktor.serialization.JsonConvertException
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerializationException
@@ -29,11 +28,11 @@ import ru.gribbirg.network.dto.TodoItemRequestDto
 import ru.gribbirg.network.dto.TodoItemResponseDto
 import ru.gribbirg.network.dto.TodoListRequestDto
 import ru.gribbirg.network.dto.TodoListResponseDto
+import ru.gribbirg.utils.extensions.currentLocalDateTimeAtUtc
 import ru.gribbirg.utils.extensions.toLocalDateTime
 import ru.gribbirg.utils.extensions.toTimestamp
 import java.io.IOException
 import java.time.LocalDateTime
-import java.time.ZoneId
 import javax.inject.Inject
 
 /**
@@ -42,24 +41,24 @@ import javax.inject.Inject
 @ApiClientScope
 internal class ItemsApiClientImpl @Inject constructor(
     private val dataStore: KeyValueDataSaver,
-    @ApiClientImplQualifier private val coroutineDispatcher: CoroutineDispatcher,
-    @ApiClientImplQualifier private val client: HttpClient = mainHttpClient,
+    @ApiClientImplQualifier private val client: HttpClient,
 ) : ItemsApiClient {
 
     private var lastRevision = -1
-        private set(value) {
-            CoroutineScope(coroutineDispatcher).launch {
-                dataStore.save(NetworkConstants.LAST_REVISION, value.toString())
-            }
-            field = value
-        }
+
     override var lastUpdateTime: LocalDateTime = (0L).toLocalDateTime()!!
-        private set(value) {
-            CoroutineScope(coroutineDispatcher).launch {
-                dataStore.save(NetworkConstants.LAST_UPDATE_TIME, value.toTimestamp().toString())
-            }
-            field = value
-        }
+        private set
+
+    private suspend fun setLastRevision(value: Int) {
+        lastRevision = value
+        dataStore.save(NetworkConstants.LAST_REVISION, value.toString())
+    }
+
+    private suspend fun setLastUpdateTimeNow() {
+        val value = currentLocalDateTimeAtUtc
+        lastUpdateTime = value
+        dataStore.save(NetworkConstants.LAST_UPDATE_TIME, value.toTimestamp().toString())
+    }
 
     init {
         runBlocking {
@@ -150,7 +149,12 @@ internal class ItemsApiClientImpl @Inject constructor(
                 ApiResponse.Error.SerializationError
             } catch (noTransformationFoundException: NoTransformationFoundException) {
                 ApiResponse.Error.SerializationError
+            } catch (jsonConvertException: JsonConvertException) {
+                ApiResponse.Error.SerializationError
+            } catch (contentConvertException: ContentConvertException) {
+                ApiResponse.Error.SerializationError
             } catch (e: Exception) {
+                println(e)
                 ApiResponse.Error.UnknownError
             }.updateLastRequestData()
         }
@@ -171,11 +175,11 @@ internal class ItemsApiClientImpl @Inject constructor(
         }
 
 
-    private inline fun <reified T : ResponseDto> ApiResponse<T>.updateLastRequestData(): ApiResponse<T> =
+    private suspend inline fun <reified T : ResponseDto> ApiResponse<T>.updateLastRequestData(): ApiResponse<T> =
         also {
             if (it is ApiResponse.Success) {
-                lastRevision = it.body.revision
-                lastUpdateTime = LocalDateTime.now(ZoneId.of("UTC"))
+                setLastRevision(it.body.revision)
+                setLastUpdateTimeNow()
             }
         }
 }
