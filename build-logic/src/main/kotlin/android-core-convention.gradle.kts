@@ -1,3 +1,6 @@
+import gradle.kotlin.dsl.accessors._8e8a6dd48b2094ffcd3758431423791d.androidTestImplementation
+import gradle.kotlin.dsl.accessors._8e8a6dd48b2094ffcd3758431423791d.testImplementation
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -57,6 +60,8 @@ dependencies {
     testImplementation(libs.androidx.ui.test.junit4)
     testImplementation(libs.mockk)
     testImplementation(libs.ktor.mock)
+    androidTestImplementation(libs.androidx.junit.ktx)
+    androidTestImplementation(libs.androidx.test.runner)
 
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.androidx.core.ktx)
