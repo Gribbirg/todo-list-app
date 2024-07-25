@@ -1,9 +1,9 @@
 package ru.gribbirg.domain.utils
 
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 import ru.gribbirg.domain.model.user.UserSettings
 
 interface SettingsHandler {
-    fun getSettings(): StateFlow<UserSettings>
+    fun getSettings(): Flow<UserSettings>
     suspend fun saveSettings(settings: UserSettings)
 }
