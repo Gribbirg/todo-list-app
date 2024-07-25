@@ -5,6 +5,6 @@ package ru.gribbirg.domain.model.user
  *
  * Will be implemented later
  */
-class UserData(
+data class UserData(
     val name: String = ""
 ) {}
