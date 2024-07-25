@@ -12,8 +12,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.gribbirg.domain.model.todo.TodoItem
 import ru.gribbirg.domain.repositories.TodoItemRepository
-import java.time.LocalDateTime
-import java.time.ZoneId
+import ru.gribbirg.utils.extensions.currentLocalDateTimeAtUtc
 import java.util.UUID
 
 /**
@@ -64,7 +63,7 @@ class EditItemViewModel @AssistedInject constructor(
                     EditItemUiState.ItemState.EDIT ->
                         todoItemRepository.saveItem(
                             item = state.item.copy(
-                                editDate = LocalDateTime.now(ZoneId.of("UTC"))
+                                editDate = currentLocalDateTimeAtUtc,
                             )
                         )
 
@@ -72,8 +71,8 @@ class EditItemViewModel @AssistedInject constructor(
                         todoItemRepository.addItem(
                             item = state.item.copy(
                                 id = UUID.randomUUID().toString(),
-                                creationDate = LocalDateTime.now(ZoneId.of("UTC")),
-                                editDate = LocalDateTime.now(ZoneId.of("UTC"))
+                                creationDate = currentLocalDateTimeAtUtc,
+                                editDate = currentLocalDateTimeAtUtc,
                             )
                         )
                 }
