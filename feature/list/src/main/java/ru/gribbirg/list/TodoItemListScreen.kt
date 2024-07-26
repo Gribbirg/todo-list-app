@@ -190,6 +190,7 @@ private fun TodoItemsListScreenContent(
                             onChecked = onChecked,
                             onDelete = onDelete,
                             toEditItemScreen = toEditItemScreen,
+                            onRefresh = onRefresh,
                             modifier = Modifier
                                 .animateContentSize()
                                 .fillMaxWidth()
@@ -230,6 +231,7 @@ private fun ListLoadedContent(
     onChecked: (TodoItem, Boolean) -> Unit,
     onDelete: (TodoItem) -> Unit,
     toEditItemScreen: (itemId: String?) -> Unit,
+    onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
     bottomPadding: Dp = 0.dp,
 ) {
@@ -271,6 +273,7 @@ private fun ListLoadedContent(
                 onChecked = { value -> onChecked(item, value) },
                 onDeleted = { onDelete(item) },
                 onInfoClicked = { toEditItemScreen(item.id) },
+                onRefresh = onRefresh,
                 dismissOnCheck = listState.filterState == TodoItemsListUiState.ListState.FilterState.NOT_COMPLETED,
                 modifier = Modifier.animateItem(
                     fadeOutSpec = tween(

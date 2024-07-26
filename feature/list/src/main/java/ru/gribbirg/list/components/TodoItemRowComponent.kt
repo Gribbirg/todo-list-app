@@ -39,6 +39,7 @@ internal fun TodoItemRow(
     onChecked: (Boolean) -> Unit,
     onDeleted: () -> Unit,
     onInfoClicked: () -> Unit,
+    onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
     dismissOnCheck: Boolean = false,
 ) {
@@ -78,6 +79,10 @@ internal fun TodoItemRow(
                         },
                         CustomAccessibilityAction(context.getString(R.string.delete)) {
                             onDeleted()
+                            true
+                        },
+                        CustomAccessibilityAction(context.getString(R.string.update)) {
+                            onRefresh()
                             true
                         }
                     )
@@ -162,6 +167,8 @@ private fun TodoItemRowPreview(
             item = itemState,
             onChecked = { itemState = item.copy(completed = it) },
             onDeleted = { },
-            onInfoClicked = { })
+            onInfoClicked = { },
+            onRefresh = { },
+        )
     }
 }
