@@ -2,8 +2,8 @@ package ru.gribbirg.utils
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -41,7 +41,7 @@ internal class SettingsHandlerImpl @Inject constructor(
         saver.save(SETTINGS_KEY, Json.encodeToString(settings.toDto()))
     }
 
-    override fun getSettings(): Flow<UserSettings> = _state.asStateFlow()
+    override fun getSettings(): StateFlow<UserSettings> = _state.asStateFlow()
 
     companion object {
         const val SETTINGS_KEY = "settings"

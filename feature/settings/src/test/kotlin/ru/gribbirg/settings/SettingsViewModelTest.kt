@@ -90,24 +90,6 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun `collect settings with error`() = runTest(dispatcher) {
-        val settings = UserSettings()
-        val settingsHandler: SettingsHandler = mockk(relaxed = true) {
-            every { getSettings() } returns flow { throw Exception() }
-        }
-        val viewModel = SettingsViewModel(
-            loginRepository = mockk(relaxed = true),
-            settingsHandler = settingsHandler,
-            dispatcher
-        )
-
-        repeat(5) { yield() }
-        val res = viewModel.uiState.value.appSettingsState
-
-        assertTrue(res is SettingsUiState.AppSettingsState.Error)
-    }
-
-    @Test
     fun `successful login`() = runTest(dispatcher) {
         val login: LoginRepository = mockk(relaxed = true)
         val viewModel = SettingsViewModel(

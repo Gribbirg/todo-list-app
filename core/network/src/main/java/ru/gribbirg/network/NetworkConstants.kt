@@ -4,7 +4,7 @@ package ru.gribbirg.network
  * Constants for internet connection
  */
 object NetworkConstants {
-    internal const val BASE_URL = "https://hive.mrdekk.ru/todo"
+    private const val BASE_URL = "https://hive.mrdekk.ru/todo"
     internal const val LIST_URL = "$BASE_URL/list"
     internal fun getItemUrl(id: String) = "$LIST_URL/$id"
 

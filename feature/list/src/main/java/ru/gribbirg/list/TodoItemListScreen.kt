@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -54,6 +55,7 @@ import ru.gribbirg.list.components.Sides
 import ru.gribbirg.list.components.TodoItemListCollapsingToolbar
 import ru.gribbirg.list.components.TodoItemRow
 import ru.gribbirg.list.components.TodoItemsListPullToRefreshBox
+import ru.gribbirg.list.testing.ListFeatureTestingTags
 import ru.gribbirg.theme.custom.AppTheme
 import ru.gribbirg.todoapp.list.R
 import ru.gribbirg.ui.components.ErrorComponent
@@ -157,6 +159,7 @@ private fun TodoItemsListScreenContent(
             if (uiState.listState is TodoItemsListUiState.ListState.Loaded)
                 FloatingActionButton(
                     onClick = { toEditItemScreen(null) },
+                    modifier = Modifier.testTag(ListFeatureTestingTags.ADD_BUTTON),
                     shape = CircleShape,
                     containerColor = AppTheme.colors.blue,
                     contentColor = AppTheme.colors.white

@@ -80,6 +80,7 @@ class TodoItemsListViewModel @Inject constructor(
                             loginState = loginState
                         )
                     }
+                    onUpdate()
                 }
         }
     }

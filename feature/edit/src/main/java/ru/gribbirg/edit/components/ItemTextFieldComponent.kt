@@ -13,7 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import ru.gribbirg.edit.testing.EditFeatureTestingTags
 import ru.gribbirg.theme.custom.AppTheme
 import ru.gribbirg.todoapp.edit.R
 import ru.gribbirg.ui.previews.DefaultPreview
@@ -40,9 +42,16 @@ internal fun ItemTextField(
     TextField(
         value = text,
         onValueChange = { onChanged(it) },
-        modifier = modifier.shadow(AppTheme.dimensions.shadowElevationSmall, shape),
+        modifier = modifier
+            .shadow(AppTheme.dimensions.shadowElevationSmall, shape)
+            .testTag(EditFeatureTestingTags.TEXT_FIELD),
         minLines = 5,
-        placeholder = { Text(text = stringResource(id = R.string.type_text), style = AppTheme.typography.body) },
+        placeholder = {
+            Text(
+                text = stringResource(id = R.string.type_text),
+                style = AppTheme.typography.body
+            )
+        },
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = indicatorColor,
             unfocusedIndicatorColor = indicatorColor,

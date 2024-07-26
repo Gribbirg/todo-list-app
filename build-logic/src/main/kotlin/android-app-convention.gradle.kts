@@ -1,4 +1,5 @@
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
+import gradle.kotlin.dsl.accessors._6ab6c3f1daf0c54b8463dcc0a8d5f754.implementation
 import java.util.Properties
 
 plugins {
@@ -30,6 +31,10 @@ configure<BaseAppModuleExtension> {
     }
 }
 
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
 dependencies {
     // Dagger 2
     implementation(libs.dagger)
@@ -44,6 +49,25 @@ dependencies {
     // Compose navigation
     implementation(libs.androidx.navigation.compose)
 
+    // Ktor
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.android)
+    androidTestImplementation(libs.ktor.mock)
+
+    // Serialization
+    androidTestImplementation(libs.kotlinx.serialization.json)
+
+    // Testing
+    androidTestImplementation(libs.junit)
+    androidTestImplementation(libs.junit.jupiter)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.mockk)
+    androidTestImplementation(libs.ktor.mock)
+    androidTestImplementation(libs.androidx.junit.ktx)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.datastore.preferences)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -56,4 +80,5 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.test.manifest)
 }

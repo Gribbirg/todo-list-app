@@ -17,7 +17,6 @@
     <string name="done">Выполнено</string>
     <string name="done_not">Не выполнено</string>
     <string name="perform">Выполнить</string>
-<!--  TODO: подумать  -->
     <string name="fail">Не выполнить</string>
     <string name="edit">Изменить</string>
     <string name="deadline_desc_template">%1$s срок выполнения</string>

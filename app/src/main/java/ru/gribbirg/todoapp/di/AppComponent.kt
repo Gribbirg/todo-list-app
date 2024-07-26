@@ -16,6 +16,7 @@ import ru.gribbirg.todoapp.di.modules.AboutFeatureModule
 import ru.gribbirg.todoapp.di.modules.DataModule
 import ru.gribbirg.todoapp.di.modules.EditFeatureModule
 import ru.gribbirg.todoapp.di.modules.ListFeatureModule
+import ru.gribbirg.todoapp.di.modules.NetworkModule
 import ru.gribbirg.todoapp.di.modules.UtilsModule
 import ru.gribbirg.utils.di.UtilsDependencies
 import ru.gribbirg.utils.di.modules.AppSettingsScope
@@ -31,6 +32,7 @@ annotation class AppScope
         EditFeatureModule::class,
         UtilsModule::class,
         AboutFeatureModule::class,
+        NetworkModule::class,
     ]
 )
 @DataScope

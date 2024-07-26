@@ -17,9 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import ru.gribbirg.edit.testing.EditFeatureTestingTags
 import ru.gribbirg.theme.custom.AppTheme
 import ru.gribbirg.todoapp.edit.R
 import ru.gribbirg.ui.components.AnimatedTopAppBar
@@ -53,6 +55,7 @@ internal fun EditScreenAppBarComponent(
                         onSave()
                         onClose()
                     },
+                    modifier = Modifier.testTag(EditFeatureTestingTags.SAVE_BUTTON),
                     enabled = saveEnabled,
                     colors = ButtonDefaults.textButtonColors(
                         contentColor = AppTheme.colors.blue,

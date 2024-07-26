@@ -12,7 +12,7 @@ fun BaseExtension.baseAndroidConfig() {
             useSupportLibrary = true
         }
 
-        testInstrumentationRunner("androidx.test.runner.AndroidJUnitRunner")
+        testInstrumentationRunner("ru.gribbirg.todoapp.app.TestRunner")
     }
 
     signingConfigs {
@@ -52,6 +52,10 @@ fun BaseExtension.baseAndroidConfig() {
 
     kotlinOptions {
         jvmTarget = AndroidConst.KOTLIN_JVM_TARGET
+    }
+
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
     }
 }
 

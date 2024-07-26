@@ -97,7 +97,7 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    internal fun onLogin(result: YandexAuthResult) {
+    fun onLogin(result: YandexAuthResult) {
         viewModelScope.launch(coroutineLoginExceptionHandler) {
             when (result) {
                 is YandexAuthResult.Success -> loginRepository.registerUser(result.token.value)

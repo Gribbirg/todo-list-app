@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -35,6 +36,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import ru.gribbirg.domain.model.todo.TodoImportance
 import ru.gribbirg.domain.model.todo.TodoItem
+import ru.gribbirg.list.testing.ListFeatureTestingTags
 import ru.gribbirg.theme.custom.AppTheme
 import ru.gribbirg.todoapp.list.R
 import ru.gribbirg.ui.previews.DefaultPreview
@@ -59,10 +61,8 @@ internal fun TodoItemRowContent(
     onInfoClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
-
     Row(
-        modifier = modifier
+        modifier = modifier.testTag(ListFeatureTestingTags.getItemRowId(item.id))
     ) {
         ItemCheckBox(
             completed = item.completed,
